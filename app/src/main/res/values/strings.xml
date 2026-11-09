@@ -1,3 +1,28 @@
 <resources>
-    <string name="app_name">EduProfile</string>
+    <string name="app_name">Tu_Dien_Ca_Nhan</string>
+    <string name="title_cassavas_lexicon">Cassavas Lexicon</string>
+    <string name="subtitle_sm2">Từ điển cá nhân hóa &amp; Ôn tập ngắt quãng thông minh theo chuẩn SM-2</string>
+    
+    <!-- Login form -->
+    <string name="label_email">EMAIL HOẶC TÊN ĐĂNG NHẬP</string>
+    <string name="hint_email">xuanhoa.dev@cassavas.io</string>
+    <string name="label_password">MẬT KHẨU BẢO MẬT</string>
+    <string name="hint_password">••••••••••••</string>
+    
+    <string name="remember_login">Ghi nhớ đăng nhập</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="btn_login_notebook">Đăng nhập vào Sổ tay</string>
+    
+    <string name="or_continue_with">HOẶC TIẾP TỤC VỚI</string>
+    <string name="social_google">Google</string>
+    <string name="social_github">GitHub</string>
+    <string name="btn_guest_mode">Dùng thử Chế độ Khách (Offline SQLite)</string>
+    
+    <string name="dont_have_account">Chưa có tài khoản cá nhân?</string>
+    <string name="register_now">Đăng ký ngay</string>
+    
+    <!-- Validation & feedback -->
+    <string name="err_empty_email">Vui lòng nhập email hoặc tên đăng nhập</string>
+    <string name="err_empty_password">Vui lòng nhập mật khẩu bảo mật</string>
+    <string name="msg_login_success">Đang chuyển vào Sổ tay ôn tập...</string>
 </resources>

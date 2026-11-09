@@ -2,4 +2,26 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Figma Cassavas Lexicon Palette -->
+    <color name="primary_purple">#6339E9</color>
+    <color name="primary_purple_dark">#5026CF</color>
+    <color name="primary_purple_light">#7E57FF</color>
+    <color name="primary_purple_soft">#F4F0FF</color>
+    <color name="primary_purple_tint">#EAE4FC</color>
+    <color name="primary_purple_stroke">#D2C4F7</color>
+    
+    <color name="text_primary">#1D2029</color>
+    <color name="text_secondary">#72778A</color>
+    <color name="text_label">#8D93A5</color>
+    <color name="text_hint">#B4B9C8</color>
+    
+    <color name="border_light">#E5E7EB</color>
+    <color name="border_focus">#6339E9</color>
+    <color name="bg_input">#FAFAFC</color>
+    <color name="bg_page">#FFFFFF</color>
+    
+    <!-- Social Colors -->
+    <color name="social_btn_stroke">#E5E7EB</color>
+    <color name="social_btn_text">#24292F</color>
 </resources>
