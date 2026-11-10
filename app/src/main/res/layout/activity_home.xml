@@ -21,7 +21,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="100dp">
 
-            <!-- 1. TOP BAR (Menu, Dictionary switcher, Dark mode toggle) -->
+            <!-- 1. TOP BAR: Menu, Greeting, Avatar -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,104 +45,126 @@
                         android:src="@drawable/ic_menu" />
                 </FrameLayout>
 
-                <!-- Dictionary Selector Switcher -->
+                <!-- Greeting text -->
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_dict_switch"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="3dp">
+                    android:orientation="vertical">
 
-                    <!-- Option 1: Tất cả (Active) -->
-                    <LinearLayout
-                        android:id="@+id/tabDictAll"
+                    <TextView
+                        android:id="@+id/tvGreeting"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_dict_active"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="10dp">
-
-                        <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:layout_marginEnd="4dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_globe" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/dict_all"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Option 2: Anh-Việt -->
-                    <TextView
-                        android:id="@+id/tabDictEnVi"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="🇬🇧 Anh-Việt"
-                        android:textColor="#64748B"
-                        android:textSize="11.5sp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/greeting_morning"
+                        android:textColor="#0F172A"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <!-- Option 3: Nhật -->
                     <TextView
-                        android:id="@+id/tabDictJp"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:gravity="center"
-                        android:text="🇯🇵 Nhật"
+                        android:id="@+id/tvGreetingSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/greeting_subtitle"
                         android:textColor="#64748B"
-                        android:textSize="11.5sp"
-                        android:textStyle="bold" />
+                        android:textSize="12.5sp" />
+                </LinearLayout>
 
-                    <!-- Option 4: Hàn -->
+                <!-- Student Avatar with online dot -->
+                <ImageView
+                    android:id="@+id/ivUserAvatar"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/nav_account"
+                    android:focusable="true"
+                    android:src="@drawable/ic_student_avatar" />
+            </LinearLayout>
+
+            <!-- 2. DICTIONARY SELECTOR SWITCHER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_dict_switch"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <!-- Option 1: Tất cả (Active) -->
+                <LinearLayout
+                    android:id="@+id/tabDictAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_dict_active"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="12dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="5dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_globe" />
+
                     <TextView
-                        android:id="@+id/tabDictKr"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:gravity="center"
-                        android:text="🇰🇷 Hàn"
-                        android:textColor="#64748B"
-                        android:textSize="11.5sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dict_all"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Dark Mode Toggle Button -->
-                <FrameLayout
-                    android:id="@+id/btnDarkMode"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_circle_icon"
-                    android:clickable="true"
-                    android:focusable="true">
+                <!-- Option 2: GB Anh-Việt -->
+                <TextView
+                    android:id="@+id/tabDictEnVi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/dict_gb_en_vi"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_moon" />
-                </FrameLayout>
+                <!-- Option 3: JP Nhật -->
+                <TextView
+                    android:id="@+id/tabDictJp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:gravity="center"
+                    android:text="@string/dict_jp_ja"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+
+                <!-- Option 4: KR Hàn -->
+                <TextView
+                    android:id="@+id/tabDictKr"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:gravity="center"
+                    android:text="@string/dict_kr_ko"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- 2. SEARCH BOX -->
+            <!-- 3. SEARCH BOX -->
             <LinearLayout
                 android:id="@+id/searchContainer"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
                 android:background="@drawable/bg_search_bar"
                 android:elevation="2dp"
                 android:gravity="center_vertical"
@@ -162,7 +184,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="@string/hint_search_box"
+                    android:hint="@string/hint_search_instant"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:textColor="#1E293B"
@@ -205,106 +227,350 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <!-- 3. WORD PART FILTERS (Horizontal Scroll) -->
-            <HorizontalScrollView
+            <!-- 4. STATS ROW (Mục tiêu hôm nay & 18 ngày streak) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:clipToPadding="false"
-                android:scrollbars="none">
+                android:orientation="horizontal">
 
-                <LinearLayout
+                <!-- Card 1: Mục tiêu hôm nay -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_stat_card"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:lineSpacingExtra="2dp"
+                                android:text="Mục tiêu hôm\nnay"
+                                android:textColor="#64748B"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:lineSpacingExtra="1dp"
+                                android:text="14/20\ntừ"
+                                android:textColor="#6339E9"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Progress Bar -->
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:layout_marginTop="10dp"
+                            android:max="100"
+                            android:progress="70"
+                            android:progressDrawable="@drawable/progress_horizontal_purple" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text="@string/val_percent_done"
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card 2: 18 ngày streak -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_stat_card"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="14dp">
+
+                        <!-- Flame icon circle -->
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_streak_icon">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_flame" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="18 ngày\nstreak"
+                                    android:textColor="#0F172A"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <ImageView
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:layout_marginStart="4dp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ic_sparkle" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:lineSpacingExtra="1dp"
+                                android:text="⭐ 1,420 XP tích\nlũy"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- 5. THAO TÁC NHANH (5 Quick Action Buttons) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/title_quick_actions"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/action_study_utilities"
+                    android:textColor="#6339E9"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-                    <!-- Filter: Tất cả (Active) -->
-                    <TextView
-                        android:id="@+id/chipFilterAll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:background="@drawable/bg_chip_purple"
-                        android:gravity="center"
-                        android:paddingHorizontal="18dp"
-                        android:text="@string/filter_all"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+            <!-- 5 Quick action items row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-                    <!-- Filter: Danh từ -->
-                    <TextView
-                        android:id="@+id/chipFilterNoun"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_chip_white"
-                        android:gravity="center"
-                        android:paddingHorizontal="18dp"
-                        android:text="@string/filter_noun"
-                        android:textColor="#64748B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                <!-- 1. Tra từ -->
+                <LinearLayout
+                    android:id="@+id/qaLookup"
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_qa_search"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <!-- Filter: Động từ -->
-                    <TextView
-                        android:id="@+id/chipFilterVerb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_chip_white"
-                        android:gravity="center"
-                        android:paddingHorizontal="18dp"
-                        android:text="@string/filter_verb"
-                        android:textColor="#64748B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_search" />
 
-                    <!-- Filter: Tính từ -->
                     <TextView
-                        android:id="@+id/chipFilterAdj"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_chip_white"
-                        android:gravity="center"
-                        android:paddingHorizontal="18dp"
-                        android:text="@string/filter_adj"
-                        android:textColor="#64748B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <!-- Filter: Idiom -->
-                    <TextView
-                        android:id="@+id/chipFilterIdiom"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_chip_white"
-                        android:gravity="center"
-                        android:paddingHorizontal="18dp"
-                        android:text="@string/filter_idiom"
-                        android:textColor="#64748B"
-                        android:textSize="13sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/qa_lookup"
+                        android:textColor="#1E293B"
+                        android:textSize="11sp"
                         android:textStyle="bold" />
                 </LinearLayout>
-            </HorizontalScrollView>
 
-            <!-- 4. TỪ VỰNG CỦA NGÀY (Feature Card) -->
+                <!-- 2. Ôn SM-2 -->
+                <LinearLayout
+                    android:id="@+id/qaSRS"
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_qa_srs"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_srs_green" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:lineSpacingExtra="0dp"
+                        android:text="Ôn SM-\n2"
+                        android:textColor="#1E293B"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- 3. Làm Quiz -->
+                <LinearLayout
+                    android:id="@+id/qaQuiz"
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_qa_quiz"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_quiz" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:lineSpacingExtra="0dp"
+                        android:text="Làm\nQuiz"
+                        android:textColor="#1E293B"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- 4. Sổ tay -->
+                <LinearLayout
+                    android:id="@+id/qaNotebook"
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_qa_folder"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_folder_purple" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/qa_notebook"
+                        android:textColor="#1E293B"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- 5. Thêm từ -->
+                <LinearLayout
+                    android:id="@+id/qaAddWord"
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_qa_add"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_plus_rose" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/qa_add_word"
+                        android:textColor="#1E293B"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 6. TỪ VỰNG CỦA NGÀY (Feature Card) -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="6dp">
+                app:cardElevation="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_card_wotd"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="18dp">
 
-                    <!-- Top header row inside card -->
+                    <!-- Top row: Badge & Bookmark -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -314,16 +580,16 @@
                         <!-- Badge "TỪ VỰNG CỦA NGÀY" -->
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="28dp"
+                            android:layout_height="26dp"
                             android:background="@drawable/bg_translucent_pill"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingHorizontal="10dp">
 
                             <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_width="13dp"
+                                android:layout_height="13dp"
+                                android:layout_marginEnd="5dp"
                                 android:contentDescription="@null"
                                 android:src="@drawable/ic_sparkle" />
 
@@ -344,37 +610,101 @@
                         <!-- Badge "CEFR C1" -->
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="28dp"
+                            android:layout_height="26dp"
                             android:background="@drawable/bg_translucent_pill"
                             android:gravity="center"
-                            android:paddingHorizontal="12dp"
+                            android:paddingHorizontal="10dp"
                             android:text="@string/badge_cefr_c1"
                             android:textColor="#FFFFFF"
-                            android:textSize="11.5sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
 
-                        <!-- Bookmark Button -->
+                        <!-- Gold Bookmark Button -->
                         <ImageView
                             android:id="@+id/btnBookmarkWotd"
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:layout_marginStart="10dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="8dp"
                             android:clickable="true"
                             android:contentDescription="@null"
                             android:focusable="true"
-                            android:src="@drawable/ic_bookmark_white" />
+                            android:src="@drawable/ic_bookmark_gold" />
                     </LinearLayout>
 
-                    <!-- Word Title -->
-                    <TextView
-                        android:id="@+id/tvWotdWord"
-                        android:layout_width="wrap_content"
+                    <!-- Word Title & Pronunciation Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="@string/wotd_word"
-                        android:textColor="#FFFFFF"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvWotdWord"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/wotd_word"
+                            android:textColor="#FFFFFF"
+                            android:textSize="26sp"
+                            android:textStyle="bold" />
+
+                        <!-- Pronunciation Buttons -->
+                        <LinearLayout
+                            android:id="@+id/btnAudioUS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:background="@drawable/bg_translucent_audio"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <ImageView
+                                android:layout_width="13dp"
+                                android:layout_height="13dp"
+                                android:layout_marginEnd="4dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_speaker" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/btn_audio_us"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btnAudioUK"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_translucent_audio"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <ImageView
+                                android:layout_width="13dp"
+                                android:layout_height="13dp"
+                                android:layout_marginEnd="4dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_speaker" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/btn_audio_uk"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <!-- Phonetic & Word class -->
                     <TextView
@@ -384,350 +714,122 @@
                         android:layout_marginTop="2dp"
                         android:text="@string/wotd_phonetic_part"
                         android:textColor="#D8B4FE"
-                        android:textSize="14sp" />
-
-                    <!-- Pronunciation Audio Buttons -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/btnAudioUS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:background="@drawable/bg_translucent_audio"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="12dp">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:layout_marginEnd="6dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_speaker" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/btn_audio_us"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/btnAudioUK"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/bg_translucent_audio"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="12dp">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:layout_marginEnd="6dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_speaker" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/btn_audio_uk"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        android:textSize="13.5sp" />
 
                     <!-- Meaning Description -->
                     <TextView
                         android:id="@+id/tvWotdMeaning"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:lineSpacingExtra="3dp"
+                        android:layout_marginTop="10dp"
+                        android:lineSpacingExtra="2dp"
                         android:text="@string/wotd_meaning"
                         android:textColor="#F3E8FF"
-                        android:textSize="14sp" />
+                        android:textSize="13.5sp" />
 
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="14dp"
-                        android:layout_marginBottom="12dp"
-                        android:background="#2EFFFFFF" />
-
-                    <!-- Example sentence & Detail link -->
+                    <!-- Mnemonic Tip Pill Inside Card -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_translucent_pill"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="7dp">
 
                         <TextView
-                            android:id="@+id/tvWotdExample"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
-                            android:maxLines="2"
-                            android:text="@string/wotd_example"
-                            android:textColor="#E2E8F0"
-                            android:textSize="13sp" />
-
-                        <LinearLayout
-                            android:id="@+id/btnViewDetail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingStart="8dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Chi tiết"
-                                android:textColor="#FDE047"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:layout_marginStart="2dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_chevron_right" />
-                        </LinearLayout>
+                            android:maxLines="1"
+                            android:text="@string/tip_mnemonic_wotd"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 5. RECENT & TRENDING LOOKUPS -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="6dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_clock" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.04"
-                    android:text="@string/title_recent_trending"
-                    android:textColor="#64748B"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/btnCollapseTrending"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="@string/btn_collapse"
-                    android:textColor="#6339E9"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Trending chips row 1 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <!-- Chip 1 -->
-                <LinearLayout
-                    android:id="@+id/chipTrend1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:background="@drawable/bg_chip_white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="14dp">
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="6dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_trending_up" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/trend_word_1"
-                        android:textColor="#1E293B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Chip 2 -->
-                <LinearLayout
-                    android:id="@+id/chipTrend2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_chip_white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="14dp">
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="6dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_trending_up" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/trend_word_2"
-                        android:textColor="#1E293B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Chip 3 -->
-                <LinearLayout
-                    android:id="@+id/chipTrend3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_chip_white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="14dp">
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="6dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_trending_up" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/trend_word_3"
-                        android:textColor="#1E293B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Trending chips row 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <!-- Chip 4 -->
-                <LinearLayout
-                    android:id="@+id/chipTrend4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:background="@drawable/bg_chip_white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="14dp">
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginEnd="6dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_trending_up" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/trend_word_4"
-                        android:textColor="#1E293B"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- 6. TỪ ĐIỂN CÁ NHÂN CỦA BẠN SECTION -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.04"
-                    android:text="@string/title_personal_dict"
-                    android:textColor="#64748B"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/btnAddNewWord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="@string/btn_add_new_word"
-                    android:textColor="#6339E9"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Personal Dictionary Card Item -->
+            <!-- 7. HÀNG ĐỢI ÔN TẬP SM-2 HÔM NAY -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="18dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="3dp">
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_personal_card"
+                    android:background="@drawable/bg_stat_card"
                     android:orientation="vertical"
-                    android:padding="18dp">
+                    android:padding="16dp">
 
-                    <!-- Word & Pronunciation & Actions -->
+                    <!-- Section Header Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Layers Icon in circle -->
+                        <FrameLayout
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_badge_purple">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_nav_srs" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/title_sm2_queue"
+                                android:textColor="#0F172A"
+                                android:textSize="14.5sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:text="@string/subtitle_sm2_queue"
+                                android:textColor="#64748B"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Red Badge "18 từ đến hạn" -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_red"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/badge_due_count"
+                            android:textColor="#EF4444"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="#F1F5F9" />
+
+                    <!-- Queue Word Item: Ephemeral -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -737,140 +839,99 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Serendipity"
+                            android:text="@string/queue_word_1"
                             android:textColor="#0F172A"
-                            android:textSize="18sp"
+                            android:textSize="15.5sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="/ˌser.ənˈdɪp.ə.ti/"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/queue_phonetic_1"
                             android:textColor="#64748B"
-                            android:textSize="13sp" />
+                            android:textSize="12.5sp" />
 
                         <View
                             android:layout_width="0dp"
                             android:layout_height="1dp"
                             android:layout_weight="1" />
 
-                        <!-- Speaker Icon Circle -->
-                        <FrameLayout
-                            android:id="@+id/btnPersonalAudio"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:background="@drawable/bg_audio_circle"
-                            android:clickable="true"
-                            android:focusable="true">
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_gravity="center"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_speaker_purple" />
-                        </FrameLayout>
-
-                        <!-- Bookmark Icon -->
-                        <ImageView
-                            android:id="@+id/btnPersonalBookmark"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginStart="10dp"
-                            android:clickable="true"
-                            android:contentDescription="@null"
-                            android:focusable="true"
-                            android:src="@drawable/ic_bookmark" />
-                    </LinearLayout>
-
-                    <!-- Word Tags / Badges -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_badge_purple"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="3dp"
-                            android:text="@string/badge_noun"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/queue_ef_1"
                             android:textColor="#6339E9"
-                            android:textSize="11sp"
+                            android:textSize="11.5sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:background="@drawable/bg_badge_purple"
+                            android:background="@drawable/bg_badge_orange"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="3dp"
-                            android:text="@string/badge_c1"
-                            android:textColor="#6339E9"
+                            android:text="@string/badge_today"
+                            android:textColor="#D97706"
                             android:textSize="11sp"
                             android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Meaning -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:lineSpacingExtra="2dp"
-                        android:text="Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị, có giá trị một…"
-                        android:textColor="#334155"
-                        android:textSize="13.5sp" />
-
-                    <!-- Memory Mnemonic Tip -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:background="@drawable/bg_tip_box"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="8dp">
-
-                        <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:layout_marginEnd="6dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_pencil" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tip_mnemonic"
-                            android:textColor="#6339E9"
-                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- 7. BOTTOM NAVIGATION BAR -->
+    <!-- 8. BOTTOM NAVIGATION BAR (6 TABS) -->
     <LinearLayout
         android:id="@+id/bottomNavContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="64dp"
         android:layout_gravity="bottom"
         android:background="#FFFFFF"
         android:elevation="12dp"
         android:gravity="center_vertical"
+        android:minHeight="64dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingHorizontal="8dp">
+        android:paddingBottom="8dp">
 
-        <!-- Tab 1: Tra cứu (Active) -->
+        <!-- Tab 1: Trang chủ (Active) -->
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="26dp"
+                android:background="@drawable/bg_badge_purple">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/nav_home"
+                    android:src="@drawable/ic_compass" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_home"
+                android:textColor="#6339E9"
+                android:textSize="10.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Tab 2: Tra cứu -->
         <LinearLayout
             android:id="@+id/navLookup"
             android:layout_width="0dp"
@@ -881,30 +942,23 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="54dp"
-                android:layout_height="30dp"
-                android:background="@drawable/bg_badge_purple">
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/nav_lookup"
-                    android:src="@drawable/ic_nav_search" />
-            </FrameLayout>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/nav_lookup"
+                android:src="@drawable/ic_nav_search"
+                app:tint="#94A3B8" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:text="@string/nav_lookup"
-                android:textColor="#6339E9"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
         </LinearLayout>
 
-        <!-- Tab 2: Sổ tay -->
+        <!-- Tab 3: Sổ tay -->
         <LinearLayout
             android:id="@+id/navNotebook"
             android:layout_width="0dp"
@@ -916,8 +970,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:contentDescription="@string/nav_notebook"
                 android:src="@drawable/ic_nav_notebook" />
 
@@ -927,10 +981,10 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/nav_notebook"
                 android:textColor="#64748B"
-                android:textSize="11sp" />
+                android:textSize="10.5sp" />
         </LinearLayout>
 
-        <!-- Tab 3: Ôn tập SRS -->
+        <!-- Tab 4: Ôn SM-2 -->
         <LinearLayout
             android:id="@+id/navSRS"
             android:layout_width="0dp"
@@ -942,8 +996,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:contentDescription="@string/nav_srs"
                 android:src="@drawable/ic_nav_srs" />
 
@@ -953,10 +1007,10 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/nav_srs"
                 android:textColor="#64748B"
-                android:textSize="11sp" />
+                android:textSize="10.5sp" />
         </LinearLayout>
 
-        <!-- Tab 4: Thống kê -->
+        <!-- Tab 5: Thống kê -->
         <LinearLayout
             android:id="@+id/navStats"
             android:layout_width="0dp"
@@ -968,8 +1022,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:contentDescription="@string/nav_stats"
                 android:src="@drawable/ic_nav_stats" />
 
@@ -979,7 +1033,33 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/nav_stats"
                 android:textColor="#64748B"
-                android:textSize="11sp" />
+                android:textSize="10.5sp" />
+        </LinearLayout>
+
+        <!-- Tab 6: Tài khoản -->
+        <LinearLayout
+            android:id="@+id/navAccount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/nav_account"
+                android:src="@drawable/ic_nav_account" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_account"
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
         </LinearLayout>
     </LinearLayout>
 

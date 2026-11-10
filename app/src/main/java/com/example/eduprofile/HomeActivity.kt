@@ -17,11 +17,10 @@ import java.util.Locale
 
 class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
-    private lateinit var etSearchBox: EditText
-    private lateinit var btnVoiceSearch: FrameLayout
-    private lateinit var btnCameraSearch: FrameLayout
     private lateinit var btnMenu: FrameLayout
-    private lateinit var btnDarkMode: FrameLayout
+    private lateinit var tvGreeting: TextView
+    private lateinit var tvGreetingSub: TextView
+    private lateinit var ivUserAvatar: ImageView
 
     // Dictionary tabs
     private lateinit var tabDictAll: LinearLayout
@@ -29,40 +28,33 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tabDictJp: TextView
     private lateinit var tabDictKr: TextView
 
-    // Filters
-    private lateinit var chipFilterAll: TextView
-    private lateinit var chipFilterNoun: TextView
-    private lateinit var chipFilterVerb: TextView
-    private lateinit var chipFilterAdj: TextView
-    private lateinit var chipFilterIdiom: TextView
+    // Search bar
+    private lateinit var etSearchBox: EditText
+    private lateinit var btnVoiceSearch: FrameLayout
+    private lateinit var btnCameraSearch: FrameLayout
+
+    // Quick Actions
+    private lateinit var qaLookup: LinearLayout
+    private lateinit var qaSRS: LinearLayout
+    private lateinit var qaQuiz: LinearLayout
+    private lateinit var qaNotebook: LinearLayout
+    private lateinit var qaAddWord: LinearLayout
 
     // Word of the Day
     private lateinit var btnAudioUS: LinearLayout
     private lateinit var btnAudioUK: LinearLayout
     private lateinit var btnBookmarkWotd: ImageView
-    private lateinit var btnViewDetail: LinearLayout
 
-    // Trending chips
-    private lateinit var chipTrend1: LinearLayout
-    private lateinit var chipTrend2: LinearLayout
-    private lateinit var chipTrend3: LinearLayout
-    private lateinit var chipTrend4: LinearLayout
-    private lateinit var btnCollapseTrending: TextView
-
-    // Personal card
-    private lateinit var btnAddNewWord: TextView
-    private lateinit var btnPersonalAudio: FrameLayout
-    private lateinit var btnPersonalBookmark: ImageView
-
-    // Bottom Navigation
+    // Bottom Navigation (6 tabs)
+    private lateinit var navHome: LinearLayout
     private lateinit var navLookup: LinearLayout
     private lateinit var navNotebook: LinearLayout
     private lateinit var navSRS: LinearLayout
     private lateinit var navStats: LinearLayout
+    private lateinit var navAccount: LinearLayout
 
     private var tts: TextToSpeech? = null
-    private var isWotdBookmarked = false
-    private var isPersonalBookmarked = false
+    private var isWotdBookmarked = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +66,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             val bottomNav = findViewById<LinearLayout>(R.id.bottomNavContainer)
             val padTop = (8 * resources.displayMetrics.density).toInt()
-            val padHoriz = (8 * resources.displayMetrics.density).toInt()
+            val padHoriz = (4 * resources.displayMetrics.density).toInt()
             bottomNav.setPadding(padHoriz, padTop, padHoriz, systemBars.bottom + padTop)
             insets
         }
@@ -86,51 +78,45 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun initViews() {
-        etSearchBox = findViewById(R.id.etSearchBox)
-        btnVoiceSearch = findViewById(R.id.btnVoiceSearch)
-        btnCameraSearch = findViewById(R.id.btnCameraSearch)
         btnMenu = findViewById(R.id.btnMenu)
-        btnDarkMode = findViewById(R.id.btnDarkMode)
+        tvGreeting = findViewById(R.id.tvGreeting)
+        tvGreetingSub = findViewById(R.id.tvGreetingSub)
+        ivUserAvatar = findViewById(R.id.ivUserAvatar)
 
         tabDictAll = findViewById(R.id.tabDictAll)
         tabDictEnVi = findViewById(R.id.tabDictEnVi)
         tabDictJp = findViewById(R.id.tabDictJp)
         tabDictKr = findViewById(R.id.tabDictKr)
 
-        chipFilterAll = findViewById(R.id.chipFilterAll)
-        chipFilterNoun = findViewById(R.id.chipFilterNoun)
-        chipFilterVerb = findViewById(R.id.chipFilterVerb)
-        chipFilterAdj = findViewById(R.id.chipFilterAdj)
-        chipFilterIdiom = findViewById(R.id.chipFilterIdiom)
+        etSearchBox = findViewById(R.id.etSearchBox)
+        btnVoiceSearch = findViewById(R.id.btnVoiceSearch)
+        btnCameraSearch = findViewById(R.id.btnCameraSearch)
+
+        qaLookup = findViewById(R.id.qaLookup)
+        qaSRS = findViewById(R.id.qaSRS)
+        qaQuiz = findViewById(R.id.qaQuiz)
+        qaNotebook = findViewById(R.id.qaNotebook)
+        qaAddWord = findViewById(R.id.qaAddWord)
 
         btnAudioUS = findViewById(R.id.btnAudioUS)
         btnAudioUK = findViewById(R.id.btnAudioUK)
         btnBookmarkWotd = findViewById(R.id.btnBookmarkWotd)
-        btnViewDetail = findViewById(R.id.btnViewDetail)
 
-        chipTrend1 = findViewById(R.id.chipTrend1)
-        chipTrend2 = findViewById(R.id.chipTrend2)
-        chipTrend3 = findViewById(R.id.chipTrend3)
-        chipTrend4 = findViewById(R.id.chipTrend4)
-        btnCollapseTrending = findViewById(R.id.btnCollapseTrending)
-
-        btnAddNewWord = findViewById(R.id.btnAddNewWord)
-        btnPersonalAudio = findViewById(R.id.btnPersonalAudio)
-        btnPersonalBookmark = findViewById(R.id.btnPersonalBookmark)
-
+        navHome = findViewById(R.id.navHome)
         navLookup = findViewById(R.id.navLookup)
         navNotebook = findViewById(R.id.navNotebook)
         navSRS = findViewById(R.id.navSRS)
         navStats = findViewById(R.id.navStats)
+        navAccount = findViewById(R.id.navAccount)
     }
 
     private fun setupListeners() {
         btnMenu.setOnClickListener {
-            Toast.makeText(this, "Mở thanh Menu điều hướng", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Mở Menu tính năng Cassavas", Toast.LENGTH_SHORT).show()
         }
 
-        btnDarkMode.setOnClickListener {
-            Toast.makeText(this, "Chuyển đổi giao diện Sáng / Tối", Toast.LENGTH_SHORT).show()
+        ivUserAvatar.setOnClickListener {
+            Toast.makeText(this, "Hồ sơ người dùng: Nguyễn Xuân Hòa", Toast.LENGTH_SHORT).show()
         }
 
         etSearchBox.setOnEditorActionListener { _, actionId, _ ->
@@ -148,6 +134,28 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             Toast.makeText(this, "Tính năng quét văn bản OCR qua Camera", Toast.LENGTH_SHORT).show()
         }
 
+        // Quick Actions
+        qaLookup.setOnClickListener {
+            etSearchBox.requestFocus()
+            Toast.makeText(this, "Mở nhanh tính năng Tra từ", Toast.LENGTH_SHORT).show()
+        }
+
+        qaSRS.setOnClickListener {
+            Toast.makeText(this, "Bắt đầu phiên Ôn tập SM-2 hôm nay (18 từ)", Toast.LENGTH_SHORT).show()
+        }
+
+        qaQuiz.setOnClickListener {
+            Toast.makeText(this, "Khởi động Mini Quiz ôn tập từ vựng", Toast.LENGTH_SHORT).show()
+        }
+
+        qaNotebook.setOnClickListener {
+            Toast.makeText(this, "Mở Sổ tay từ vựng cá nhân", Toast.LENGTH_SHORT).show()
+        }
+
+        qaAddWord.setOnClickListener {
+            Toast.makeText(this, "Mở biểu mẫu Thêm từ mới vào từ điển", Toast.LENGTH_SHORT).show()
+        }
+
         // Audio pronunciation
         btnAudioUS.setOnClickListener {
             speakWord("Serendipity", Locale.US)
@@ -157,68 +165,49 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             speakWord("Serendipity", Locale.UK)
         }
 
-        btnPersonalAudio.setOnClickListener {
-            speakWord("Serendipity", Locale.US)
-        }
-
-        // Bookmark buttons
+        // Bookmark toggle
         btnBookmarkWotd.setOnClickListener {
             isWotdBookmarked = !isWotdBookmarked
             if (isWotdBookmarked) {
-                Toast.makeText(this, "Đã lưu 'Serendipity' vào Sổ tay cá nhân", Toast.LENGTH_SHORT).show()
+                btnBookmarkWotd.setImageResource(R.drawable.ic_bookmark_gold)
+                Toast.makeText(this, "Đã lưu 'Serendipity' vào Sổ tay", Toast.LENGTH_SHORT).show()
             } else {
+                btnBookmarkWotd.setImageResource(R.drawable.ic_bookmark_white)
                 Toast.makeText(this, "Đã bỏ lưu khỏi Sổ tay", Toast.LENGTH_SHORT).show()
             }
         }
 
-        btnPersonalBookmark.setOnClickListener {
-            isPersonalBookmarked = !isPersonalBookmarked
-            if (isPersonalBookmarked) {
-                Toast.makeText(this, "Đã ghim từ vựng ưu tiên ôn tập", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Đã bỏ ghim từ vựng", Toast.LENGTH_SHORT).show()
-            }
+        // Bottom Navigation
+        navHome.setOnClickListener {
+            Toast.makeText(this, "Đang ở Trang chủ", Toast.LENGTH_SHORT).show()
         }
 
-        btnViewDetail.setOnClickListener {
-            Toast.makeText(this, "Xem phân tích chi tiết từ vựng 'Serendipity'", Toast.LENGTH_SHORT).show()
-        }
-
-        // Trending chips click
-        chipTrend1.setOnClickListener { setTrendingSearch("Serendipity") }
-        chipTrend2.setOnClickListener { setTrendingSearch("Idempotent") }
-        chipTrend3.setOnClickListener { setTrendingSearch("Resilient") }
-        chipTrend4.setOnClickListener { setTrendingSearch("Bite the bullet") }
-
-        btnAddNewWord.setOnClickListener {
-            Toast.makeText(this, "Mở biểu mẫu thêm từ mới vào Từ điển cá nhân", Toast.LENGTH_SHORT).show()
-        }
-
-        // Bottom nav
         navLookup.setOnClickListener {
-            Toast.makeText(this, "Đang ở trang Tra cứu", Toast.LENGTH_SHORT).show()
+            etSearchBox.requestFocus()
+            Toast.makeText(this, "Chuyển sang Tra cứu", Toast.LENGTH_SHORT).show()
         }
-        navNotebook.setOnClickListener {
-            Toast.makeText(this, "Mở Sổ tay từ vựng cá nhân", Toast.LENGTH_SHORT).show()
-        }
-        navSRS.setOnClickListener {
-            Toast.makeText(this, "Bắt đầu phiên Ôn tập ngắt quãng SRS", Toast.LENGTH_SHORT).show()
-        }
-        navStats.setOnClickListener {
-            Toast.makeText(this, "Xem Thống kê học tập & Chuỗi streak", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun setTrendingSearch(word: String) {
-        etSearchBox.setText(word)
-        etSearchBox.setSelection(word.length)
-        performSearch(word)
+        navNotebook.setOnClickListener {
+            Toast.makeText(this, "Mở Sổ tay từ vựng", Toast.LENGTH_SHORT).show()
+        }
+
+        navSRS.setOnClickListener {
+            Toast.makeText(this, "Chuyển sang Ôn SM-2", Toast.LENGTH_SHORT).show()
+        }
+
+        navStats.setOnClickListener {
+            Toast.makeText(this, "Xem Thống kê học tập", Toast.LENGTH_SHORT).show()
+        }
+
+        navAccount.setOnClickListener {
+            Toast.makeText(this, "Mở Tài khoản cá nhân & Cài đặt", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun performSearch(query: String) {
         val q = query.trim()
         if (q.isNotEmpty()) {
-            Toast.makeText(this, "Đang tra cứu từ: $q", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Đang tra từ điển: $q", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -244,4 +233,3 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 }
-
