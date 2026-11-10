@@ -213,7 +213,7 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navAccount.setOnClickListener {
-            Toast.makeText(this, "Mở Tài khoản cá nhân & Cài đặt", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 

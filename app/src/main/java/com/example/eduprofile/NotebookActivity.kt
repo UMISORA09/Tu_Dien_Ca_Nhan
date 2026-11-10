@@ -174,7 +174,7 @@ class NotebookActivity : AppCompatActivity() {
         }
 
         navAccount.setOnClickListener {
-            Toast.makeText(this, "Tài khoản học viên: Nguyễn Minh Quân", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 

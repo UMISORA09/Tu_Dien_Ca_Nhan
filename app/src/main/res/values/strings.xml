@@ -283,4 +283,26 @@
     <string name="day_fri">T6</string>
     <string name="day_sat">T7</string>
     <string name="day_sun">CN</string>
+
+    <!-- Profile / Tài khoản & Cài đặt Screen -->
+    <string name="title_profile_screen">Tài Khoản &amp; Cài Đặt</string>
+    <string name="subtitle_profile_screen">Quản lý đồng bộ dữ liệu, giọng đọc &amp; bảo mật tài khoản</string>
+    <string name="default_user_name">Văn Nguyễn Xuân Hòa</string>
+    <string name="default_user_email">xuanhoa.dev@cassavas.io</string>
+    <string name="default_user_role">Học viên C1 • Full-stack Lexicon</string>
+    <string name="sync_status_recent">☁ Vừa xong (SQLite ↔ Cloud)</string>
+    <string name="btn_sync_now">🔄 Đồng bộ ngay</string>
+    <string name="sec_custom_tts">TÙY CHỈNH HỌC TẬP &amp; ÂM THANH (TTS)</string>
+    <string name="label_default_voice">Giọng phát âm mặc định</string>
+    <string name="sub_default_voice">TextToSpeech Engine (Android)</string>
+    <string name="voice_us">🇺🇸 US</string>
+    <string name="voice_uk">🇬🇧 UK</string>
+    <string name="label_alarm_sm2">Thông báo nhắc ôn tập SM-2</string>
+    <string name="sub_alarm_sm2">Hàng ngày lúc 20:30 (AlarmManager)</string>
+    <string name="label_export_dict">Sao lưu &amp; Xuất từ điển (.CSV / .JSON)</string>
+    <string name="sub_export_dict">Dung lượng SQLite: 2.4 MB (8 từ)</string>
+    <string name="btn_export_label">Xuất\nfile</string>
+    <string name="sec_security_session">BẢO MẬT &amp; PHIÊN ĐĂNG NHẬP</string>
+    <string name="label_change_password">Đổi mật khẩu tài khoản</string>
+    <string name="btn_logout_device">Đăng Xuất Khỏi Thiết Bị</string>
 </resources>

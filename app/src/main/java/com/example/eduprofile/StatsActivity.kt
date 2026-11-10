@@ -267,7 +267,8 @@ class StatsActivity : AppCompatActivity() {
         }
 
         navAccount.setOnClickListener {
-            startActivity(Intent(this, MenuActivity::class.java))
+            startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
         }
     }
 
