@@ -176,4 +176,32 @@
     <string name="menu_item_logout">Đăng xuất tài khoản</string>
     <string name="menu_footer_version">Cassavas Dictionary v2.5</string>
     <string name="menu_footer_project">Đồ Án Mobile</string>
+
+    <!-- Personal Notebook Screen (Sổ tay cá nhân) -->
+    <string name="title_notebook">Sổ Tay Cá Nhân</string>
+    <string name="subtitle_notebook">Quản lý bộ sưu tập từ vựng &amp; ghi chú của riêng bạn</string>
+    <string name="btn_add_word_header">+ Thêm từ\nmới</string>
+    <string name="btn_add_word_full">+ Thêm từ mới</string>
+    <string name="topic_it">Chuyên ngành IT</string>
+    <string name="topic_it_sub">Thuật ngữ công nghệ…</string>
+    <string name="topic_it_count">2 từ</string>
+    <string name="topic_comm">Giao tiếp hàng ngày</string>
+    <string name="topic_comm_sub">Từ vựng phản xạ, giao tiếp…</string>
+    <string name="topic_comm_count">3 từ</string>
+    <string name="topic_ielts">IELTS Reading &amp;\nAcademic</string>
+    <string name="topic_ielts_sub">Từ vựng học thuật C1-C2…</string>
+    <string name="topic_ielts_count">2 từ</string>
+    <string name="topic_idioms">Idioms &amp; Phrasal\nVerbs</string>
+    <string name="topic_idioms_sub">Thành ngữ tự nhiên như bản xứ…</string>
+    <string name="topic_idioms_count">1 từ</string>
+
+    <string name="filter_notebook_all">Tất cả (8)</string>
+    <string name="filter_notebook_new">Mới (2)</string>
+    <string name="filter_notebook_learning">Đang học (4)</string>
+    <string name="filter_notebook_mastered">Thuộc lòng (2)</string>
+    <string name="badge_status_learning">Đang học</string>
+    <string name="badge_status_mastered">Đã thuộc</string>
+    <string name="srs_1_day">Lặp lại SRS: 1 ngày</string>
+    <string name="srs_3_days">Lặp lại SRS: 3 ngày</string>
+    <string name="srs_7_days">Lặp lại SRS: 7 ngày</string>
 </resources>

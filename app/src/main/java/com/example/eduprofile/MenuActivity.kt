@@ -117,7 +117,8 @@ class MenuActivity : AppCompatActivity() {
         }
 
         menuItemNotebook.setOnClickListener {
-            Toast.makeText(this, "Sổ tay từ vựng cá nhân: 8 từ đang theo dõi", Toast.LENGTH_SHORT).show()
+            closeMenuWithAnimation()
+            startActivity(Intent(this, NotebookActivity::class.java))
         }
 
         menuItemSRS.setOnClickListener {
