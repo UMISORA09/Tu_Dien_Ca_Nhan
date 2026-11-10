@@ -30,6 +30,8 @@
 
         <activity android:name=".ProfileActivity" android:exported="true" android:windowSoftInputMode="adjustResize" />
 
+        <activity android:name=".AdminCmsActivity" android:exported="true" android:windowSoftInputMode="adjustResize" />
+
         <activity android:name=".MenuActivity" android:exported="true" android:theme="@style/Theme.EduProfile.MenuTranslucent" android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".MainActivity" android:exported="false" />

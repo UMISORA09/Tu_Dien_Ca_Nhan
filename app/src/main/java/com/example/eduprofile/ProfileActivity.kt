@@ -142,6 +142,12 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             Toast.makeText(this, "Hồ sơ: Văn Nguyễn Xuân Hòa (Học viên C1)", Toast.LENGTH_SHORT).show()
         }
 
+        // Tap Role to open Admin CMS
+        tvUserRole.setOnClickListener {
+            Toast.makeText(this, "Đang mở Bảng Quản trị Admin CMS...", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, AdminCmsActivity::class.java))
+        }
+
         // Sync Now Button
         btnSyncNow.setOnClickListener {
             val rotate = ObjectAnimator.ofFloat(btnSyncNow, "rotation", 0f, 360f).apply {

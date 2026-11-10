@@ -567,7 +567,62 @@
                         app:trackTint="#E5E7EB" />
                 </LinearLayout>
 
-                <!-- Item 10: Đăng xuất tài khoản -->
+                <!-- Item 10: Quản trị Admin CMS -->
+                <LinearLayout
+                    android:id="@+id/menuItemAdminCms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/bg_menu_item_ripple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@string/title_admin_cms"
+                        android:src="@drawable/ic_shield_admin" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_admin_cms"
+                            android:textColor="#1F2937"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="Kiểm duyệt từ, học viên &amp; bộ từ"
+                            android:textColor="#6B7280"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_badge_admin_role_admin"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:text="@string/badge_admin_cms"
+                        android:textColor="@color/admin_yellow_text"
+                        android:textSize="9.5sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Item 11: Đăng xuất tài khoản -->
                 <LinearLayout
                     android:id="@+id/menuItemLogout"
                     android:layout_width="match_parent"
