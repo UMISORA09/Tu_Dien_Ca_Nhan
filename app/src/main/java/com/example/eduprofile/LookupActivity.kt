@@ -160,7 +160,7 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         btnAddNewWord.setOnClickListener {
-            Toast.makeText(this, "Mở biểu mẫu Thêm từ mới vào kho", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, AddWordActivity::class.java))
         }
 
         // Audio pronunciation

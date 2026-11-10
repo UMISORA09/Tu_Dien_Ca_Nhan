@@ -204,4 +204,30 @@
     <string name="srs_1_day">Lặp lại SRS: 1 ngày</string>
     <string name="srs_3_days">Lặp lại SRS: 3 ngày</string>
     <string name="srs_7_days">Lặp lại SRS: 7 ngày</string>
+
+    <!-- Add New Word Screen (Thêm từ mới) -->
+    <string name="title_add_word">Thêm Từ Mới</string>
+    <string name="subtitle_add_word">Tạo thẻ từ vựng &amp; đưa vào chu trình ôn tập SM-2</string>
+    <string name="btn_save_top">Lưu thẻ</string>
+    <string name="sec_word_info">THÔNG TIN TỪ VỰNG</string>
+    <string name="label_add_word">TỪ VỰNG TIẾNG ANH *</string>
+    <string name="hint_add_word">Ví dụ: Ephemeral, Serendipity…</string>
+    <string name="label_add_phonetic">PHIÊN ÂM QUỐC TẾ (IPA)</string>
+    <string name="hint_add_phonetic">Ví dụ: /ɪˈfem.ər.əl/</string>
+    <string name="label_add_pos">LOẠI TỪ CHÍNH *</string>
+    <string name="label_add_level">TRÌNH ĐỘ CEFR</string>
+    <string name="sec_meaning_context">ĐỊNH NGHĨA &amp; NGỮ CẢNH</string>
+    <string name="label_add_meaning">ĐỊNH NGHĨA TIẾNG VIỆT *</string>
+    <string name="hint_add_meaning">Giải nghĩa chi tiết, ngắn gọn và dễ hiểu…</string>
+    <string name="label_add_example">CÂU VÍ DỤ MINH HỌA</string>
+    <string name="hint_add_example">Ví dụ: The ephemeral beauty of cherry blossoms lasts for just a few days.</string>
+    <string name="label_add_mnemonic">MẸO GHI NHỚ (MNEMONIC)</string>
+    <string name="hint_add_mnemonic">Gợi ý liên tưởng, từ đồng âm hoặc ngữ cảnh thực tế…</string>
+    <string name="sec_collection_srs">BỘ SƯU TẬP &amp; ÔN TẬP SM-2</string>
+    <string name="label_add_collection">LƯU VÀO SỔ TAY CHỦ ĐỀ *</string>
+    <string name="info_srs_schedule">Thẻ từ sau khi tạo sẽ tự động được đưa vào phiên ôn tập hôm nay với hệ số khởi điểm EF: 2.5 theo thuật toán SuperMemo SM-2.</string>
+    <string name="btn_submit_word">Lưu từ vựng vào Sổ tay</string>
+    <string name="err_word_empty">Vui lòng nhập từ vựng tiếng Anh</string>
+    <string name="err_meaning_empty">Vui lòng nhập định nghĩa tiếng Việt</string>
+    <string name="msg_word_added">Đã thêm từ vựng thành công vào Sổ tay!</string>
 </resources>
