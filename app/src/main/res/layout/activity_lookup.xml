@@ -458,9 +458,13 @@
 
             <!-- WORD CARD 1: Serendipity -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardWord1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardCornerRadius="18dp"
                 app:cardElevation="2dp">
 
@@ -596,9 +600,13 @@
 
             <!-- WORD CARD 2: Resilient -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardWord2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardCornerRadius="18dp"
                 app:cardElevation="2dp">
 
@@ -734,9 +742,13 @@
 
             <!-- WORD CARD 3: Idempotent -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardWord3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardCornerRadius="18dp"
                 app:cardElevation="2dp">
 

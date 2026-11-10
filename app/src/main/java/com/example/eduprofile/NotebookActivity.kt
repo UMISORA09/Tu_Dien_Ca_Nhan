@@ -137,17 +137,26 @@ class NotebookActivity : AppCompatActivity() {
             cardVocab3.visibility = View.GONE
         }
 
-        // Vocab cards clicks
+        // Vocab cards clicks -> Open WordDetailActivity
         cardVocab1.setOnClickListener {
-            Toast.makeText(this, "Serendipity /ˌser.ənˈdɪp.ə.ti/: Đang ôn tập SM-2", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Serendipity")
+            }
+            startActivity(intent)
         }
 
         cardVocab2.setOnClickListener {
-            Toast.makeText(this, "Resilient /rɪˈzɪl.i.ənt/: Đã thuộc lòng vững chắc", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Resilient")
+            }
+            startActivity(intent)
         }
 
         cardVocab3.setOnClickListener {
-            Toast.makeText(this, "Idempotent /ˌaɪ.dɛmˈpoʊ.tənt/: Lặp lại SRS sau 3 ngày", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Idempotent")
+            }
+            startActivity(intent)
         }
 
         // Bottom Navigation

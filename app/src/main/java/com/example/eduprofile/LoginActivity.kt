@@ -2,11 +2,13 @@ package com.example.eduprofile
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
@@ -15,6 +17,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var btnSelectRoleUser: LinearLayout
+    private lateinit var btnSelectRoleAdmin: LinearLayout
+    private lateinit var tvRoleUserText: TextView
+    private lateinit var tvRoleAdminText: TextView
 
     private lateinit var tilEmail: TextInputLayout
     private lateinit var etEmail: TextInputEditText
@@ -27,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnGithub: MaterialButton
     private lateinit var btnGuestMode: AppCompatButton
     private lateinit var tvRegister: TextView
+
+    private var selectedRole = "USER" // "USER" or "ADMIN"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +50,15 @@ class LoginActivity : AppCompatActivity() {
 
         initViews()
         setupListeners()
+        selectRole("USER")
     }
 
     private fun initViews() {
+        btnSelectRoleUser = findViewById(R.id.btnSelectRoleUser)
+        btnSelectRoleAdmin = findViewById(R.id.btnSelectRoleAdmin)
+        tvRoleUserText = findViewById(R.id.tvRoleUserText)
+        tvRoleAdminText = findViewById(R.id.tvRoleAdminText)
+
         tilEmail = findViewById(R.id.tilEmail)
         etEmail = findViewById(R.id.etEmail)
         tilPassword = findViewById(R.id.tilPassword)
@@ -58,6 +73,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        btnSelectRoleUser.setOnClickListener {
+            selectRole("USER")
+        }
+
+        btnSelectRoleAdmin.setOnClickListener {
+            selectRole("ADMIN")
+        }
+
         btnLogin.setOnClickListener {
             handleLogin()
         }
@@ -75,13 +98,43 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnGuestMode.setOnClickListener {
-            Toast.makeText(this, "Đang vào ứng dụng với Chế độ Khách...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Đang vào ứng dụng với Chế độ Khách (Offline SQLite)...", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, HomeActivity::class.java))
         }
 
         tvRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun selectRole(role: String) {
+        selectedRole = role
+        val colorWhite = ContextCompat.getColor(this, R.color.white)
+        val colorDark = ContextCompat.getColor(this, R.color.admin_slate_dark)
+
+        if (role == "USER") {
+            btnSelectRoleUser.setBackgroundResource(R.drawable.bg_tab_admin_active)
+            tvRoleUserText.setTextColor(colorWhite)
+
+            btnSelectRoleAdmin.setBackgroundResource(R.drawable.bg_btn_menu_white)
+            tvRoleAdminText.setTextColor(colorDark)
+
+            etEmail.setText("xuanhoa.dev@tdc.edu.vn")
+            etPassword.setText("12345678")
+            btnLogin.text = "➔ Đăng nhập Sổ Tay Học Viên (User)"
+            btnLogin.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_purple))
+        } else {
+            btnSelectRoleAdmin.setBackgroundResource(R.drawable.bg_tab_admin_active)
+            tvRoleAdminText.setTextColor(colorWhite)
+
+            btnSelectRoleUser.setBackgroundResource(R.drawable.bg_btn_menu_white)
+            tvRoleUserText.setTextColor(colorDark)
+
+            etEmail.setText("admin@cassavas.edu.vn")
+            etPassword.setText("12345678")
+            btnLogin.text = "🛡️ Đăng nhập Quản Trị Hệ Thống (Admin)"
+            btnLogin.setBackgroundColor(ContextCompat.getColor(this, R.color.admin_orange))
         }
     }
 
@@ -106,9 +159,21 @@ class LoginActivity : AppCompatActivity() {
         }
 
         if (isValid) {
-            Toast.makeText(this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+            // Save role into SharedPreferences
+            val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+            prefs.edit().putString("CURRENT_ROLE", selectedRole).apply()
+
+            if (selectedRole == "ADMIN") {
+                Toast.makeText(this, "Đăng nhập thành công với quyền Quản trị viên (Admin) 🛡️", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, AdminCmsActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 }

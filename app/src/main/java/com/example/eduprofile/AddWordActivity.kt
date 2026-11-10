@@ -220,6 +220,8 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             return
         }
 
+        val isContributed = findViewById<com.google.android.material.checkbox.MaterialCheckBox>(R.id.cbContributeSystem)?.isChecked ?: true
+
         val resultIntent = Intent().apply {
             putExtra("WORD", word)
             putExtra("MEANING", meaning)
@@ -229,14 +231,16 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             putExtra("TOPIC", selectedTopic)
             putExtra("EXAMPLE", example)
             putExtra("MNEMONIC", mnemonic)
+            putExtra("CONTRIBUTED", isContributed)
         }
 
         setResult(RESULT_OK, resultIntent)
-        Toast.makeText(
-            this,
-            "Đã thêm từ \"$word\" ($selectedPos) vào Sổ tay \"$selectedTopic\"!",
-            Toast.LENGTH_LONG
-        ).show()
+        val successMsg = if (isContributed) {
+            "Đã thêm \"$word\" vào Sổ tay và gửi đóng góp lên Admin CMS! 🚀"
+        } else {
+            "Đã thêm từ \"$word\" ($selectedPos) vào Sổ tay \"$selectedTopic\"!"
+        }
+        Toast.makeText(this, successMsg, Toast.LENGTH_LONG).show()
 
         finish()
     }

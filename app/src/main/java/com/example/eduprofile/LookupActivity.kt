@@ -3,6 +3,7 @@ package com.example.eduprofile
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -161,6 +162,28 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         btnAddNewWord.setOnClickListener {
             startActivity(Intent(this, AddWordActivity::class.java))
+        }
+
+        // Open Word Details
+        findViewById<View>(R.id.cardWord1)?.setOnClickListener {
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Serendipity")
+            }
+            startActivity(intent)
+        }
+
+        findViewById<View>(R.id.cardWord2)?.setOnClickListener {
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Resilient")
+            }
+            startActivity(intent)
+        }
+
+        findViewById<View>(R.id.cardWord3)?.setOnClickListener {
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Idempotent")
+            }
+            startActivity(intent)
         }
 
         // Audio pronunciation
