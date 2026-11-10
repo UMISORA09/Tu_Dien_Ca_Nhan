@@ -61,4 +61,60 @@
     <string name="err_terms_not_accepted">Vui lòng đồng ý với điều khoản để tiếp tục</string>
     <string name="msg_login_success">Đang chuyển vào Sổ tay ôn tập...</string>
     <string name="msg_register_success">Đăng ký thành công! Đang khởi tạo hồ sơ...</string>
+
+    <!-- Home screen (Updated to latest design) -->
+    <string name="greeting_morning">Chào buổi sáng, \uD83D\uDC4B</string>
+    <string name="greeting_subtitle">Hôm nay hãy cùng bứt phá 20 từ vựng nhé!</string>
+
+    <string name="dict_all">Tất cả</string>
+    <string name="dict_gb_en_vi">GB Anh-Việt</string>
+    <string name="dict_jp_ja">JP Nhật</string>
+    <string name="dict_kr_ko">KR Hàn</string>
+
+    <string name="hint_search_instant">Tra từ điển tức thì, nghĩa, IPA…</string>
+
+    <!-- Stats -->
+    <string name="label_daily_target">Mục tiêu hôm nay</string>
+    <string name="val_daily_target">14/20\ntừ</string>
+    <string name="val_percent_done">70% hoàn thành</string>
+
+    <string name="val_streak_days">18 ngày streak</string>
+    <string name="val_xp_accumulated">⭐ 1,420 XP tích lũy</string>
+
+    <!-- Quick Actions -->
+    <string name="title_quick_actions">Thao tác nhanh</string>
+    <string name="action_study_utilities">Tiện ích học tập</string>
+    <string name="qa_lookup">Tra từ</string>
+    <string name="qa_srs">Ôn SM-2</string>
+    <string name="qa_quiz">Làm Quiz</string>
+    <string name="qa_notebook">Sổ tay</string>
+    <string name="qa_add_word">Thêm từ</string>
+
+    <!-- Word of the day -->
+    <string name="badge_wotd">TỪ VỰNG CỦA NGÀY</string>
+    <string name="badge_cefr_c1">CEFR C1</string>
+    <string name="wotd_word">Serendipity</string>
+    <string name="wotd_phonetic_part">/ˌser.ənˈdɪp.ə.ti/ • Danh từ</string>
+    <string name="btn_audio_us">US</string>
+    <string name="btn_audio_uk">UK</string>
+    <string name="wotd_meaning">Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị, có giá trị một cách ngẫu nhiên.</string>
+    <string name="tip_mnemonic_wotd">✨ Mẹo nhớ: \"Se-ren-đi-pi-ty\" -> Đi dạo (đi) gặp chuyện vui…</string>
+
+    <!-- SM-2 Review Queue -->
+    <string name="title_sm2_queue">Hàng đợi ôn tập SM-2 hôm nay</string>
+    <string name="subtitle_sm2_queue">18 thẻ từ vựng đến hạn cần củng cố</string>
+    <string name="badge_due_count">18 từ đến hạn</string>
+
+    <string name="queue_word_1">Ephemeral</string>
+    <string name="queue_phonetic_1">/ɪˈfem.ər.əl/</string>
+    <string name="queue_ef_1">EF: 2.5</string>
+    <string name="badge_today">Hôm nay</string>
+
+    <!-- Navigation Bar -->
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_lookup">Tra cứu</string>
+    <string name="nav_notebook">Sổ tay</string>
+    <string name="nav_srs">Ôn SM-2</string>
+    <string name="nav_stats">Thống kê</string>
+    <string name="nav_account">Tài khoản</string>
 </resources>

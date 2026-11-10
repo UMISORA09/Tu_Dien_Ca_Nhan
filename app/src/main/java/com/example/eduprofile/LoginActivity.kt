@@ -75,7 +75,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnGuestMode.setOnClickListener {
-            Toast.makeText(this, "Đang khởi tạo cơ sở dữ liệu Offline SQLite...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Đang vào ứng dụng với Chế độ Khách...", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, HomeActivity::class.java))
         }
 
         tvRegister.setOnClickListener {
@@ -106,6 +107,8 @@ class LoginActivity : AppCompatActivity() {
 
         if (isValid) {
             Toast.makeText(this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.eduprofile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -139,9 +140,12 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(
                 this,
                 "${getString(R.string.msg_register_success)}\nTrình độ: $selectedLevel - Mục tiêu: $selectedGoal",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
 
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
         }
     }
