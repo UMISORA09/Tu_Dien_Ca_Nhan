@@ -209,7 +209,7 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navStats.setOnClickListener {
-            Toast.makeText(this, "Xem Thống kê học tập", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, StatsActivity::class.java))
         }
 
         navAccount.setOnClickListener {

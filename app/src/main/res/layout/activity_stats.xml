@@ -1,0 +1,894 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainStats"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    tools:context=".StatsActivity">
+
+    <!-- Scrollable Main Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp">
+
+            <!-- Screen Header -->
+            <TextView
+                android:id="@+id/tvHeaderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_stats_screen"
+                android:textColor="#1E1B4B"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHeaderSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/subtitle_stats_screen"
+                android:textColor="#64748B"
+                android:textSize="12.5sp" />
+
+            <!-- 1. STREAK CARD (Chuỗi học tập liên tục - Gradient Cam Đỏ) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardStreak"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_streak_gradient"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Badge Pill -->
+                    <TextView
+                        android:id="@+id/tvStreakBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_streak_pill"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="5dp"
+                        android:text="@string/badge_streak_continuous"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
+
+                    <!-- Middle Row: Streak Days & Flame Icon -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="bottom"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvStreakDays"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="18 Ngày"
+                                android:textColor="#FFFFFF"
+                                android:textSize="30sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStreakRecord"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginBottom="4dp"
+                                android:text="Kỷ lục: 24 ngày"
+                                android:textColor="#FEE2E2"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <!-- Flame Icon Circle -->
+                        <FrameLayout
+                            android:id="@+id/flameContainer"
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_icon_flame_circle">
+
+                            <ImageView
+                                android:id="@+id/ivFlame"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="Streak Flame"
+                                android:src="@drawable/ic_flame"
+                                app:tint="#FFFBEB" />
+                        </FrameLayout>
+                    </RelativeLayout>
+
+                    <!-- Bottom Desc -->
+                    <TextView
+                        android:id="@+id/tvStreakProgressDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Hôm nay bạn đã ôn tập 14/20 từ vựng!"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 2. MEMORY DISTRIBUTION CARD (Phân bổ trí nhớ từ vựng) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardMemoryDistribution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvMemoryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PHÂN BỔ TRÍ NHỚ TỪ VỰNG (8 TỪ)"
+                        android:textColor="#64748B"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <!-- 3 Memory Status Boxes -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <!-- Box 1: Mới thêm -->
+                        <LinearLayout
+                            android:id="@+id/boxNewWords"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_stat_box_new"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="14dp">
+
+                            <TextView
+                                android:id="@+id/tvCountNew"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2"
+                                android:textColor="#2563EB"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_status_new"
+                                android:textColor="#3B82F6"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- Box 2: Đang nhớ -->
+                        <LinearLayout
+                            android:id="@+id/boxLearningWords"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="3dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_stat_box_learning"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="14dp">
+
+                            <TextView
+                                android:id="@+id/tvCountLearning"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4"
+                                android:textColor="#D97706"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_status_remembering"
+                                android:textColor="#D97706"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- Box 3: Thuộc lòng -->
+                        <LinearLayout
+                            android:id="@+id/boxMasteredWords"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_stat_box_mastered"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="14dp">
+
+                            <TextView
+                                android:id="@+id/tvCountMastered"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2"
+                                android:textColor="#059669"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_status_mastered"
+                                android:textColor="#059669"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Stacked Bar Segment Indicator -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginTop="16dp"
+                        app:cardBackgroundColor="#F1F5F9"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="0dp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutStackedBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="8">
+
+                            <!-- Segment Blue (New: 2) -->
+                            <View
+                                android:id="@+id/barSegmentNew"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="#3B82F6" />
+
+                            <!-- Segment Amber (Learning: 4) -->
+                            <View
+                                android:id="@+id/barSegmentLearning"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4"
+                                android:background="#F59E0B" />
+
+                            <!-- Segment Green (Mastered: 2) -->
+                            <View
+                                android:id="@+id/barSegmentMastered"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="#10B981" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 3. WEEKLY REVIEW CHART CARD (Số từ ôn tập trong tuần) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardWeeklyReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Header Row: Title & Total Count -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvWeeklyTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/label_weekly_reviews_title"
+                            android:textColor="#64748B"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvWeeklyTotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="Tổng: 112 từ"
+                            android:textColor="#5B36E0"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <!-- 7-Day Bar Chart Grid -->
+                    <LinearLayout
+                        android:id="@+id/chartContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:weightSum="7">
+
+                        <!-- Day 1: T2 (15 words) -->
+                        <LinearLayout
+                            android:id="@+id/colMon"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValMon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="15"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barMon"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="63dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_normal" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_mon"
+                                android:textColor="#94A3B8"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Day 2: T3 (22 words) -->
+                        <LinearLayout
+                            android:id="@+id/colTue"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValTue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="22"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barTue"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="92dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_normal" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_tue"
+                                android:textColor="#94A3B8"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Day 3: T4 (12 words) -->
+                        <LinearLayout
+                            android:id="@+id/colWed"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValWed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barWed"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_normal" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_wed"
+                                android:textColor="#94A3B8"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Day 4: T5 (25 words - Highest) -->
+                        <LinearLayout
+                            android:id="@+id/colThu"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValThu"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="25"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barThu"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="105dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_normal" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_thu"
+                                android:textColor="#94A3B8"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Day 5: T6 (18 words) -->
+                        <LinearLayout
+                            android:id="@+id/colFri"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValFri"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="18"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barFri"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="75dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_normal" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_fri"
+                                android:textColor="#94A3B8"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Day 6: T7 (20 words) -->
+                        <LinearLayout
+                            android:id="@+id/colSat"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValSat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barSat"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="84dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_normal" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_sat"
+                                android:textColor="#94A3B8"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <!-- Day 7: CN (14 words - ACTIVE CURRENT DAY) -->
+                        <LinearLayout
+                            android:id="@+id/colSun"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvValSun"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="14"
+                                android:textColor="#1E1B4B"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <FrameLayout
+                                android:layout_width="26dp"
+                                android:layout_height="105dp"
+                                android:layout_marginTop="6dp">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/bg_chart_bar_track" />
+
+                                <View
+                                    android:id="@+id/barSun"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="58dp"
+                                    android:layout_gravity="bottom"
+                                    android:background="@drawable/bg_chart_bar_active" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/day_sun"
+                                android:textColor="#6339E9"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 4. BOTTOM NAVIGATION BAR (6 Tabs matching Figma) -->
+    <LinearLayout
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        android:baselineAligned="false"
+        android:elevation="8dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="12dp"
+        android:weightSum="6">
+
+        <!-- Tab 1: Trang chủ -->
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/nav_home"
+                android:src="@drawable/ic_compass"
+                app:tint="#64748B" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_home"
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+
+        <!-- Tab 2: Tra cứu -->
+        <LinearLayout
+            android:id="@+id/navLookup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/nav_lookup"
+                android:src="@drawable/ic_nav_search"
+                app:tint="#64748B" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_lookup"
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+
+        <!-- Tab 3: Sổ tay -->
+        <LinearLayout
+            android:id="@+id/navNotebook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/nav_notebook"
+                android:src="@drawable/ic_nav_notebook"
+                app:tint="#64748B" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_notebook"
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+
+        <!-- Tab 4: Ôn SM-2 -->
+        <LinearLayout
+            android:id="@+id/navSRS"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/nav_srs"
+                android:src="@drawable/ic_nav_srs"
+                app:tint="#64748B" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_srs"
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+
+        <!-- Tab 5: Thống kê (ACTIVE) -->
+        <LinearLayout
+            android:id="@+id/navStats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
+
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="30dp"
+                android:background="@drawable/bg_badge_purple">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/nav_stats"
+                    android:src="@drawable/ic_nav_stats"
+                    app:tint="#6339E9" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_stats"
+                android:textColor="#6339E9"
+                android:textSize="10.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Tab 6: Tài khoản -->
+        <LinearLayout
+            android:id="@+id/navAccount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="@string/nav_account"
+                android:src="@drawable/ic_nav_account"
+                app:tint="#64748B" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_account"
+                android:textColor="#64748B"
+                android:textSize="10.5sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
