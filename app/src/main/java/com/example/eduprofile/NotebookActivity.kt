@@ -166,7 +166,7 @@ class NotebookActivity : AppCompatActivity() {
         }
 
         navSRS.setOnClickListener {
-            Toast.makeText(this, "Ôn tập Spaced Repetition (SuperMemo SM-2)", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, FlashcardActivity::class.java))
         }
 
         navStats.setOnClickListener {

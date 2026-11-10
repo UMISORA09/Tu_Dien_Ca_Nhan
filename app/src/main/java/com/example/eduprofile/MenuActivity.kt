@@ -122,7 +122,8 @@ class MenuActivity : AppCompatActivity() {
         }
 
         menuItemSRS.setOnClickListener {
-            Toast.makeText(this, "Ôn tập Spaced Repetition (SuperMemo SM-2)", Toast.LENGTH_SHORT).show()
+            closeMenuWithAnimation()
+            startActivity(Intent(this, FlashcardActivity::class.java))
         }
 
         menuItemStats.setOnClickListener {

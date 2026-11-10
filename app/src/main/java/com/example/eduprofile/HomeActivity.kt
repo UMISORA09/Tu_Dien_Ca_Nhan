@@ -40,6 +40,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var qaQuiz: LinearLayout
     private lateinit var qaNotebook: LinearLayout
     private lateinit var qaAddWord: LinearLayout
+    private lateinit var cardSrsQueue: androidx.cardview.widget.CardView
 
     // Word of the Day
     private lateinit var btnAudioUS: LinearLayout
@@ -98,6 +99,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         qaQuiz = findViewById(R.id.qaQuiz)
         qaNotebook = findViewById(R.id.qaNotebook)
         qaAddWord = findViewById(R.id.qaAddWord)
+        cardSrsQueue = findViewById(R.id.cardSrsQueue)
 
         btnAudioUS = findViewById(R.id.btnAudioUS)
         btnAudioUK = findViewById(R.id.btnAudioUK)
@@ -143,7 +145,11 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         qaSRS.setOnClickListener {
-            Toast.makeText(this, "Bắt đầu phiên Ôn tập SM-2 hôm nay (18 từ)", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, FlashcardActivity::class.java))
+        }
+
+        cardSrsQueue.setOnClickListener {
+            startActivity(Intent(this, FlashcardActivity::class.java))
         }
 
         qaQuiz.setOnClickListener {
@@ -193,7 +199,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navSRS.setOnClickListener {
-            Toast.makeText(this, "Chuyển sang Ôn SM-2", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, FlashcardActivity::class.java))
         }
 
         navStats.setOnClickListener {
