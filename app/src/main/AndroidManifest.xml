@@ -39,6 +39,12 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".MenuActivity"
+            android:exported="true"
+            android:theme="@style/Theme.EduProfile.MenuTranslucent"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
     </application>
