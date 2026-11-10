@@ -61,4 +61,46 @@
     <string name="err_terms_not_accepted">Vui lòng đồng ý với điều khoản để tiếp tục</string>
     <string name="msg_login_success">Đang chuyển vào Sổ tay ôn tập...</string>
     <string name="msg_register_success">Đăng ký thành công! Đang khởi tạo hồ sơ...</string>
+
+    <!-- Home screen -->
+    <string name="dict_all">Tất cả</string>
+    <string name="dict_en_vi">Anh-Việt</string>
+    <string name="dict_jp">Nhật</string>
+    <string name="dict_kr">Hàn</string>
+
+    <string name="hint_search_box">Tra từ, nghĩa, phiên âm, ghi chú…</string>
+
+    <string name="filter_all">Tất cả</string>
+    <string name="filter_noun">Danh từ</string>
+    <string name="filter_verb">Động từ</string>
+    <string name="filter_adj">Tính từ</string>
+    <string name="filter_idiom">Idiom</string>
+
+    <string name="badge_wotd">TỪ VỰNG CỦA NGÀY</string>
+    <string name="badge_cefr_c1">CEFR C1</string>
+    <string name="wotd_word">Serendipity</string>
+    <string name="wotd_phonetic_part">/ˌser.ənˈdɪp.ə.ti/ • Danh từ</string>
+    <string name="btn_audio_us">US</string>
+    <string name="btn_audio_uk">UK</string>
+    <string name="wotd_meaning">Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị, có giá trị một cách ngẫu nhiên.</string>
+    <string name="wotd_example">\"Finding this cozy café was pure serendipity.\"</string>
+    <string name="btn_view_detail">Chi tiết ></string>
+
+    <string name="title_recent_trending">TRA CỨU GẦN ĐÂY &amp; XU HƯỚNG</string>
+    <string name="btn_collapse">Thu gọn</string>
+    <string name="trend_word_1">Serendipity</string>
+    <string name="trend_word_2">Idempotent</string>
+    <string name="trend_word_3">Resilient</string>
+    <string name="trend_word_4">Bite the bullet</string>
+
+    <string name="title_personal_dict">TỪ ĐIỂN CÁ NHÂN CỦA BẠN</string>
+    <string name="btn_add_new_word">+ Thêm từ mới</string>
+    <string name="badge_noun">Danh từ</string>
+    <string name="badge_c1">C1</string>
+    <string name="tip_mnemonic">Mẹo nhớ: \"Se-ren-đi-pi-ty\" → Đi dạo (đi) gặp chuyện vui bất ngờ…</string>
+
+    <string name="nav_lookup">Tra cứu</string>
+    <string name="nav_notebook">Sổ tay</string>
+    <string name="nav_srs">Ôn tập SRS</string>
+    <string name="nav_stats">Thống kê</string>
 </resources>
