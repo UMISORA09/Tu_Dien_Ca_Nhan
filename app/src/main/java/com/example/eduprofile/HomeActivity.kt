@@ -151,7 +151,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         qaNotebook.setOnClickListener {
-            Toast.makeText(this, "Mở Sổ tay từ vựng cá nhân", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, NotebookActivity::class.java))
         }
 
         qaAddWord.setOnClickListener {
@@ -189,7 +189,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navNotebook.setOnClickListener {
-            Toast.makeText(this, "Mở Sổ tay từ vựng", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, NotebookActivity::class.java))
         }
 
         navSRS.setOnClickListener {
