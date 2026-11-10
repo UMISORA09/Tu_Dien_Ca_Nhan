@@ -205,3 +205,4 @@ class MenuActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.stay, R.anim.slide_out_left)
     }
 }
+
