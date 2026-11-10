@@ -11,8 +11,6 @@ import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.CycleInterpolator
-import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -32,51 +30,33 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val id: Int,
         val word: String,
         val phonetic: String,
-        val correctAnswerIndex: Int, // 0 for A, 1 for B, 2 for C, 3 for D
+        val correctAnswerIndex: Int, // 0 for Option 1, 1 for Option 2, etc.
         val options: List<String>
     )
 
     // Header Views
-    private lateinit var btnBack: FrameLayout
     private lateinit var tvHeaderTitle: TextView
     private lateinit var tvHeaderSubtitle: TextView
     private lateinit var tabModeFlashcard: LinearLayout
     private lateinit var tabModeQuiz: LinearLayout
     private lateinit var progressBarSession: ProgressBar
 
-    // Quiz Content Views
-    private lateinit var layoutActiveQuiz: LinearLayout
-    private lateinit var tvScoreXP: TextView
+    // Quiz Container & Target Word
+    private lateinit var cardQuizContainer: CardView
+    private lateinit var tvQuizBadgeScore: TextView
     private lateinit var tvQuestionWord: TextView
     private lateinit var tvQuestionPhonetic: TextView
-    private lateinit var btnSpeakWord: ImageView
-    private lateinit var cardQuestion: CardView
 
     // 4 Option Cards
-    private lateinit var cardOptionA: CardView
-    private lateinit var cardOptionB: CardView
-    private lateinit var cardOptionC: CardView
-    private lateinit var cardOptionD: CardView
+    private lateinit var layoutOption1: LinearLayout
+    private lateinit var layoutOption2: LinearLayout
+    private lateinit var layoutOption3: LinearLayout
+    private lateinit var layoutOption4: LinearLayout
 
-    private lateinit var layoutOptionA: LinearLayout
-    private lateinit var layoutOptionB: LinearLayout
-    private lateinit var layoutOptionC: LinearLayout
-    private lateinit var layoutOptionD: LinearLayout
-
-    private lateinit var badgeContainerA: FrameLayout
-    private lateinit var badgeContainerB: FrameLayout
-    private lateinit var badgeContainerC: FrameLayout
-    private lateinit var badgeContainerD: FrameLayout
-
-    private lateinit var tvBadgeA: TextView
-    private lateinit var tvBadgeB: TextView
-    private lateinit var tvBadgeC: TextView
-    private lateinit var tvBadgeD: TextView
-
-    private lateinit var tvOptionA: TextView
-    private lateinit var tvOptionB: TextView
-    private lateinit var tvOptionC: TextView
-    private lateinit var tvOptionD: TextView
+    private lateinit var tvOption1: TextView
+    private lateinit var tvOption2: TextView
+    private lateinit var tvOption3: TextView
+    private lateinit var tvOption4: TextView
 
     // Completion Views
     private lateinit var cardCompletion: CardView
@@ -85,11 +65,13 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var btnRestartQuiz: AppCompatButton
     private lateinit var btnBackHome: AppCompatButton
 
-    // Bottom Navigation
+    // Bottom Navigation (6 tabs matching Figma)
+    private lateinit var navHome: LinearLayout
     private lateinit var navLookup: LinearLayout
     private lateinit var navNotebook: LinearLayout
     private lateinit var navSRS: LinearLayout
     private lateinit var navStats: LinearLayout
+    private lateinit var navAccount: LinearLayout
 
     // State & Data
     private val questionList = ArrayList<QuizQuestion>()
@@ -123,51 +105,33 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             val bottomNav = findViewById<LinearLayout>(R.id.bottomNavContainer)
             val padTop = (8 * resources.displayMetrics.density).toInt()
-            val padHoriz = (8 * resources.displayMetrics.density).toInt()
+            val padHoriz = (4 * resources.displayMetrics.density).toInt()
             bottomNav.setPadding(padHoriz, padTop, padHoriz, systemBars.bottom + padTop)
             insets
         }
     }
 
     private fun initViews() {
-        btnBack = findViewById(R.id.btnBack)
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle)
         tvHeaderSubtitle = findViewById(R.id.tvHeaderSubtitle)
         tabModeFlashcard = findViewById(R.id.tabModeFlashcard)
         tabModeQuiz = findViewById(R.id.tabModeQuiz)
         progressBarSession = findViewById(R.id.progressBarSession)
 
-        layoutActiveQuiz = findViewById(R.id.layoutActiveQuiz)
-        tvScoreXP = findViewById(R.id.tvScoreXP)
+        cardQuizContainer = findViewById(R.id.cardQuizContainer)
+        tvQuizBadgeScore = findViewById(R.id.tvQuizBadgeScore)
         tvQuestionWord = findViewById(R.id.tvQuestionWord)
         tvQuestionPhonetic = findViewById(R.id.tvQuestionPhonetic)
-        btnSpeakWord = findViewById(R.id.btnSpeakWord)
-        cardQuestion = findViewById(R.id.cardQuestion)
 
-        cardOptionA = findViewById(R.id.cardOptionA)
-        cardOptionB = findViewById(R.id.cardOptionB)
-        cardOptionC = findViewById(R.id.cardOptionC)
-        cardOptionD = findViewById(R.id.cardOptionD)
+        layoutOption1 = findViewById(R.id.layoutOption1)
+        layoutOption2 = findViewById(R.id.layoutOption2)
+        layoutOption3 = findViewById(R.id.layoutOption3)
+        layoutOption4 = findViewById(R.id.layoutOption4)
 
-        layoutOptionA = findViewById(R.id.layoutOptionA)
-        layoutOptionB = findViewById(R.id.layoutOptionB)
-        layoutOptionC = findViewById(R.id.layoutOptionC)
-        layoutOptionD = findViewById(R.id.layoutOptionD)
-
-        badgeContainerA = findViewById(R.id.badgeContainerA)
-        badgeContainerB = findViewById(R.id.badgeContainerB)
-        badgeContainerC = findViewById(R.id.badgeContainerC)
-        badgeContainerD = findViewById(R.id.badgeContainerD)
-
-        tvBadgeA = findViewById(R.id.tvBadgeA)
-        tvBadgeB = findViewById(R.id.tvBadgeB)
-        tvBadgeC = findViewById(R.id.tvBadgeC)
-        tvBadgeD = findViewById(R.id.tvBadgeD)
-
-        tvOptionA = findViewById(R.id.tvOptionA)
-        tvOptionB = findViewById(R.id.tvOptionB)
-        tvOptionC = findViewById(R.id.tvOptionC)
-        tvOptionD = findViewById(R.id.tvOptionD)
+        tvOption1 = findViewById(R.id.tvOption1)
+        tvOption2 = findViewById(R.id.tvOption2)
+        tvOption3 = findViewById(R.id.tvOption3)
+        tvOption4 = findViewById(R.id.tvOption4)
 
         cardCompletion = findViewById(R.id.cardCompletion)
         tvFinalXP = findViewById(R.id.tvFinalXP)
@@ -175,16 +139,18 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         btnRestartQuiz = findViewById(R.id.btnRestartQuiz)
         btnBackHome = findViewById(R.id.btnBackHome)
 
+        navHome = findViewById(R.id.navHome)
         navLookup = findViewById(R.id.navLookup)
         navNotebook = findViewById(R.id.navNotebook)
         navSRS = findViewById(R.id.navSRS)
         navStats = findViewById(R.id.navStats)
+        navAccount = findViewById(R.id.navAccount)
     }
 
     private fun initData() {
         questionList.clear()
 
-        // 1. Serendipity
+        // 1. Serendipity (Exact text from Figma)
         questionList.add(
             QuizQuestion(
                 id = 1,
@@ -193,8 +159,8 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 correctAnswerIndex = 0,
                 options = listOf(
                     "Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị, có giá trị một cách ngẫu nhiên.",
-                    "Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn, biến cố hoặc thay đổi (trong IT: hệ thống chịu lỗi).",
-                    "(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho cùng kết quả.",
+                    "Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn, biến cố hoặc thay đổi (trong IT: hệ thống chịu lỗi tốt).",
+                    "(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho ra cùng một kết quả mà không gây tác dụng phụ.",
                     "Cắn răng chịu đựng; quyết tâm đối mặt với một tình huống khó khăn không thể tránh khỏi."
                 )
             )
@@ -208,7 +174,7 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 phonetic = "/rɪˈzɪl.i.ənt/",
                 correctAnswerIndex = 0,
                 options = listOf(
-                    "Kiên cường, mau hồi phục sau khó khăn, biến cố hoặc khả năng đàn hồi co giãn của vật chất.",
+                    "Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn, biến cố hoặc thay đổi (trong IT: hệ thống chịu lỗi tốt).",
                     "Phù du, chóng tàn, chỉ tồn tại hoặc kéo dài trong một thời gian rất ngắn ngủi.",
                     "Có mặt ở khắp mọi nơi, phổ biến rộng rãi khắp chốn.",
                     "Thực tế, thực dụng; giải quyết vấn đề dựa trên hiệu quả thực tế thay vì lý thuyết suông."
@@ -225,9 +191,9 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 correctAnswerIndex = 1,
                 options = listOf(
                     "Hùng biện, lưu loát; có tài diễn đạt ý nghĩ và cảm xúc một cách thuyết phục và truyền cảm.",
-                    "(Toán / IT) Lũy đẳng; đặc tính của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho kết quả giống hệt nhau.",
+                    "(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho ra cùng một kết quả mà không gây tác dụng phụ.",
                     "Bền bỉ, ngoan cường, kiên trì theo đuổi mục tiêu đến cùng mà không bao giờ bỏ cuộc.",
-                    "Sự tình cờ may mắn ngoài mong đợi trong cuộc sống."
+                    "Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị ngoài mong đợi."
                 )
             )
         )
@@ -240,10 +206,10 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 phonetic = "/ɪˈfem.ər.əl/",
                 correctAnswerIndex = 2,
                 options = listOf(
-                    "Có mặt ở khắp mọi nơi, phổ biến trên toàn cầu.",
-                    "Cắn răng chấp nhận hoàn cảnh khó khăn để vượt qua.",
+                    "Có mặt ở khắp mọi nơi, phổ biến trên quy mô toàn cầu.",
+                    "Cắn răng chịu đựng; quyết tâm đối mặt với thử thách khó khăn.",
                     "Phù du, chóng tàn, chỉ tồn tại hoặc kéo dài trong một thời gian rất ngắn ngủi.",
-                    "Tái cấu trúc mã nguồn mà không thay đổi chức năng vốn có."
+                    "Tái cấu trúc mã nguồn mà không làm thay đổi hành vi bên ngoài của hệ thống."
                 )
             )
         )
@@ -257,9 +223,9 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 correctAnswerIndex = 0,
                 options = listOf(
                     "Thực tế, thực dụng; giải quyết vấn đề dựa trên hiệu quả thực tế thay vì lý thuyết suông.",
-                    "Lời chúc may mắn mang tính biểu tượng trước buổi biểu diễn nghệ thuật.",
-                    "Đặc tính bất biến khi thực thi liên tục nhiều phiên làm việc.",
-                    "Khả năng đàn hồi và phục hồi trạng thái ổn định ban đầu."
+                    "Lời chúc may mắn mang ý nghĩa chúc diễn viên biểu diễn thành công tốt đẹp.",
+                    "Tính chất bền vững, duy trì trạng thái nhất quán sau các sự cố gián đoạn.",
+                    "Khả năng phục hồi và tái tạo năng lượng sau chuỗi ngày làm việc căng thẳng."
                 )
             )
         )
@@ -272,9 +238,9 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 phonetic = "/juːˈbɪk.wə.təs/",
                 correctAnswerIndex = 3,
                 options = listOf(
-                    "Bền bỉ, kiên định theo đuổi chí hướng đến cùng.",
-                    "Vẻ đẹp mong manh thoáng chốc như giọt sương mai.",
-                    "Sự tình cờ khám phá ra quy luật khoa học mới.",
+                    "Bền bỉ, kiên định theo đuổi mục tiêu chiến lược của dự án.",
+                    "Vẻ đẹp mong manh, thoáng chốc như giọt sương mai đầu ngày.",
+                    "Sự tình cờ phát hiện ra một phát minh công nghệ có giá trị cao.",
                     "Có mặt ở khắp mọi nơi, phổ biến rộng rãi khắp chốn."
                 )
             )
@@ -288,10 +254,10 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 phonetic = "/ˈel.ə.kwənt/",
                 correctAnswerIndex = 1,
                 options = listOf(
-                    "Chú trọng thực tiễn, loại bỏ các chi tiết hàn lâm không cần thiết.",
+                    "Ưu tiên hành động thực tiễn, hạn chế tối đa các tranh luận lý thuyết.",
                     "Hùng biện, lưu loát; có tài diễn đạt ý nghĩ và cảm xúc một cách thuyết phục và truyền cảm.",
-                    "Tính chất bền bỉ trước áp lực công việc và thách thức kỹ thuật.",
-                    "Lũy đẳng; bảo đảm tính toàn vẹn dữ liệu khi gửi trùng lặp gói tin."
+                    "Kiên trì vượt qua mọi rào cản và khó khăn để đạt thành quả.",
+                    "Lũy đẳng; đảm bảo tính toàn vẹn khi thực hiện lặp lại một lệnh gọi API."
                 )
             )
         )
@@ -305,19 +271,15 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 correctAnswerIndex = 0,
                 options = listOf(
                     "Bền bỉ, ngoan cường, kiên trì theo đuổi mục tiêu đến cùng mà không bao giờ bỏ cuộc.",
-                    "Xuất hiện phổ biến ở tất cả các nền tảng thiết bị di động.",
-                    "May mắn tình cờ nảy sinh trong hoàn cảnh ngẫu nhiên.",
-                    "Thích nghi nhanh với những biến động thời tiết khắc nghiệt."
+                    "Phổ biến rộng khắp, xuất hiện trong mọi ngóc ngách của đời sống xã hội.",
+                    "Khả năng nắm bắt cơ hội may mắn và chuyển hóa thành thành công vượt bậc.",
+                    "Khả năng thích ứng linh hoạt trước những thay đổi khó lường của môi trường."
                 )
             )
         )
     }
 
     private fun setupListeners() {
-        btnBack.setOnClickListener {
-            finish()
-        }
-
         // Mode Switcher: Click on Flashcard 3D -> launch FlashcardActivity
         tabModeFlashcard.setOnClickListener {
             val intent = Intent(this, FlashcardActivity::class.java)
@@ -327,22 +289,22 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Mode Switcher: Click on Quiz Nhanh -> already active
         tabModeQuiz.setOnClickListener {
-            Toast.makeText(this, "Đang trong chế độ Quiz Trắc nghiệm", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Đang trong chế độ Quiz Nhanh", Toast.LENGTH_SHORT).show()
         }
 
-        // Speak word
-        btnSpeakWord.setOnClickListener {
+        // Tap word to pronounce
+        tvQuestionWord.setOnClickListener {
             speakCurrentWord()
         }
-        cardQuestion.setOnClickListener {
+        tvQuestionPhonetic.setOnClickListener {
             speakCurrentWord()
         }
 
         // Options Click Listeners
-        cardOptionA.setOnClickListener { onOptionSelected(0) }
-        cardOptionB.setOnClickListener { onOptionSelected(1) }
-        cardOptionC.setOnClickListener { onOptionSelected(2) }
-        cardOptionD.setOnClickListener { onOptionSelected(3) }
+        layoutOption1.setOnClickListener { onOptionSelected(0) }
+        layoutOption2.setOnClickListener { onOptionSelected(1) }
+        layoutOption3.setOnClickListener { onOptionSelected(2) }
+        layoutOption4.setOnClickListener { onOptionSelected(3) }
 
         // Restart Quiz
         btnRestartQuiz.setOnClickListener {
@@ -357,7 +319,14 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             finish()
         }
 
-        // Bottom Navigation
+        // Bottom Navigation (6 Tabs)
+        navHome.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+            finish()
+        }
+
         navLookup.setOnClickListener {
             startActivity(Intent(this, LookupActivity::class.java))
         }
@@ -367,12 +336,15 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navSRS.setOnClickListener {
-            // Already in SRS mode
             Toast.makeText(this, "Bạn đang trong phòng Ôn tập SRS (Quiz Nhanh)", Toast.LENGTH_SHORT).show()
         }
 
         navStats.setOnClickListener {
-            Toast.makeText(this, "Thống kê từ vựng: $scoreXP XP đã tích lũy trong phiên này", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Thống kê: $scoreXP XP đã tích lũy trong phiên luyện tập này", Toast.LENGTH_SHORT).show()
+        }
+
+        navAccount.setOnClickListener {
+            Toast.makeText(this, "Hồ sơ người dùng: Nguyễn Xuân Hòa", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -402,30 +374,21 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tvQuestionPhonetic.text = q.phonetic
 
         // Update Options
-        tvOptionA.text = q.options[0]
-        tvOptionB.text = q.options[1]
-        tvOptionC.text = q.options[2]
-        tvOptionD.text = q.options[3]
+        tvOption1.text = q.options[0]
+        tvOption2.text = q.options[1]
+        tvOption3.text = q.options[2]
+        tvOption4.text = q.options[3]
 
-        // Animate question card entry
-        cardQuestion.alpha = 0f
-        cardQuestion.translationY = -20f
-        cardQuestion.animate()
-            .alpha(1f)
-            .translationY(0f)
-            .setDuration(300)
-            .start()
-
-        // Animate options cascade entry
-        val optionCards = listOf(cardOptionA, cardOptionB, cardOptionC, cardOptionD)
-        optionCards.forEachIndexed { i, card ->
-            card.alpha = 0f
-            card.translationY = 30f
-            card.animate()
+        // Smooth entry animation for options
+        val optionLayouts = listOf(layoutOption1, layoutOption2, layoutOption3, layoutOption4)
+        optionLayouts.forEachIndexed { i, layout ->
+            layout.alpha = 0f
+            layout.translationY = 24f
+            layout.animate()
                 .alpha(1f)
                 .translationY(0f)
-                .setDuration(280)
-                .setStartDelay((i * 45).toLong())
+                .setDuration(260)
+                .setStartDelay((i * 40).toLong())
                 .start()
         }
 
@@ -439,23 +402,19 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val q = questionList[currentIndex]
         val isCorrect = (selectedIndex == q.correctAnswerIndex)
-
-        val layoutList = listOf(layoutOptionA, layoutOptionB, layoutOptionC, layoutOptionD)
-        val badgeContainerList = listOf(badgeContainerA, badgeContainerB, badgeContainerC, badgeContainerD)
-        val tvBadgeList = listOf(tvBadgeA, tvBadgeB, tvBadgeC, tvBadgeD)
-        val cardList = listOf(cardOptionA, cardOptionB, cardOptionC, cardOptionD)
+        val optionLayouts = listOf(layoutOption1, layoutOption2, layoutOption3, layoutOption4)
+        val optionTexts = listOf(tvOption1, tvOption2, tvOption3, tvOption4)
 
         if (isCorrect) {
-            // Apply Correct Style to selected
-            layoutList[selectedIndex].setBackgroundResource(R.drawable.bg_option_correct)
-            badgeContainerList[selectedIndex].setBackgroundResource(R.drawable.bg_badge_option_correct)
-            tvBadgeList[selectedIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
+            // Correct Style
+            optionLayouts[selectedIndex].setBackgroundResource(R.drawable.bg_option_item_correct)
+            optionTexts[selectedIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
 
-            // Pulse animation on correct card
-            val pulseX = ObjectAnimator.ofFloat(cardList[selectedIndex], "scaleX", 1f, 1.03f, 1f)
-            val pulseY = ObjectAnimator.ofFloat(cardList[selectedIndex], "scaleY", 1f, 1.03f, 1f)
-            pulseX.duration = 300
-            pulseY.duration = 300
+            // Pulse animation
+            val pulseX = ObjectAnimator.ofFloat(optionLayouts[selectedIndex], "scaleX", 1f, 1.025f, 1f)
+            val pulseY = ObjectAnimator.ofFloat(optionLayouts[selectedIndex], "scaleY", 1f, 1.025f, 1f)
+            pulseX.duration = 280
+            pulseY.duration = 280
             pulseX.start()
             pulseY.start()
 
@@ -473,22 +432,20 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }, 1200)
 
         } else {
-            // Apply Wrong Style to selected
-            layoutList[selectedIndex].setBackgroundResource(R.drawable.bg_option_wrong)
-            badgeContainerList[selectedIndex].setBackgroundResource(R.drawable.bg_badge_option_wrong)
-            tvBadgeList[selectedIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark))
+            // Wrong Style
+            optionLayouts[selectedIndex].setBackgroundResource(R.drawable.bg_option_item_wrong)
+            optionTexts[selectedIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark))
 
-            // Shake animation on wrong card
-            val shake = ObjectAnimator.ofFloat(cardList[selectedIndex], "translationX", 0f, 25f, -25f, 20f, -20f, 10f, 0f)
-            shake.duration = 500
+            // Shake animation
+            val shake = ObjectAnimator.ofFloat(optionLayouts[selectedIndex], "translationX", 0f, 20f, -20f, 15f, -15f, 8f, 0f)
+            shake.duration = 450
             shake.interpolator = CycleInterpolator(1f)
             shake.start()
 
-            // Automatically highlight the correct answer in green
-            val correctIndex = q.correctAnswerIndex
-            layoutList[correctIndex].setBackgroundResource(R.drawable.bg_option_correct)
-            badgeContainerList[correctIndex].setBackgroundResource(R.drawable.bg_badge_option_correct)
-            tvBadgeList[correctIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
+            // Automatically highlight correct answer
+            val correctIdx = q.correctAnswerIndex
+            optionLayouts[correctIdx].setBackgroundResource(R.drawable.bg_option_item_correct)
+            optionTexts[correctIdx].setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
 
             Toast.makeText(this, "Chưa chính xác! Hãy ghi nhớ đáp án đúng nhé", Toast.LENGTH_SHORT).show()
 
@@ -501,32 +458,33 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun resetOptionStyles() {
-        val layoutList = listOf(layoutOptionA, layoutOptionB, layoutOptionC, layoutOptionD)
-        val badgeContainerList = listOf(badgeContainerA, badgeContainerB, badgeContainerC, badgeContainerD)
-        val tvBadgeList = listOf(tvBadgeA, tvBadgeB, tvBadgeC, tvBadgeD)
-        val defaultPurple = ContextCompat.getColor(this, R.color.primary_purple)
+        val optionLayouts = listOf(layoutOption1, layoutOption2, layoutOption3, layoutOption4)
+        val optionTexts = listOf(tvOption1, tvOption2, tvOption3, tvOption4)
+        val defaultTextColor = ContextCompat.getColor(this, R.color.text_primary)
 
         for (i in 0..3) {
-            layoutList[i].setBackgroundResource(R.drawable.bg_option_default)
-            badgeContainerList[i].setBackgroundResource(R.drawable.bg_badge_option_default)
-            tvBadgeList[i].setTextColor(defaultPurple)
+            optionLayouts[i].setBackgroundResource(R.drawable.bg_option_item_default)
+            optionTexts[i].setTextColor(defaultTextColor)
+            optionLayouts[i].scaleX = 1f
+            optionLayouts[i].scaleY = 1f
+            optionLayouts[i].translationX = 0f
         }
     }
 
     private fun updateScoreDisplay(animated: Boolean) {
-        tvScoreXP.text = "Điểm XP: $scoreXP"
+        tvQuizBadgeScore.text = "TRẮC NGHIỆM QUIZ • ĐIỂM: $scoreXP"
         if (animated) {
-            val scaleX = ObjectAnimator.ofFloat(tvScoreXP, "scaleX", 1f, 1.35f, 1f)
-            val scaleY = ObjectAnimator.ofFloat(tvScoreXP, "scaleY", 1f, 1.35f, 1f)
-            scaleX.duration = 350
-            scaleY.duration = 350
+            val scaleX = ObjectAnimator.ofFloat(tvQuizBadgeScore, "scaleX", 1f, 1.25f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(tvQuizBadgeScore, "scaleY", 1f, 1.25f, 1f)
+            scaleX.duration = 300
+            scaleY.duration = 300
             scaleX.start()
             scaleY.start()
         }
     }
 
     private fun showCompletionScreen() {
-        layoutActiveQuiz.visibility = View.GONE
+        cardQuizContainer.visibility = View.GONE
         cardCompletion.visibility = View.VISIBLE
         cardCompletion.alpha = 0f
         cardCompletion.scaleX = 0.9f
@@ -561,7 +519,7 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     cardCompletion.visibility = View.GONE
-                    layoutActiveQuiz.visibility = View.VISIBLE
+                    cardQuizContainer.visibility = View.VISIBLE
                     loadQuestion(currentIndex)
                 }
             })
