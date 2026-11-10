@@ -46,6 +46,7 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var switchReminder: MaterialSwitch
     private lateinit var menuItemDarkMode: LinearLayout
     private lateinit var switchDarkMode: MaterialSwitch
+    private lateinit var menuItemAdminCms: LinearLayout
     private lateinit var menuItemLogout: LinearLayout
 
     // Footer
@@ -95,6 +96,7 @@ class MenuActivity : AppCompatActivity() {
         switchReminder = findViewById(R.id.switchReminder)
         menuItemDarkMode = findViewById(R.id.menuItemDarkMode)
         switchDarkMode = findViewById(R.id.switchDarkMode)
+        menuItemAdminCms = findViewById(R.id.menuItemAdminCms)
         menuItemLogout = findViewById(R.id.menuItemLogout)
 
         tvMenuProjectLink = findViewById(R.id.tvMenuProjectLink)
@@ -177,6 +179,12 @@ class MenuActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 Toast.makeText(this, "Đã bật Giao diện Ban ngày (Light Mode)", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Quản trị Admin CMS
+        menuItemAdminCms.setOnClickListener {
+            closeMenuWithAnimation()
+            startActivity(Intent(this, AdminCmsActivity::class.java))
         }
 
         // Đăng xuất
