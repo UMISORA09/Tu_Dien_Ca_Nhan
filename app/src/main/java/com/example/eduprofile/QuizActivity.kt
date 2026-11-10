@@ -345,7 +345,8 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navAccount.setOnClickListener {
-            Toast.makeText(this, "Hồ sơ người dùng: Nguyễn Xuân Hòa", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
         }
     }
 
