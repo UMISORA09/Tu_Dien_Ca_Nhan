@@ -113,7 +113,9 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setupListeners() {
         btnMenu.setOnClickListener {
-            Toast.makeText(this, "Mở Menu tính năng Cassavas", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MenuActivity::class.java))
+            @Suppress("DEPRECATION")
+            overridePendingTransition(R.anim.slide_in_left, R.anim.stay)
         }
 
         ivUserAvatar.setOnClickListener {

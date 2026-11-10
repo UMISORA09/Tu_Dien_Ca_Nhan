@@ -9,6 +9,16 @@
 
     <style name="Theme.EduProfile" parent="Base.Theme.EduProfile" />
 
+    <style name="Theme.EduProfile.MenuTranslucent" parent="Base.Theme.EduProfile">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <!-- Custom Outlined Box Style with Rounded Corners -->
     <style name="Widget.Cassavas.TextInputLayout.OutlinedBox" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusTopStart">14dp</item>

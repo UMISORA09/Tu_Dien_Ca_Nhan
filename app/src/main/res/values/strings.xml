@@ -151,4 +151,29 @@
     <string name="phonetic_idempotent">/ˌaɪ.dɛmˈpoʊ.tənt/</string>
     <string name="badge_c2">C2</string>
     <string name="meaning_idempotent">(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện nhiều lần vẫn cho cùng kết quả…</string>
+
+    <!-- Menu Screen (Figma) -->
+    <string name="menu_user_name">Nguyễn Minh Quân</string>
+    <string name="menu_user_subtitle">Học viên C1 • Pro Lexicon</string>
+    <string name="menu_streak_days">🔥 Chuỗi 18 ngày liên tiếp</string>
+    <string name="menu_target_progress">14/20 từ</string>
+    <string name="menu_sec_learning_space">KHÔNG GIAN HỌC TẬP</string>
+    <string name="menu_item_smart_lookup">Tra cứu thông minh</string>
+    <string name="menu_badge_ai_ocr">AI OCR</string>
+    <string name="menu_item_notebook">Sổ tay từ vựng cá nhân</string>
+    <string name="menu_badge_word_count">8 từ</string>
+    <string name="menu_item_spaced_repetition">Ôn tập Spaced Repetition</string>
+    <string name="menu_badge_sm2">SM-2</string>
+    <string name="menu_item_progress_analytics">Phân tích &amp; Tiến độ học</string>
+    <string name="menu_sec_data_settings">QUẢN LÝ DỮ LIỆU &amp; CÀI ĐẶT</string>
+    <string name="menu_item_export_data">Xuất dữ liệu (CSV / JSON / Anki)</string>
+    <string name="menu_item_import_data">Nhập bộ từ vựng (Import CSV)</string>
+    <string name="menu_item_offline_dict">Từ điển Ngoại tuyến (Offline)</string>
+    <string name="menu_sub_offline_dict">Đã tải gói phát âm US/UK (42MB)</string>
+    <string name="menu_item_smart_reminder">Nhắc nhở ôn tập thông minh</string>
+    <string name="menu_sub_smart_reminder">Hàng ngày lúc 20:30 tối</string>
+    <string name="menu_item_dark_mode">Giao diện Ban đêm (Dark Mode)</string>
+    <string name="menu_item_logout">Đăng xuất tài khoản</string>
+    <string name="menu_footer_version">Cassavas Dictionary v2.5</string>
+    <string name="menu_footer_project">Đồ Án Mobile</string>
 </resources>
