@@ -68,6 +68,65 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <!-- Mode Toggle Switcher [Flashcard 3D | Quiz Nhanh] -->
+        <LinearLayout
+            android:id="@+id/toggleModeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_mode_toggle_container"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <!-- Tab 1: Flashcard 3D (Active) -->
+            <LinearLayout
+                android:id="@+id/tabModeFlashcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_mode_tab_active"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lineSpacingExtra="1dp"
+                    android:text="Flashcard\n3D"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Tab 2: Quiz Nhanh (Inactive) -->
+            <LinearLayout
+                android:id="@+id/tabModeQuiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:lineSpacingExtra="1dp"
+                    android:text="Quiz\nNhanh"
+                    android:textColor="#6B7280"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
         <!-- Shuffle / Reset Button -->
         <FrameLayout
             android:id="@+id/btnShuffle"

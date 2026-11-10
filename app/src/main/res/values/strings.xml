@@ -249,4 +249,18 @@
     <string name="flashcard_completed_msg">Bạn đã ôn tập xong toàn bộ thẻ từ vựng trong hàng đợi hôm nay.</string>
     <string name="flashcard_btn_restart">Ôn lại phiên này</string>
     <string name="flashcard_btn_home">Về Trang chủ</string>
+
+    <!-- Quiz / Luyện tập trắc nghiệm Screen -->
+    <string name="title_quiz_srs">Ôn Tập Thông Minh</string>
+    <string name="subtitle_quiz_srs">Thuật toán lặp lại ngắt quãng SM-2 • Thẻ %1$d/%2$d</string>
+    <string name="tab_mode_flashcard">Flashcard\n3D</string>
+    <string name="tab_mode_quiz">Quiz\nNhanh</string>
+    <string name="quiz_prompt">Chọn nghĩa đúng của từ</string>
+    <string name="quiz_score_xp">Điểm XP: %d</string>
+    <string name="quiz_correct_feedback">Chính xác! +10 XP 🎉</string>
+    <string name="quiz_wrong_feedback">Chưa chính xác! Hãy ghi nhớ đáp án đúng nhé</string>
+    <string name="quiz_completed_title">Xuất Sắc! Hoàn Thành Bài Quiz 🏆</string>
+    <string name="quiz_completed_msg">Bạn đã hoàn thành phiên luyện tập trắc nghiệm từ vựng cá nhân hôm nay.</string>
+    <string name="quiz_btn_restart">Luyện tập lại</string>
+    <string name="quiz_btn_home">Về Trang chủ</string>
 </resources>
