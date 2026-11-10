@@ -110,6 +110,15 @@
     <string name="queue_ef_1">EF: 2.5</string>
     <string name="badge_today">Hôm nay</string>
 
+    <!-- Word Filters & Badges -->
+    <string name="filter_all">Tất cả</string>
+    <string name="filter_noun">Danh từ</string>
+    <string name="filter_verb">Động từ</string>
+    <string name="filter_adj">Tính từ</string>
+    <string name="filter_idiom">Idiom</string>
+    <string name="badge_noun">Danh từ</string>
+    <string name="badge_c1">C1</string>
+
     <!-- Navigation Bar -->
     <string name="nav_home">Trang chủ</string>
     <string name="nav_lookup">Tra cứu</string>
@@ -117,4 +126,29 @@
     <string name="nav_srs">Ôn SM-2</string>
     <string name="nav_stats">Thống kê</string>
     <string name="nav_account">Tài khoản</string>
+    <!-- Lookup screen (Tra cứu) -->
+    <string name="title_lookup_instant">Tra cứu tức thì</string>
+    <string name="subtitle_lookup_instant">Từ điển cá nhân đa ngôn ngữ</string>
+    <string name="dict_gb_short">GB\nAnh</string>
+    <string name="dict_jp_short">JP\nNhật</string>
+    <string name="hint_search_lookup">Tra từ vựng, phiên âm IPA, nghĩa tiếng Việt…</string>
+
+    <string name="title_recent_search">Tra cứu gần đây</string>
+    <string name="btn_clear_history">Xóa lịch sử</string>
+
+    <string name="title_inventory_count">Tất cả từ vựng trong kho (8)</string>
+    <string name="btn_add_new_word_inventory">+ Thêm từ mới</string>
+
+    <!-- Vocabulary items -->
+    <string name="word_resilient">Resilient</string>
+    <string name="phonetic_resilient">/rɪˈzɪl.i.ənt/</string>
+    <string name="badge_adj">Tính từ</string>
+    <string name="badge_b2">B2</string>
+    <string name="meaning_resilient">Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn, biến cố hoặc thay đổi…</string>
+    <string name="tip_resilient">Hay dùng trong tài liệu System Design để chỉ hệ thống tự phục hồi…</string>
+
+    <string name="word_idempotent">Idempotent</string>
+    <string name="phonetic_idempotent">/ˌaɪ.dɛmˈpoʊ.tənt/</string>
+    <string name="badge_c2">C2</string>
+    <string name="meaning_idempotent">(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện nhiều lần vẫn cho cùng kết quả…</string>
 </resources>

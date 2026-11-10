@@ -1,5 +1,6 @@
 package com.example.eduprofile
 
+import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.inputmethod.EditorInfo
@@ -136,8 +137,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Quick Actions
         qaLookup.setOnClickListener {
-            etSearchBox.requestFocus()
-            Toast.makeText(this, "Mở nhanh tính năng Tra từ", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LookupActivity::class.java))
         }
 
         qaSRS.setOnClickListener {
@@ -183,8 +183,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navLookup.setOnClickListener {
-            etSearchBox.requestFocus()
-            Toast.makeText(this, "Chuyển sang Tra cứu", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LookupActivity::class.java))
         }
 
         navNotebook.setOnClickListener {
