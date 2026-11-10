@@ -557,9 +557,13 @@
 
             <!-- 6. TỪ VỰNG CỦA NGÀY (Feature Card) -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardWotd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="5dp">
 

@@ -3,6 +3,7 @@ package com.example.eduprofile
 import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -183,6 +184,14 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 btnBookmarkWotd.setImageResource(R.drawable.ic_bookmark_white)
                 Toast.makeText(this, "Đã bỏ lưu khỏi Sổ tay", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Click Word of the day -> Open WordDetailActivity
+        findViewById<View>(R.id.cardWotd)?.setOnClickListener {
+            val intent = Intent(this, WordDetailActivity::class.java).apply {
+                putExtra("EXTRA_WORD", "Serendipity")
+            }
+            startActivity(intent)
         }
 
         // Bottom Navigation

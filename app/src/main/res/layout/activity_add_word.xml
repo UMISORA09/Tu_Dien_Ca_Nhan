@@ -668,14 +668,27 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
+            <!-- Contribute Checkbox -->
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbContributeSystem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:checked="true"
+                android:text="Đóng góp từ này lên Kho từ Hệ thống (Chờ Admin duyệt)"
+                android:textColor="#0F172A"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
+                app:buttonTint="@color/admin_orange" />
+
             <!-- Submit Button -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSubmitWord"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:background="@drawable/bg_btn_primary"
-                android:text="@string/btn_submit_word"
+                android:text="Lưu &amp; Đồng bộ vào Sổ tay"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
