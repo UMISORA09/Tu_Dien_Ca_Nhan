@@ -90,7 +90,7 @@ class NotebookActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         btnAddWord.setOnClickListener {
-            Toast.makeText(this, "+ Thêm từ vựng mới vào Sổ tay cá nhân", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, AddWordActivity::class.java))
         }
 
         // Topic Cards selection

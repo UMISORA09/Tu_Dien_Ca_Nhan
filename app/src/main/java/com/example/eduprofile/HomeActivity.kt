@@ -155,7 +155,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         qaAddWord.setOnClickListener {
-            Toast.makeText(this, "Mở biểu mẫu Thêm từ mới vào từ điển", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, AddWordActivity::class.java))
         }
 
         // Audio pronunciation

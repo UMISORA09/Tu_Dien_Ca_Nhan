@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page">
+
+    <!-- Top Navigation Header -->
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_circle_icon"
+            android:clickable="true"
+            android:contentDescription="@string/btn_back"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/btn_back"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/text_primary" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_add_word"
+                android:textColor="#1F2937"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/subtitle_add_word"
+                android:textColor="#6B7280"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnSaveTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:text="@string/btn_save_top"
+            android:textColor="@color/primary_purple"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Scrollable Form -->
+    <ScrollView
+        android:id="@+id/contentScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="32dp">
+
+            <!-- SECTION 1: THÔNG TIN TỪ VỰNG -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.05"
+                android:text="@string/sec_word_info"
+                android:textColor="#9CA3AF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <!-- Input 1: Từ vựng tiếng Anh -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/label_add_word"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilWord"
+                    style="@style/Widget.Cassavas.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxStrokeColor="@color/primary_purple"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etWord"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_add_word"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true"
+                        android:textColor="#1F2937"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Speaker Test Pronounce Button -->
+                <FrameLayout
+                    android:id="@+id/btnSpeakWord"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_dict_active"
+                    android:clickable="true"
+                    android:contentDescription="@string/btn_audio_us"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/btn_audio_us"
+                        android:src="@drawable/ic_speaker_purple"
+                        app:tint="#FFFFFF" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Input 2: Phiên âm IPA -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_add_phonetic"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPhonetic"
+                style="@style/Widget.Cassavas.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:boxStrokeColor="@color/primary_purple"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhonetic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_add_phonetic"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Input 3: Loại từ (Part of Speech Chips) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_add_pos"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Danh từ (Default active) -->
+                    <TextView
+                        android:id="@+id/chipPosNoun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_purple"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="14dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/filter_noun"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <!-- Động từ -->
+                    <TextView
+                        android:id="@+id/chipPosVerb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_white"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="14dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/filter_verb"
+                        android:textColor="#4B5563"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <!-- Tính từ -->
+                    <TextView
+                        android:id="@+id/chipPosAdj"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_white"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="14dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/filter_adj"
+                        android:textColor="#4B5563"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <!-- Trạng từ -->
+                    <TextView
+                        android:id="@+id/chipPosAdv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_chip_white"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="14dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="8dp"
+                        android:text="Trạng từ"
+                        android:textColor="#4B5563"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <!-- Idiom -->
+                    <TextView
+                        android:id="@+id/chipPosIdiom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_chip_white"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingStart="14dp"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="14dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/filter_idiom"
+                        android:textColor="#4B5563"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Input 4: Trình độ CEFR -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_add_level"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chipLevelA"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="A1 - A2"
+                    android:textColor="#4B5563"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/chipLevelB"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="B1 - B2"
+                    android:textColor="#4B5563"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/chipLevelC"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_chip_purple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="C1 - C2"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- SECTION 2: ĐỊNH NGHĨA & NGỮ CẢNH -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:letterSpacing="0.05"
+                android:text="@string/sec_meaning_context"
+                android:textColor="#9CA3AF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <!-- Input 5: Định nghĩa tiếng Việt -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/label_add_meaning"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilMeaning"
+                style="@style/Widget.Cassavas.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:boxStrokeColor="@color/primary_purple"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMeaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:hint="@string/hint_add_meaning"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="3"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Input 6: Câu ví dụ minh họa -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_add_example"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilExample"
+                style="@style/Widget.Cassavas.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:boxStrokeColor="@color/primary_purple"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etExample"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:hint="@string/hint_add_example"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="2"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Input 7: Mẹo ghi nhớ (Mnemonic) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/label_add_mnemonic"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilMnemonic"
+                style="@style/Widget.Cassavas.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:boxStrokeColor="@color/primary_purple"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_sparkle"
+                app:startIconTint="#F59E0B">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMnemonic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:hint="@string/hint_add_mnemonic"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="2"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- SECTION 3: BỘ SƯU TẬP & ÔN TẬP SM-2 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:letterSpacing="0.05"
+                android:text="@string/sec_collection_srs"
+                android:textColor="#9CA3AF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/label_add_collection"
+                android:textColor="#4B5563"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Topic Cards Grid for Selection -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/cardTopicIT"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_topic_card"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@string/topic_it"
+                        android:src="@drawable/ic_laptop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Chuyên ngành IT"
+                        android:textColor="#1F2937"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardTopicComm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_topic_card"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@string/topic_comm"
+                        android:src="@drawable/ic_chat_bubble" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Giao tiếp hằng ngày"
+                        android:textColor="#1F2937"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/cardTopicIELTS"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_topic_card_selected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@string/topic_ielts"
+                        android:src="@drawable/ic_graduation_cap" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="IELTS Academic"
+                        android:textColor="#6339E9"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardTopicIdioms"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_topic_card"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@string/topic_idioms"
+                        android:src="@drawable/ic_sparkle" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Idioms &amp; Phrasal"
+                        android:textColor="#1F2937"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- SRS Info Banner -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_srs_info_box"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/title_sm2_queue"
+                    android:src="@drawable/ic_layers_outline"
+                    app:tint="@color/primary_purple" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:lineSpacingExtra="2dp"
+                    android:text="@string/info_srs_schedule"
+                    android:textColor="#4B5563"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Submit Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSubmitWord"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_btn_primary"
+                android:text="@string/btn_submit_word"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
