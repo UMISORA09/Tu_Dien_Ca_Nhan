@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tu_Dien_Ca_Nhan</string>
+    <string name="app_name">Cassavas</string>
     <string name="title_cassavas_lexicon">Cassavas Lexicon</string>
     <string name="subtitle_sm2">Từ điển cá nhân hóa &amp; Ôn tập ngắt quãng thông minh theo chuẩn SM-2</string>
     
@@ -21,8 +21,44 @@
     <string name="dont_have_account">Chưa có tài khoản cá nhân?</string>
     <string name="register_now">Đăng ký ngay</string>
     
+    <!-- Register form -->
+    <string name="btn_back">Quay lại</string>
+    <string name="already_have_account_login">ĐÃ CÓ TÀI KHOẢN? ĐĂNG NHẬP</string>
+    <string name="title_create_account">Tạo Tài Khoản Mới</string>
+    <string name="subtitle_create_account">Bắt đầu hành trình ghi nhớ từ vựng khoa học và cá nhân hóa với thuật toán SM-2.</string>
+    
+    <string name="label_fullname">HỌ VÀ TÊN HIỂN THỊ *</string>
+    <string name="hint_fullname">VD: Nguyễn Xuân Hòa</string>
+    
+    <string name="label_register_email">EMAIL HOẶC SỐ ĐIỆN THOẠI *</string>
+    <string name="hint_register_email">xuanhoa.dev@cassavas.io</string>
+    
+    <string name="label_register_password">MẬT KHẨU *</string>
+    <string name="hint_register_password">Tối thiểu 8 ký tự</string>
+    
+    <string name="label_confirm_password">XÁC NHẬN MẬT KHẨU *</string>
+    <string name="hint_confirm_password">Nhập lại mật khẩu</string>
+    
+    <string name="label_english_level">TRÌNH ĐỘ TIẾNG ANH HIỆN TẠI</string>
+    <string name="level_a">Sơ cấp (A1 - A2)</string>
+    <string name="level_b">Trung cấp (B1 - B2)</string>
+    <string name="level_c">Nâng cao (C1 - C2)</string>
+    
+    <string name="label_daily_goal">MỤC TIÊU HỌC TỪ MỖI NGÀY</string>
+    <string name="goal_10">10 từ / ngày</string>
+    <string name="goal_20">20 từ / ngày</string>
+    <string name="goal_30">30 từ / ngày</string>
+    
+    <string name="agree_terms">Tôi đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của Cassavas Lexicon.</string>
+    <string name="btn_complete_register">Hoàn tất Đăng ký &amp; Bắt đầu</string>
+    
     <!-- Validation & feedback -->
     <string name="err_empty_email">Vui lòng nhập email hoặc tên đăng nhập</string>
     <string name="err_empty_password">Vui lòng nhập mật khẩu bảo mật</string>
+    <string name="err_empty_fullname">Vui lòng nhập họ và tên của bạn</string>
+    <string name="err_password_short">Mật khẩu phải có tối thiểu 8 ký tự</string>
+    <string name="err_password_not_match">Mật khẩu xác nhận không trùng khớp</string>
+    <string name="err_terms_not_accepted">Vui lòng đồng ý với điều khoản để tiếp tục</string>
     <string name="msg_login_success">Đang chuyển vào Sổ tay ôn tập...</string>
+    <string name="msg_register_success">Đăng ký thành công! Đang khởi tạo hồ sơ...</string>
 </resources>
