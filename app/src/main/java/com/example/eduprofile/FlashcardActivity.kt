@@ -42,6 +42,8 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     // Views - Header & Progress
     private lateinit var btnBack: FrameLayout
     private lateinit var btnShuffle: FrameLayout
+    private lateinit var tabModeFlashcard: LinearLayout
+    private lateinit var tabModeQuiz: LinearLayout
     private lateinit var tvCardCounter: TextView
     private lateinit var tvQueueRemaining: TextView
     private lateinit var progressBarSession: ProgressBar
@@ -286,6 +288,8 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         btnShuffle = findViewById(R.id.btnShuffle)
+        tabModeFlashcard = findViewById(R.id.tabModeFlashcard)
+        tabModeQuiz = findViewById(R.id.tabModeQuiz)
         tvCardCounter = findViewById(R.id.tvCardCounter)
         tvQueueRemaining = findViewById(R.id.tvQueueRemaining)
         progressBarSession = findViewById(R.id.progressBarSession)
@@ -339,6 +343,16 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun setupListeners() {
         btnBack.setOnClickListener { finish() }
+
+        tabModeFlashcard.setOnClickListener {
+            Toast.makeText(this, "Đang ở chế độ Flashcard 3D", Toast.LENGTH_SHORT).show()
+        }
+
+        tabModeQuiz.setOnClickListener {
+            val intent = Intent(this, QuizActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         btnShuffle.setOnClickListener {
             flashcardList.shuffle()

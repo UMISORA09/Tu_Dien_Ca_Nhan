@@ -153,7 +153,7 @@ class HomeActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         qaQuiz.setOnClickListener {
-            Toast.makeText(this, "Khởi động Mini Quiz ôn tập từ vựng", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, QuizActivity::class.java))
         }
 
         qaNotebook.setOnClickListener {
