@@ -34,6 +34,11 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".LookupActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
     </application>
