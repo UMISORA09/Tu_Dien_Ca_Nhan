@@ -230,4 +230,23 @@
     <string name="err_word_empty">Vui lòng nhập từ vựng tiếng Anh</string>
     <string name="err_meaning_empty">Vui lòng nhập định nghĩa tiếng Việt</string>
     <string name="msg_word_added">Đã thêm từ vựng thành công vào Sổ tay!</string>
+
+    <!-- Flashcard 3D Screen (Ôn tập SM-2 Flashcard 3D) -->
+    <string name="title_flashcard_3d">Ôn Tập Flashcard 3D</string>
+    <string name="subtitle_flashcard_3d">Lặp ngắt quãng Spaced Repetition • SM-2</string>
+    <string name="flashcard_hint_flip_front">Chạm để lật thẻ 3D xem nghĩa &amp; ví dụ 🔄</string>
+    <string name="flashcard_hint_flip_back">Chạm để lật 3D lại mặt trước 🔄</string>
+    <string name="flashcard_rating_prompt">Bạn nhớ từ vựng này như thế nào?</string>
+    <string name="rating_again">Quên</string>
+    <string name="rating_again_time">&lt; 1 ngày</string>
+    <string name="rating_hard">Khó</string>
+    <string name="rating_hard_time">2 ngày</string>
+    <string name="rating_good">Tốt</string>
+    <string name="rating_good_time">4 ngày</string>
+    <string name="rating_easy">Dễ</string>
+    <string name="rating_easy_time">7 ngày</string>
+    <string name="flashcard_completed_title">Xuất Sắc! Hoàn Thành 🎉</string>
+    <string name="flashcard_completed_msg">Bạn đã ôn tập xong toàn bộ thẻ từ vựng trong hàng đợi hôm nay.</string>
+    <string name="flashcard_btn_restart">Ôn lại phiên này</string>
+    <string name="flashcard_btn_home">Về Trang chủ</string>
 </resources>

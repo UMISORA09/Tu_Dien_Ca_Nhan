@@ -752,9 +752,12 @@
 
             <!-- 7. HÀNG ĐỢI ÔN TẬP SM-2 HÔM NAY -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardSrsQueue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
+                android:clickable="true"
+                android:focusable="true"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp">
 

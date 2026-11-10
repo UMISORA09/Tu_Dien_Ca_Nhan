@@ -205,7 +205,7 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navSRS.setOnClickListener {
-            Toast.makeText(this, "Chuyển sang Ôn SM-2", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, FlashcardActivity::class.java))
         }
 
         navStats.setOnClickListener {
