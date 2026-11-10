@@ -340,7 +340,8 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         navStats.setOnClickListener {
-            Toast.makeText(this, "Thống kê: $scoreXP XP đã tích lũy trong phiên luyện tập này", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, StatsActivity::class.java))
+            finish()
         }
 
         navAccount.setOnClickListener {

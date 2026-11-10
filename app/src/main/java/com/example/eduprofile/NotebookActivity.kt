@@ -170,7 +170,7 @@ class NotebookActivity : AppCompatActivity() {
         }
 
         navStats.setOnClickListener {
-            Toast.makeText(this, "Thống kê từ vựng & Chuỗi ngày học liên tục", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, StatsActivity::class.java))
         }
 
         navAccount.setOnClickListener {

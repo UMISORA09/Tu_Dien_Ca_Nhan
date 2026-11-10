@@ -263,4 +263,24 @@
     <string name="quiz_completed_msg">Bạn đã hoàn thành phiên luyện tập trắc nghiệm từ vựng cá nhân hôm nay.</string>
     <string name="quiz_btn_restart">Luyện tập lại</string>
     <string name="quiz_btn_home">Về Trang chủ</string>
+
+    <!-- Stats / Thống kê học tập Screen -->
+    <string name="title_stats_screen">Thống Kê Học Tập</string>
+    <string name="subtitle_stats_screen">Theo dõi chuỗi ngày học liên tiếp &amp; mức độ ghi nhớ từ vựng</string>
+    <string name="badge_streak_continuous">CHUỖI HỌC TẬP LIÊN TỤC</string>
+    <string name="streak_record_format">Kỷ lục: %d ngày</string>
+    <string name="streak_today_progress_format">Hôm nay bạn đã ôn tập %1$d/%2$d từ vựng!</string>
+    <string name="label_memory_distribution_format">PHÂN BỔ TRÍ NHỚ TỪ VỰNG (%d TỪ)</string>
+    <string name="stat_status_new">Mới thêm</string>
+    <string name="stat_status_remembering">Đang nhớ</string>
+    <string name="stat_status_mastered">Thuộc lòng</string>
+    <string name="label_weekly_reviews_title">SỐ TỪ ÔN TẬP TRONG TUẦN</string>
+    <string name="label_weekly_total_format">Tổng: %d từ</string>
+    <string name="day_mon">T2</string>
+    <string name="day_tue">T3</string>
+    <string name="day_wed">T4</string>
+    <string name="day_thu">T5</string>
+    <string name="day_fri">T6</string>
+    <string name="day_sat">T7</string>
+    <string name="day_sun">CN</string>
 </resources>
