@@ -19,7 +19,6 @@ import java.util.Locale
 
 class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
-    private lateinit var btnBack: FrameLayout
     private lateinit var etSearchBox: EditText
     private lateinit var btnVoiceSearch: FrameLayout
     private lateinit var btnCameraSearch: FrameLayout
@@ -89,7 +88,6 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun initViews() {
-        btnBack = findViewById(R.id.btnBack)
         etSearchBox = findViewById(R.id.etSearchBox)
         btnVoiceSearch = findViewById(R.id.btnVoiceSearch)
         btnCameraSearch = findViewById(R.id.btnCameraSearch)
@@ -129,10 +127,6 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun setupListeners() {
-        btnBack.setOnClickListener {
-            finish()
-        }
-
         etSearchBox.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 performSearch(etSearchBox.text.toString())
