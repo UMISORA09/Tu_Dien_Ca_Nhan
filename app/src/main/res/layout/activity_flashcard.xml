@@ -207,163 +207,168 @@
             app:cardCornerRadius="24dp"
             app:cardElevation="4dp">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_card_3d_front"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:background="@drawable/bg_card_3d_front">
 
-                <!-- Top Pill Badge: MẶT TRƯỚC • TỪ VỰNG -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/bg_badge_purple"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="3.5dp">
+                <!-- Bookmark Icon ở góc trên bên phải -->
+                <ImageView
+                    android:id="@+id/btnBookmarkFront"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="14dp"
+                    android:padding="6dp"
+                    android:contentDescription="Đánh dấu"
+                    android:src="@drawable/ic_bookmark_gold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="MẶT TRƯỚC • TỪ VỰNG"
-                        android:textColor="#6339E9"
-                        android:textSize="10.5sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Front Top Row: Badges & Bookmark -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <!-- Part of Speech Badge -->
-                    <TextView
-                        android:id="@+id/badgePosFront"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_badge_purple"
-                        android:paddingStart="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="3dp"
-                        android:text="Danh từ"
-                        android:textColor="#6339E9"
-                        android:textSize="11.5sp"
-                        android:textStyle="bold" />
-
-                    <!-- CEFR Badge -->
-                    <TextView
-                        android:id="@+id/badgeCefrFront"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:background="@drawable/bg_badge_purple"
-                        android:paddingStart="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="3dp"
-                        android:text="C1"
-                        android:textColor="#6339E9"
-                        android:textSize="11.5sp"
-                        android:textStyle="bold" />
-
-                    <!-- Topic Badge -->
-                    <TextView
-                        android:id="@+id/badgeTopicFront"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:background="@drawable/bg_badge_orange"
-                        android:paddingStart="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="3dp"
-                        android:text="IELTS Academic"
-                        android:textColor="#D97706"
-                        android:textSize="11.5sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
-
-                    <!-- Bookmark Icon -->
-                    <ImageView
-                        android:id="@+id/btnBookmarkFront"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:contentDescription="Đánh dấu"
-                        android:src="@drawable/ic_bookmark_gold" />
-                </LinearLayout>
-
-                <!-- Center Content: English Word, Phonetic, Big Speaker -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvWordFront"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="Serendipity"
-                        android:textColor="#1E1B4B"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvPhoneticFront"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center"
-                        android:text="/ˌser.ənˈdɪp.ə.ti/"
-                        android:textColor="#6B7280"
-                        android:textSize="15sp" />
-
-                    <!-- Pronounce Speaker Button (Large Pill) -->
+                    <!-- Top Pill Badge: MẶT TRƯỚC • TỪ VỰNG -->
                     <LinearLayout
-                        android:id="@+id/btnSpeakFront"
                         android:layout_width="wrap_content"
-                        android:layout_height="42dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_btn_primary"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="18dp">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:contentDescription="Phát âm"
-                            android:src="@drawable/ic_speaker"
-                            app:tint="#FFFFFF" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/bg_badge_purple"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="3.5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Nghe US"
-                            android:textColor="#FFFFFF"
-                            android:textSize="13sp"
+                            android:text="MẶT TRƯỚC • TỪ VỰNG"
+                            android:textColor="#6339E9"
+                            android:textSize="10.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
-                </LinearLayout>
 
-            </LinearLayout>
+                    <!-- Front Top Row: 3 Badges CĂN CHỈNH Ở GIỮA -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <!-- Part of Speech Badge -->
+                        <TextView
+                            android:id="@+id/badgePosFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_purple"
+                            android:paddingStart="8dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="3dp"
+                            android:text="Danh từ"
+                            android:textColor="#6339E9"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <!-- CEFR Badge -->
+                        <TextView
+                            android:id="@+id/badgeCefrFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_badge_purple"
+                            android:paddingStart="8dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="3dp"
+                            android:text="C1"
+                            android:textColor="#6339E9"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <!-- Topic Badge -->
+                        <TextView
+                            android:id="@+id/badgeTopicFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_badge_orange"
+                            android:paddingStart="8dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="3dp"
+                            android:text="IELTS Academic"
+                            android:textColor="#D97706"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Center Content: English Word, Phonetic, Big Speaker -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvWordFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:text="Serendipity"
+                            android:textColor="#1E1B4B"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPhoneticFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
+                            android:text="/ˌser.ənˈdɪp.ə.ti/"
+                            android:textColor="#6B7280"
+                            android:textSize="15sp" />
+
+                        <!-- Pronounce Speaker Button (Large Pill) -->
+                        <LinearLayout
+                            android:id="@+id/btnSpeakFront"
+                            android:layout_width="wrap_content"
+                            android:layout_height="42dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_btn_primary"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="18dp">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:contentDescription="Phát âm"
+                                android:src="@drawable/ic_speaker"
+                                app:tint="#FFFFFF" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Nghe US"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </FrameLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- ================= BACK OF CARD ================= -->
