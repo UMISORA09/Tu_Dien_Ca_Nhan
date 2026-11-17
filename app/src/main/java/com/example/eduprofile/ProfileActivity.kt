@@ -30,10 +30,12 @@ import java.util.Locale
 class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     // Header
+    // [ĐÃ XÓA]: btnTopMenu (nút hamburger menu góc phải) đã được gỡ bỏ
     private lateinit var tvProfileTitle: TextView
     private lateinit var tvProfileSubtitle: TextView
 
     // Profile Card
+    // [ĐÃ XÓA]: btnSyncNow (nút Đồng bộ ngay) đã được gỡ bỏ vì chuyển sang đồng bộ liên tục tự động
     private lateinit var cardProfile: CardView
     private lateinit var ivAvatar: ImageView
     private lateinit var tvUserName: TextView
@@ -87,6 +89,7 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         hideStatusBar()
     }
 
+    // [THÊM]: Ẩn thanh trạng thái hệ thống Status Bar toàn màn hình theo yêu cầu giao diện
     private fun hideStatusBar() {
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -96,6 +99,7 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainProfile)) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // [SỬA]: padTop = 12dp để tiêu đề không bị cấn khi ẩn Status Bar
             val padTop = (12 * resources.displayMetrics.density).toInt()
             findViewById<View>(R.id.scrollContainer).setPadding(
                 0,
@@ -154,7 +158,8 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             startActivity(Intent(this, AdminCmsActivity::class.java))
         }
 
-        // Continuous Sync Status
+        // [ĐÃ XÓA]: btnTopMenu.setOnClickListener và btnSyncNow.setOnClickListener
+        // [THÊM]: Listener thông báo trạng thái đồng bộ liên tục khi người dùng chạm vào
         tvSyncStatus.setOnClickListener {
             Toast.makeText(this, "Hệ thống đang đồng bộ liên tục với Cloud", Toast.LENGTH_SHORT).show()
         }

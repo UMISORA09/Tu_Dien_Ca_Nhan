@@ -22,13 +22,14 @@
             android:paddingBottom="100dp">
 
             <!-- 1. TOP BAR (Title, Dictionary Switcher) -->
+            <!-- [ĐÃ XÓA]: Nút btnBack (mũi tên quay lại) ở góc trái theo yêu cầu giao diện -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <!-- Title & Subtitle -->
+                <!-- Title & Subtitle [SỬA]: Bỏ layout_marginStart để căn lề trái đồng bộ -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

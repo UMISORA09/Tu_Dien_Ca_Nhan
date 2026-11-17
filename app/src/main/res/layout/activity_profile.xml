@@ -25,6 +25,8 @@
             android:paddingTop="20dp">
 
             <!-- 1. Header Row: Title & Subtitle -->
+            <!-- [ĐÃ XÓA]: Nút btnTopMenu (icon hamburger menu ≡) ở góc trên bên phải -->
+            <!-- [SỬA]: Chuyển sang LinearLayout chứa Tiêu đề & Phụ đề thoáng đãng, đồng bộ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,6 +143,8 @@
                     </LinearLayout>
 
                     <!-- Bottom Row: Continuous Sync Indicator -->
+                    <!-- [ĐÃ XÓA]: Nút btnSyncNow ("Đồng bộ ngay") và text "☁ Vừa xong (SQLite ↔ Cloud)" -->
+                    <!-- [THÊM/SỬA]: Thay thế bằng chỉ báo tvSyncStatus "● Đồng bộ liên tục" màu xanh ngọc #A7F3D0 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

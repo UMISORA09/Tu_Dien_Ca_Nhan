@@ -288,10 +288,12 @@
 
     <!-- Profile / Tài khoản & Cài đặt Screen -->
     <string name="title_profile_screen">Tài Khoản &amp; Cài Đặt</string>
+    <!-- [SỬA]: Cập nhật phụ đề thành đồng bộ liên tục -->
     <string name="subtitle_profile_screen">Quản lý đồng bộ liên tục, giọng đọc &amp; bảo mật tài khoản</string>
     <string name="default_user_name">Văn Nguyễn Xuân Hòa</string>
     <string name="default_user_email">xuanhoa.dev@cassavas.io</string>
     <string name="default_user_role">Học viên C1 • Full-stack Lexicon</string>
+    <!-- [SỬA]: Đổi trạng thái từ "☁ Vừa xong (SQLite ↔ Cloud)" sang "● Đồng bộ liên tục" -->
     <string name="sync_status_recent">● Đồng bộ liên tục</string>
     <string name="btn_sync_now">Đồng bộ liên tục</string>
     <string name="sec_custom_tts">TÙY CHỈNH HỌC TẬP &amp; ÂM THANH (TTS)</string>

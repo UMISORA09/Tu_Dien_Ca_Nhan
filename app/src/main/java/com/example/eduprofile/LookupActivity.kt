@@ -19,6 +19,7 @@ import java.util.Locale
 
 class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
+    // [ĐÃ XÓA]: btnBack (nút quay lại góc trái) đã được gỡ bỏ khỏi giao diện
     private lateinit var etSearchBox: EditText
     private lateinit var btnVoiceSearch: FrameLayout
     private lateinit var btnCameraSearch: FrameLayout
@@ -127,6 +128,7 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun setupListeners() {
+        // [ĐÃ XÓA]: Listener btnBack.setOnClickListener { finish() } đã gỡ bỏ cùng nút quay lại
         etSearchBox.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 performSearch(etSearchBox.text.toString())
