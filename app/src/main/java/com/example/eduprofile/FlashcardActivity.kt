@@ -50,7 +50,6 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     // Views - Header & Progress
     private lateinit var tvHeaderTitle: TextView
-    private lateinit var btnBack: FrameLayout
     private lateinit var btnShuffle: FrameLayout
     private lateinit var tabModeFlashcard: LinearLayout
     private lateinit var tabModeQuiz: LinearLayout
@@ -390,7 +389,6 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun initViews() {
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle)
-        btnBack = findViewById(R.id.btnBack)
         btnShuffle = findViewById(R.id.btnShuffle)
         tabModeFlashcard = findViewById(R.id.tabModeFlashcard)
         tabModeQuiz = findViewById(R.id.tabModeQuiz)
@@ -462,8 +460,6 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun setupListeners() {
-        btnBack.setOnClickListener { finish() }
-
         tabModeFlashcard.setOnClickListener {
             Toast.makeText(this, "Đang ở chế độ Flashcard 3D", Toast.LENGTH_SHORT).show()
         }
