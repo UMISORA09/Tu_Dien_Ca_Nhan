@@ -25,7 +25,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import java.util.Locale
 
 class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -129,6 +131,7 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        hideStatusBar()
         setContentView(R.layout.activity_flashcard)
 
         setupWindowInsets()
@@ -151,14 +154,26 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         showCard(currentIndex)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideStatusBar()
+    }
+
+    private fun hideStatusBar() {
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+    }
+
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainFlashcard)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            val padTop = (12 * resources.displayMetrics.density).toInt()
+            v.setPadding(systemBars.left, padTop, systemBars.right, 0)
             val bottomNav = findViewById<LinearLayout>(R.id.bottomNavContainer)
-            val padTop = (6 * resources.displayMetrics.density).toInt()
+            val navPadTop = (6 * resources.displayMetrics.density).toInt()
             val padHoriz = (4 * resources.displayMetrics.density).toInt()
-            bottomNav.setPadding(padHoriz, padTop, padHoriz, systemBars.bottom + padTop)
+            bottomNav.setPadding(padHoriz, navPadTop, padHoriz, systemBars.bottom + navPadTop)
             insets
         }
     }
