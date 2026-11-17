@@ -283,8 +283,8 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         // Mode Switcher: Click on Flashcard 3D -> launch FlashcardActivity
         tabModeFlashcard.setOnClickListener {
             val intent = Intent(this, FlashcardActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
             startActivity(intent)
-            finish()
         }
 
         // Mode Switcher: Click on Quiz Nhanh -> already active
