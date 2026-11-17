@@ -32,7 +32,6 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     // Header
     private lateinit var tvProfileTitle: TextView
     private lateinit var tvProfileSubtitle: TextView
-    private lateinit var btnTopMenu: FrameLayout
 
     // Profile Card
     private lateinit var cardProfile: CardView
@@ -115,7 +114,6 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun initViews() {
         tvProfileTitle = findViewById(R.id.tvProfileTitle)
         tvProfileSubtitle = findViewById(R.id.tvProfileSubtitle)
-        btnTopMenu = findViewById(R.id.btnTopMenu)
 
         cardProfile = findViewById(R.id.cardProfile)
         ivAvatar = findViewById(R.id.ivAvatar)
@@ -145,11 +143,6 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun setupListeners() {
-        // Top Menu Button -> MenuActivity
-        btnTopMenu.setOnClickListener {
-            startActivity(Intent(this, MenuActivity::class.java))
-        }
-
         // Profile Avatar Tap
         ivAvatar.setOnClickListener {
             Toast.makeText(this, "Hồ sơ: Văn Nguyễn Xuân Hòa (Học viên C1)", Toast.LENGTH_SHORT).show()
