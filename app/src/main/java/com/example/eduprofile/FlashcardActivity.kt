@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -15,6 +17,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -72,6 +75,8 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var btnSpeakFront: LinearLayout
 
     // Back Card Views
+    private lateinit var scrollCardBack: ScrollView
+    private lateinit var layoutCardBackContent: LinearLayout
     private lateinit var tvWordBack: TextView
     private lateinit var tvPhoneticBack: TextView
     private lateinit var btnSpeakBack: FrameLayout
@@ -410,6 +415,8 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         btnSpeakFront = findViewById(R.id.btnSpeakFront)
 
         // Back views
+        scrollCardBack = findViewById(R.id.scrollCardBack)
+        layoutCardBackContent = findViewById(R.id.layoutCardBackContent)
         tvWordBack = findViewById(R.id.tvWordBack)
         tvPhoneticBack = findViewById(R.id.tvPhoneticBack)
         btnSpeakBack = findViewById(R.id.btnSpeakBack)
@@ -489,9 +496,39 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             Toast.makeText(this, "Đã xáo trộn các thẻ chưa ôn!", Toast.LENGTH_SHORT).show()
         }
 
-        // Tap vào thẻ để lật 3D
-        cardFront.setOnClickListener { flipCard3D() }
-        cardBack.setOnClickListener { flipCard3D() }
+        // Tap vào thẻ để lật 3D (Mặt trước -> Mặt sau)
+        cardFront.setOnClickListener {
+            if (!isFlipped && !isAnimating) flipCard3D()
+        }
+
+        // Tap vào thẻ để lật lại 3D (Mặt sau -> Mặt trước)
+        val flipBackAction = {
+            if (isFlipped && !isAnimating) {
+                flipCard3D()
+            }
+        }
+
+        val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                flipBackAction()
+                return true
+            }
+        })
+
+        scrollCardBack.setOnTouchListener { v, event ->
+            gestureDetector.onTouchEvent(event)
+            v.onTouchEvent(event)
+        }
+
+        cardBack.setOnClickListener { flipBackAction() }
+        layoutCardBackContent.setOnClickListener { flipBackAction() }
+        tvWordBack.setOnClickListener { flipBackAction() }
+        tvPhoneticBack.setOnClickListener { flipBackAction() }
+        tvMeaningBack.setOnClickListener { flipBackAction() }
+        tvExampleEnBack.setOnClickListener { flipBackAction() }
+        tvExampleViBack.setOnClickListener { flipBackAction() }
+        tvMnemonicBack.setOnClickListener { flipBackAction() }
+        tvSrsStatsBack.setOnClickListener { flipBackAction() }
 
         // Lỗi 5: Nút "Xem đáp án"
         btnShowAnswer.setOnClickListener {
