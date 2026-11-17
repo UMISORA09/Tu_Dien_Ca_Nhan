@@ -20,7 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.util.Locale
@@ -71,6 +73,7 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        hideStatusBar()
         setContentView(R.layout.activity_profile)
 
         setupWindowInsets()
@@ -80,19 +83,31 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts = TextToSpeech(this, this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideStatusBar()
+    }
+
+    private fun hideStatusBar() {
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+    }
+
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainProfile)) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val padTop = (12 * resources.displayMetrics.density).toInt()
             findViewById<View>(R.id.scrollContainer).setPadding(
                 0,
-                systemBars.top,
+                padTop,
                 0,
                 0
             )
             val bottomNav = findViewById<LinearLayout>(R.id.bottomNavContainer)
-            val padTop = (8 * resources.displayMetrics.density).toInt()
+            val padNavTop = (8 * resources.displayMetrics.density).toInt()
             val padHoriz = (4 * resources.displayMetrics.density).toInt()
-            bottomNav.setPadding(padHoriz, padTop, padHoriz, systemBars.bottom + padTop)
+            bottomNav.setPadding(padHoriz, padNavTop, padHoriz, systemBars.bottom + padNavTop)
             insets
         }
     }
