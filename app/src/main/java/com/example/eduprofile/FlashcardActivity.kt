@@ -50,7 +50,6 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     // Views - Header & Progress
     private lateinit var tvHeaderTitle: TextView
-    private lateinit var tvHeaderSubtitle: TextView
     private lateinit var btnBack: FrameLayout
     private lateinit var btnShuffle: FrameLayout
     private lateinit var tabModeFlashcard: LinearLayout
@@ -391,7 +390,6 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun initViews() {
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle)
-        tvHeaderSubtitle = findViewById(R.id.tvHeaderSubtitle)
         btnBack = findViewById(R.id.btnBack)
         btnShuffle = findViewById(R.id.btnShuffle)
         tabModeFlashcard = findViewById(R.id.tabModeFlashcard)
@@ -646,9 +644,8 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val item = flashcardList[index]
 
-        // Lỗi 7: Cập nhật Header & Progress đúng chuẩn
+        // Cập nhật Header & Progress đúng chuẩn
         tvHeaderTitle.text = getString(R.string.title_flashcard_3d)
-        tvHeaderSubtitle.text = "Thuật toán lặp lại ngắt quãng SM-2 • Thẻ ${index + 1}/${flashcardList.size}"
         tvCardCounter.text = "Thẻ ${index + 1} / ${flashcardList.size}"
         val remaining = flashcardList.size - index
         tvQueueRemaining.text = "$remaining từ cần ôn"
