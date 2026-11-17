@@ -39,7 +39,6 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var tvUserEmail: TextView
     private lateinit var tvUserRole: TextView
     private lateinit var tvSyncStatus: TextView
-    private lateinit var btnSyncNow: LinearLayout
 
     // TTS & Learning Settings
     private lateinit var cardSettingsTTS: CardView
@@ -109,7 +108,6 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tvUserEmail = findViewById(R.id.tvUserEmail)
         tvUserRole = findViewById(R.id.tvUserRole)
         tvSyncStatus = findViewById(R.id.tvSyncStatus)
-        btnSyncNow = findViewById(R.id.btnSyncNow)
 
         cardSettingsTTS = findViewById(R.id.cardSettingsTTS)
         pillVoiceUS = findViewById(R.id.pillVoiceUS)
@@ -148,22 +146,9 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             startActivity(Intent(this, AdminCmsActivity::class.java))
         }
 
-        // Sync Now Button
-        btnSyncNow.setOnClickListener {
-            val rotate = ObjectAnimator.ofFloat(btnSyncNow, "rotation", 0f, 360f).apply {
-                duration = 600
-                interpolator = AccelerateDecelerateInterpolator()
-            }
-            rotate.start()
-
-            tvSyncStatus.text = "🔄 Đang đồng bộ dữ liệu..."
-            btnSyncNow.isEnabled = false
-
-            handler.postDelayed({
-                tvSyncStatus.text = "☁ Vừa xong (SQLite ↔ Cloud)"
-                btnSyncNow.isEnabled = true
-                Toast.makeText(this, "✅ Đã đồng bộ 8 từ vựng với Cloud thành công!", Toast.LENGTH_SHORT).show()
-            }, 1000)
+        // Continuous Sync Status
+        tvSyncStatus.setOnClickListener {
+            Toast.makeText(this, "Hệ thống đang đồng bộ liên tục với Cloud", Toast.LENGTH_SHORT).show()
         }
 
         // TTS Voice Accent Switchers
