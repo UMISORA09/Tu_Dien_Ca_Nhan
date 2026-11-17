@@ -2,56 +2,56 @@
     <string name="app_name">Cassavas</string>
     <string name="title_cassavas_lexicon">Cassavas Lexicon</string>
     <string name="subtitle_sm2">Từ điển cá nhân hóa &amp; Ôn tập ngắt quãng thông minh theo chuẩn SM-2</string>
-    
+
     <!-- Login form -->
     <string name="label_email">EMAIL HOẶC TÊN ĐĂNG NHẬP</string>
     <string name="hint_email">xuanhoa.dev@cassavas.io</string>
     <string name="label_password">MẬT KHẨU BẢO MẬT</string>
     <string name="hint_password">••••••••••••</string>
-    
+
     <string name="remember_login">Ghi nhớ đăng nhập</string>
     <string name="forgot_password">Quên mật khẩu?</string>
     <string name="btn_login_notebook">Đăng nhập vào Sổ tay</string>
-    
+
     <string name="or_continue_with">HOẶC TIẾP TỤC VỚI</string>
     <string name="social_google">Google</string>
     <string name="social_github">GitHub</string>
     <string name="btn_guest_mode">Dùng thử Chế độ Khách (Offline SQLite)</string>
-    
+
     <string name="dont_have_account">Chưa có tài khoản cá nhân?</string>
     <string name="register_now">Đăng ký ngay</string>
-    
+
     <!-- Register form -->
     <string name="btn_back">Quay lại</string>
     <string name="already_have_account_login">ĐÃ CÓ TÀI KHOẢN? ĐĂNG NHẬP</string>
     <string name="title_create_account">Tạo Tài Khoản Mới</string>
     <string name="subtitle_create_account">Bắt đầu hành trình ghi nhớ từ vựng khoa học và cá nhân hóa với thuật toán SM-2.</string>
-    
+
     <string name="label_fullname">HỌ VÀ TÊN HIỂN THỊ *</string>
     <string name="hint_fullname">VD: Nguyễn Xuân Hòa</string>
-    
+
     <string name="label_register_email">EMAIL HOẶC SỐ ĐIỆN THOẠI *</string>
     <string name="hint_register_email">xuanhoa.dev@cassavas.io</string>
-    
+
     <string name="label_register_password">MẬT KHẨU *</string>
     <string name="hint_register_password">Tối thiểu 8 ký tự</string>
-    
+
     <string name="label_confirm_password">XÁC NHẬN MẬT KHẨU *</string>
     <string name="hint_confirm_password">Nhập lại mật khẩu</string>
-    
+
     <string name="label_english_level">TRÌNH ĐỘ TIẾNG ANH HIỆN TẠI</string>
     <string name="level_a">Sơ cấp (A1 - A2)</string>
     <string name="level_b">Trung cấp (B1 - B2)</string>
     <string name="level_c">Nâng cao (C1 - C2)</string>
-    
+
     <string name="label_daily_goal">MỤC TIÊU HỌC TỪ MỖI NGÀY</string>
     <string name="goal_10">10 từ / ngày</string>
     <string name="goal_20">20 từ / ngày</string>
     <string name="goal_30">30 từ / ngày</string>
-    
+
     <string name="agree_terms">Tôi đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của Cassavas Lexicon.</string>
     <string name="btn_complete_register">Hoàn tất Đăng ký &amp; Bắt đầu</string>
-    
+
     <!-- Validation & feedback -->
     <string name="err_empty_email">Vui lòng nhập email hoặc tên đăng nhập</string>
     <string name="err_empty_password">Vui lòng nhập mật khẩu bảo mật</string>
@@ -232,17 +232,19 @@
     <string name="msg_word_added">Đã thêm từ vựng thành công vào Sổ tay!</string>
 
     <!-- Flashcard 3D Screen (Ôn tập SM-2 Flashcard 3D) -->
-    <string name="title_flashcard_3d">Ôn Tập Flashcard 3D</string>
-    <string name="subtitle_flashcard_3d">Lặp ngắt quãng Spaced Repetition • SM-2</string>
-    <string name="flashcard_hint_flip_front">Chạm để lật thẻ 3D xem nghĩa &amp; ví dụ 🔄</string>
-    <string name="flashcard_hint_flip_back">Chạm để lật 3D lại mặt trước 🔄</string>
+    <string name="title_flashcard_3d">Ôn Tập Thông Minh</string>
+    <string name="subtitle_flashcard_3d">Thuật toán lặp lại ngắt quãng SM-2</string>
+    <string name="flashcard_hint_flip_front">Chạm vào thẻ để lật xem nghĩa &amp; ghi chú</string>
     <string name="flashcard_rating_prompt">Bạn nhớ từ vựng này như thế nào?</string>
+    <string name="flashcard_remember_prompt">Bạn nhớ được từ này chưa</string>
+    <string name="flashcard_btn_show_answer">Xem đáp án</string>
+    <string name="flashcard_btn_retry">Làm lại</string>
     <string name="rating_again">Quên</string>
-    <string name="rating_again_time">&lt; 1 ngày</string>
+    <string name="rating_again_time">10 phút</string>
     <string name="rating_hard">Khó</string>
-    <string name="rating_hard_time">2 ngày</string>
-    <string name="rating_good">Tốt</string>
-    <string name="rating_good_time">4 ngày</string>
+    <string name="rating_hard_time">1 ngày</string>
+    <string name="rating_good">Ổn</string>
+    <string name="rating_good_time">3 ngày</string>
     <string name="rating_easy">Dễ</string>
     <string name="rating_easy_time">7 ngày</string>
     <string name="flashcard_completed_title">Xuất Sắc! Hoàn Thành 🎉</string>
@@ -286,12 +288,12 @@
 
     <!-- Profile / Tài khoản & Cài đặt Screen -->
     <string name="title_profile_screen">Tài Khoản &amp; Cài Đặt</string>
-    <string name="subtitle_profile_screen">Quản lý đồng bộ dữ liệu, giọng đọc &amp; bảo mật tài khoản</string>
+    <string name="subtitle_profile_screen">Quản lý đồng bộ liên tục, giọng đọc &amp; bảo mật tài khoản</string>
     <string name="default_user_name">Văn Nguyễn Xuân Hòa</string>
     <string name="default_user_email">xuanhoa.dev@cassavas.io</string>
     <string name="default_user_role">Học viên C1 • Full-stack Lexicon</string>
-    <string name="sync_status_recent">☁ Vừa xong (SQLite ↔ Cloud)</string>
-    <string name="btn_sync_now">🔄 Đồng bộ ngay</string>
+    <string name="sync_status_recent">● Đồng bộ liên tục</string>
+    <string name="btn_sync_now">Đồng bộ liên tục</string>
     <string name="sec_custom_tts">TÙY CHỈNH HỌC TẬP &amp; ÂM THANH (TTS)</string>
     <string name="label_default_voice">Giọng phát âm mặc định</string>
     <string name="sub_default_voice">TextToSpeech Engine (Android)</string>
