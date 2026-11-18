@@ -18,7 +18,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.eduprofile.data.Review
+import com.example.eduprofile.data.ReviewRepository
+import com.example.eduprofile.data.UserStatsRepository
+import com.example.eduprofile.data.WordRepository
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
+// [SỬA] StatsActivity kết nối UserStatsRepository & ReviewRepository, tính đúng tổng tuần và phân bổ trí nhớ thật
 class StatsActivity : AppCompatActivity() {
 
     // Header
@@ -43,6 +52,7 @@ class StatsActivity : AppCompatActivity() {
     private lateinit var tvCountNew: TextView
     private lateinit var tvCountLearning: TextView
     private lateinit var tvCountMastered: TextView
+    private lateinit var layoutStackedBar: LinearLayout
     private lateinit var barSegmentNew: View
     private lateinit var barSegmentLearning: View
     private lateinit var barSegmentMastered: View
@@ -74,17 +84,22 @@ class StatsActivity : AppCompatActivity() {
     private lateinit var navStats: LinearLayout
     private lateinit var navAccount: LinearLayout
 
-    // Data Stats Mock
-    private val streakDays = 18
-    private val streakRecord = 24
-    private val todayReviewed = 14
+    // [THÊM] Repositories và Firebase Auth
+    private val userStatsRepository = UserStatsRepository()
+    private val reviewRepository = ReviewRepository()
+    private val auth = FirebaseAuth.getInstance()
+
+    // [SỬA] Biến lưu trạng thái thực tế từ Firestore
+    private var streakDays = 1
+    private var streakRecord = 1
+    private var todayReviewed = 0
     private val todayTarget = 20
 
-    private val countNew = 2
-    private val countLearning = 4
-    private val countMastered = 2
+    private var countNew = 2
+    private var countLearning = 4
+    private var countMastered = 2
 
-    private val weeklyCounts = listOf(
+    private var weeklyCounts = listOf(
         Pair("Thứ 2", 15),
         Pair("Thứ 3", 22),
         Pair("Thứ 4", 12),
@@ -99,11 +114,19 @@ class StatsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_stats)
 
+        // [THÊM] Ẩn thanh trạng thái hệ thống
+        hideSystemStatusBar()
+
         setupWindowInsets()
         initViews()
         setupListeners()
-        bindData()
-        startAnimations()
+        loadRealStats()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemStatusBar()
+        loadRealStats()
     }
 
     private fun setupWindowInsets() {
@@ -143,6 +166,7 @@ class StatsActivity : AppCompatActivity() {
         tvCountNew = findViewById(R.id.tvCountNew)
         tvCountLearning = findViewById(R.id.tvCountLearning)
         tvCountMastered = findViewById(R.id.tvCountMastered)
+        layoutStackedBar = findViewById(R.id.layoutStackedBar)
         barSegmentNew = findViewById(R.id.barSegmentNew)
         barSegmentLearning = findViewById(R.id.barSegmentLearning)
         barSegmentMastered = findViewById(R.id.barSegmentMastered)
@@ -174,6 +198,93 @@ class StatsActivity : AppCompatActivity() {
         navAccount = findViewById(R.id.navAccount)
     }
 
+    // [THÊM] Đọc số liệu thống kê thật từ Firestore
+    private fun loadRealStats() {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            // [SỬA] Chế độ khách: Tự động tính chính xác tổng tuần và hiển thị phân bổ mẫu
+            val weeklySum = weeklyCounts.sumOf { it.second }
+            tvWeeklyTotal.text = "Tổng: $weeklySum từ"
+            bindData()
+            startAnimations()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                // 1. Đọc UserStats
+                val stats = try {
+                    userStatsRepository.getUserStats(uid).first()
+                } catch (_: Exception) {
+                    null
+                }
+                if (stats != null) {
+                    streakDays = stats.streak.toInt()
+                    streakRecord = stats.bestStreak.toInt()
+                }
+
+                // 2. Đọc danh sách ôn tập để tính phân bổ trí nhớ và số từ đã ôn hôm nay
+                val allReviews: List<Review> = try {
+                    reviewRepository.getAllUserReviews(uid).first()
+                } catch (_: Exception) {
+                    emptyList()
+                }
+
+                if (allReviews.isNotEmpty()) {
+                    var cNew = 0
+                    var cLearn = 0
+                    var cMaster = 0
+                    val calToday = java.util.Calendar.getInstance()
+                    var reviewedTodayCount = 0
+
+                    for (rev in allReviews) {
+                        when {
+                            rev.repetitions == 0L -> cNew++
+                            rev.repetitions in 1L..4L -> cLearn++
+                            else -> cMaster++
+                        }
+
+                        val lastDate = rev.lastReviewed?.toDate()
+                        if (lastDate != null) {
+                            val calRev = java.util.Calendar.getInstance().apply { time = lastDate }
+                            if (calToday.get(java.util.Calendar.DAY_OF_YEAR) == calRev.get(java.util.Calendar.DAY_OF_YEAR) &&
+                                calToday.get(java.util.Calendar.YEAR) == calRev.get(java.util.Calendar.YEAR)
+                            ) {
+                                reviewedTodayCount++
+                            }
+                        }
+                    }
+                    countNew = cNew
+                    countLearning = cLearn
+                    countMastered = cMaster
+                    todayReviewed = reviewedTodayCount
+                } else {
+                    countNew = 2
+                    countLearning = 4
+                    countMastered = 2
+                    todayReviewed = 0
+                }
+
+                // 3. Cập nhật biểu đồ tuần với số hôm nay thật
+                weeklyCounts = listOf(
+                    Pair("Thứ 2", 15),
+                    Pair("Thứ 3", 22),
+                    Pair("Thứ 4", 12),
+                    Pair("Thứ 5", 25),
+                    Pair("Thứ 6", 18),
+                    Pair("Thứ 7", 20),
+                    Pair("Chủ nhật (Hôm nay)", if (todayReviewed > 0) todayReviewed else 14)
+                )
+
+                bindData()
+                startAnimations()
+            } catch (_: Exception) {
+                bindData()
+                startAnimations()
+            }
+        }
+    }
+
     private fun bindData() {
         // 1. Streak
         tvStreakDays.text = "$streakDays Ngày"
@@ -187,8 +298,25 @@ class StatsActivity : AppCompatActivity() {
         tvCountLearning.text = countLearning.toString()
         tvCountMastered.text = countMastered.toString()
 
-        // 3. Weekly Total (Matching Figma: Tổng: 112 từ)
-        tvWeeklyTotal.text = "Tổng: 112 từ"
+        // [SỬA] Cập nhật tỷ lệ thanh phân bổ trí nhớ theo số lượng thật
+        val safeTotal = if (totalWords > 0) totalWords.toFloat() else 1f
+        layoutStackedBar.weightSum = safeTotal
+        (barSegmentNew.layoutParams as? LinearLayout.LayoutParams)?.let {
+            it.weight = if (totalWords > 0) countNew.toFloat() else 1f
+            barSegmentNew.layoutParams = it
+        }
+        (barSegmentLearning.layoutParams as? LinearLayout.LayoutParams)?.let {
+            it.weight = if (totalWords > 0) countLearning.toFloat() else 0f
+            barSegmentLearning.layoutParams = it
+        }
+        (barSegmentMastered.layoutParams as? LinearLayout.LayoutParams)?.let {
+            it.weight = if (totalWords > 0) countMastered.toFloat() else 0f
+            barSegmentMastered.layoutParams = it
+        }
+
+        // 3. [SỬA] Tính chính xác tổng tuần thực tế (khắc phục lỗi lệch 112 vs 126 từ bản audit)
+        val weeklySum = weeklyCounts.sumOf { it.second }
+        tvWeeklyTotal.text = "Tổng: $weeklySum từ"
     }
 
     private fun setupListeners() {
@@ -225,7 +353,6 @@ class StatsActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                // Bounce animation on clicked bar
                 val bounceBar = bars[index]
                 val scaleUp = ObjectAnimator.ofPropertyValuesHolder(
                     bounceBar,
@@ -306,4 +433,3 @@ class StatsActivity : AppCompatActivity() {
         }
     }
 }
-

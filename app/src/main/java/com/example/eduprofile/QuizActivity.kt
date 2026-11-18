@@ -22,8 +22,16 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.eduprofile.data.UserStatsRepository
+import com.example.eduprofile.data.Word
+import com.example.eduprofile.data.WordRepository
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.util.Locale
 
+// [SỬA] Cập nhật QuizActivity kết nối kho từ Firestore và đồng bộ điểm XP chuẩn
 class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     data class QuizQuestion(
@@ -84,19 +92,33 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var tts: TextToSpeech? = null
     private var isTtsReady = false
 
+    // [THÊM] Repositories và Firebase Auth
+    private val wordRepository = WordRepository()
+    private val userStatsRepository = UserStatsRepository()
+    private val auth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_quiz)
 
+        // [THÊM] Ẩn thanh trạng thái hệ thống
+        hideSystemStatusBar()
+
         setupWindowInsets()
         initViews()
-        initData()
         setupListeners()
 
         tts = TextToSpeech(this, this)
 
-        loadQuestion(currentIndex)
+        // [SỬA] Nạp câu hỏi động từ Firestore / Seed data thay vì danh sách tĩnh
+        loadQuizQuestions()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // [THÊM] Đảm bảo ẩn thanh trạng thái khi quay lại màn hình
+        hideSystemStatusBar()
     }
 
     private fun setupWindowInsets() {
@@ -147,171 +169,123 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         navAccount = findViewById(R.id.navAccount)
     }
 
-    private fun initData() {
-        questionList.clear()
+    // [ĐÃ XÓA] initData() hard-code 8 câu hỏi tĩnh
+    // [THÊM] loadQuizQuestions sinh câu hỏi ngẫu nhiên từ kho từ thật
+    private fun loadQuizQuestions() {
+        lifecycleScope.launch {
+            try {
+                val flowWords = try {
+                    wordRepository.getApprovedWords().first()
+                } catch (_: Exception) {
+                    emptyList()
+                }
 
-        // 1. Serendipity (Exact text from Figma)
-        questionList.add(
-            QuizQuestion(
-                id = 1,
-                word = "Serendipity",
-                phonetic = "/ˌser.ənˈdɪp.ə.ti/",
-                correctAnswerIndex = 0,
-                options = listOf(
-                    "Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị, có giá trị một cách ngẫu nhiên.",
-                    "Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn, biến cố hoặc thay đổi (trong IT: hệ thống chịu lỗi tốt).",
-                    "(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho ra cùng một kết quả mà không gây tác dụng phụ.",
-                    "Cắn răng chịu đựng; quyết tâm đối mặt với một tình huống khó khăn không thể tránh khỏi."
-                )
-            )
-        )
+                val words: List<Word> = if (flowWords.size >= 4) {
+                    flowWords
+                } else {
+                    WordRepository.getSeedWordsList()
+                }
 
-        // 2. Resilient
-        questionList.add(
-            QuizQuestion(
-                id = 2,
-                word = "Resilient",
-                phonetic = "/rɪˈzɪl.i.ənt/",
-                correctAnswerIndex = 0,
-                options = listOf(
-                    "Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn, biến cố hoặc thay đổi (trong IT: hệ thống chịu lỗi tốt).",
-                    "Phù du, chóng tàn, chỉ tồn tại hoặc kéo dài trong một thời gian rất ngắn ngủi.",
-                    "Có mặt ở khắp mọi nơi, phổ biến rộng rãi khắp chốn.",
-                    "Thực tế, thực dụng; giải quyết vấn đề dựa trên hiệu quả thực tế thay vì lý thuyết suông."
-                )
-            )
-        )
+                val targetList = words.shuffled()
+                val questions = ArrayList<QuizQuestion>()
+                val numQuestions = minOf(8, targetList.size)
 
-        // 3. Idempotent
-        questionList.add(
-            QuizQuestion(
-                id = 3,
-                word = "Idempotent",
-                phonetic = "/ˌaɪ.dɛmˈpoʊ.tənt/",
-                correctAnswerIndex = 1,
-                options = listOf(
-                    "Hùng biện, lưu loát; có tài diễn đạt ý nghĩ và cảm xúc một cách thuyết phục và truyền cảm.",
-                    "(Công nghệ thông tin / Toán) Lũy đẳng; tính chất của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho ra cùng một kết quả mà không gây tác dụng phụ.",
-                    "Bền bỉ, ngoan cường, kiên trì theo đuổi mục tiêu đến cùng mà không bao giờ bỏ cuộc.",
-                    "Sự tình cờ may mắn; khả năng phát hiện ra những điều thú vị ngoài mong đợi."
-                )
-            )
-        )
+                for (i in 0 until numQuestions) {
+                    val target = targetList[i]
+                    // Lấy 3 nghĩa sai từ các từ khác
+                    val otherMeanings = words
+                        .filter { it.id != target.id && it.word != target.word }
+                        .map { it.meaning }
+                        .shuffled()
+                        .take(3)
 
-        // 4. Ephemeral
-        questionList.add(
-            QuizQuestion(
-                id = 4,
-                word = "Ephemeral",
-                phonetic = "/ɪˈfem.ər.əl/",
-                correctAnswerIndex = 2,
-                options = listOf(
-                    "Có mặt ở khắp mọi nơi, phổ biến trên quy mô toàn cầu.",
-                    "Cắn răng chịu đựng; quyết tâm đối mặt với thử thách khó khăn.",
-                    "Phù du, chóng tàn, chỉ tồn tại hoặc kéo dài trong một thời gian rất ngắn ngủi.",
-                    "Tái cấu trúc mã nguồn mà không làm thay đổi hành vi bên ngoài của hệ thống."
-                )
-            )
-        )
+                    // Gộp đáp án đúng và xáo trộn 4 đáp án
+                    val allOptions = (otherMeanings + target.meaning).shuffled()
+                    val correctIdx = allOptions.indexOf(target.meaning)
 
-        // 5. Pragmatic
-        questionList.add(
-            QuizQuestion(
-                id = 5,
-                word = "Pragmatic",
-                phonetic = "/præɡˈmæt.ɪk/",
-                correctAnswerIndex = 0,
-                options = listOf(
-                    "Thực tế, thực dụng; giải quyết vấn đề dựa trên hiệu quả thực tế thay vì lý thuyết suông.",
-                    "Lời chúc may mắn mang ý nghĩa chúc diễn viên biểu diễn thành công tốt đẹp.",
-                    "Tính chất bền vững, duy trì trạng thái nhất quán sau các sự cố gián đoạn.",
-                    "Khả năng phục hồi và tái tạo năng lượng sau chuỗi ngày làm việc căng thẳng."
-                )
-            )
-        )
+                    questions.add(
+                        QuizQuestion(
+                            id = i + 1,
+                            word = target.word,
+                            phonetic = target.ipa,
+                            correctAnswerIndex = correctIdx,
+                            options = allOptions
+                        )
+                    )
+                }
 
-        // 6. Ubiquitous
-        questionList.add(
-            QuizQuestion(
-                id = 6,
-                word = "Ubiquitous",
-                phonetic = "/juːˈbɪk.wə.təs/",
-                correctAnswerIndex = 3,
-                options = listOf(
-                    "Bền bỉ, kiên định theo đuổi mục tiêu chiến lược của dự án.",
-                    "Vẻ đẹp mong manh, thoáng chốc như giọt sương mai đầu ngày.",
-                    "Sự tình cờ phát hiện ra một phát minh công nghệ có giá trị cao.",
-                    "Có mặt ở khắp mọi nơi, phổ biến rộng rãi khắp chốn."
-                )
-            )
-        )
+                questionList.clear()
+                questionList.addAll(questions)
+                currentIndex = 0
+                scoreXP = 0
+                correctCount = 0
+                progressBarSession.max = questionList.size
+                updateScoreDisplay(animated = false)
 
-        // 7. Eloquent
-        questionList.add(
-            QuizQuestion(
-                id = 7,
-                word = "Eloquent",
-                phonetic = "/ˈel.ə.kwənt/",
-                correctAnswerIndex = 1,
-                options = listOf(
-                    "Ưu tiên hành động thực tiễn, hạn chế tối đa các tranh luận lý thuyết.",
-                    "Hùng biện, lưu loát; có tài diễn đạt ý nghĩ và cảm xúc một cách thuyết phục và truyền cảm.",
-                    "Kiên trì vượt qua mọi rào cản và khó khăn để đạt thành quả.",
-                    "Lũy đẳng; đảm bảo tính toàn vẹn khi thực hiện lặp lại một lệnh gọi API."
-                )
-            )
-        )
-
-        // 8. Tenacious
-        questionList.add(
-            QuizQuestion(
-                id = 8,
-                word = "Tenacious",
-                phonetic = "/təˈneɪ.ʃəs/",
-                correctAnswerIndex = 0,
-                options = listOf(
-                    "Bền bỉ, ngoan cường, kiên trì theo đuổi mục tiêu đến cùng mà không bao giờ bỏ cuộc.",
-                    "Phổ biến rộng khắp, xuất hiện trong mọi ngóc ngách của đời sống xã hội.",
-                    "Khả năng nắm bắt cơ hội may mắn và chuyển hóa thành thành công vượt bậc.",
-                    "Khả năng thích ứng linh hoạt trước những thay đổi khó lường của môi trường."
-                )
-            )
-        )
+                if (questionList.isNotEmpty()) {
+                    loadQuestion(currentIndex)
+                } else {
+                    Toast.makeText(this@QuizActivity, "Chưa có đủ từ vựng để tạo bài kiểm tra", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                // Fallback nếu có lỗi
+                val fallbackWords = WordRepository.getSeedWordsList().shuffled()
+                val questions = ArrayList<QuizQuestion>()
+                val num = minOf(8, fallbackWords.size)
+                for (i in 0 until num) {
+                    val target = fallbackWords[i]
+                    val others = fallbackWords.filter { it.id != target.id }.map { it.meaning }.shuffled().take(3)
+                    val opts = (others + target.meaning).shuffled()
+                    questions.add(
+                        QuizQuestion(
+                            id = i + 1,
+                            word = target.word,
+                            phonetic = target.ipa,
+                            correctAnswerIndex = opts.indexOf(target.meaning),
+                            options = opts
+                        )
+                    )
+                }
+                questionList.clear()
+                questionList.addAll(questions)
+                currentIndex = 0
+                scoreXP = 0
+                correctCount = 0
+                progressBarSession.max = questionList.size
+                updateScoreDisplay(animated = false)
+                loadQuestion(currentIndex)
+            }
+        }
     }
 
     private fun setupListeners() {
-        // Mode Switcher: Click on Flashcard 3D -> launch FlashcardActivity
+        // Chuyển sang Flashcard 3D
         tabModeFlashcard.setOnClickListener {
             val intent = Intent(this, FlashcardActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
             startActivity(intent)
         }
 
-        // Mode Switcher: Click on Quiz Nhanh -> already active
         tabModeQuiz.setOnClickListener {
             Toast.makeText(this, "Đang trong chế độ Quiz Nhanh", Toast.LENGTH_SHORT).show()
         }
 
-        // Tap word to pronounce
-        tvQuestionWord.setOnClickListener {
-            speakCurrentWord()
-        }
-        tvQuestionPhonetic.setOnClickListener {
-            speakCurrentWord()
-        }
+        // Phát âm khi chạm vào từ
+        tvQuestionWord.setOnClickListener { speakCurrentWord() }
+        tvQuestionPhonetic.setOnClickListener { speakCurrentWord() }
 
-        // Options Click Listeners
+        // Lựa chọn đáp án
         layoutOption1.setOnClickListener { onOptionSelected(0) }
         layoutOption2.setOnClickListener { onOptionSelected(1) }
         layoutOption3.setOnClickListener { onOptionSelected(2) }
         layoutOption4.setOnClickListener { onOptionSelected(3) }
 
-        // Restart Quiz
+        // Làm lại bài Quiz
         btnRestartQuiz.setOnClickListener {
             restartQuiz()
         }
 
-        // Back Home
+        // Quay lại trang chủ
         btnBackHome.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -361,8 +335,8 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val q = questionList[index]
 
-        // Update Header & Progress
-        tvHeaderSubtitle.text = "Thuật toán lặp lại ngắt quãng SM-2 • Thẻ ${index + 1}/${questionList.size}"
+        // Cập nhật phụ đề và thanh tiến trình
+        tvHeaderSubtitle.text = "Thuật toán lặp lại ngắt quãng SM-2 • Câu ${index + 1}/${questionList.size}"
         val oldProgress = progressBarSession.progress
         val targetProgress = index + 1
         ObjectAnimator.ofInt(progressBarSession, "progress", oldProgress, targetProgress).apply {
@@ -371,17 +345,17 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             start()
         }
 
-        // Update Question Word
+        // Cập nhật từ vựng câu hỏi
         tvQuestionWord.text = q.word
         tvQuestionPhonetic.text = q.phonetic
 
-        // Update Options
+        // Cập nhật các lựa chọn
         tvOption1.text = q.options[0]
         tvOption2.text = q.options[1]
         tvOption3.text = q.options[2]
         tvOption4.text = q.options[3]
 
-        // Smooth entry animation for options
+        // Hiệu ứng chuyển động mượt mà
         val optionLayouts = listOf(layoutOption1, layoutOption2, layoutOption3, layoutOption4)
         optionLayouts.forEachIndexed { i, layout ->
             layout.alpha = 0f
@@ -394,7 +368,6 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .start()
         }
 
-        // Optional: Speak word upon question appearance
         speakCurrentWord()
     }
 
@@ -408,11 +381,11 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val optionTexts = listOf(tvOption1, tvOption2, tvOption3, tvOption4)
 
         if (isCorrect) {
-            // Correct Style
+            // Đúng: Hiển thị nền xanh
             optionLayouts[selectedIndex].setBackgroundResource(R.drawable.bg_option_item_correct)
             optionTexts[selectedIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
 
-            // Pulse animation
+            // Hiệu ứng phóng to nhẹ
             val pulseX = ObjectAnimator.ofFloat(optionLayouts[selectedIndex], "scaleX", 1f, 1.025f, 1f)
             val pulseY = ObjectAnimator.ofFloat(optionLayouts[selectedIndex], "scaleY", 1f, 1.025f, 1f)
             pulseX.duration = 280
@@ -420,38 +393,48 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             pulseX.start()
             pulseY.start()
 
-            // Update XP
+            // [SỬA] Thang điểm chuẩn: Mỗi câu đúng +10 XP
             scoreXP += 10
             correctCount++
             updateScoreDisplay(animated = true)
 
+            // [THÊM] Lưu điểm XP thật vào Firestore và ghi nhận ngày học
+            val uid = auth.currentUser?.uid
+            if (uid != null) {
+                lifecycleScope.launch {
+                    try {
+                        userStatsRepository.addXp(uid, 10L)
+                        userStatsRepository.recordStudyDay(uid)
+                    } catch (_: Exception) {}
+                }
+            }
+
             Toast.makeText(this, "Chính xác! +10 XP 🎉", Toast.LENGTH_SHORT).show()
 
-            // Next question after 1200ms
+            // Sang câu tiếp theo sau 1200ms
             handler.postDelayed({
                 currentIndex++
                 loadQuestion(currentIndex)
             }, 1200)
 
         } else {
-            // Wrong Style
+            // Sai: Hiển thị nền đỏ và rung
             optionLayouts[selectedIndex].setBackgroundResource(R.drawable.bg_option_item_wrong)
             optionTexts[selectedIndex].setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark))
 
-            // Shake animation
             val shake = ObjectAnimator.ofFloat(optionLayouts[selectedIndex], "translationX", 0f, 20f, -20f, 15f, -15f, 8f, 0f)
             shake.duration = 450
             shake.interpolator = CycleInterpolator(1f)
             shake.start()
 
-            // Automatically highlight correct answer
+            // Tự động làm nổi bật đáp án đúng
             val correctIdx = q.correctAnswerIndex
             optionLayouts[correctIdx].setBackgroundResource(R.drawable.bg_option_item_correct)
             optionTexts[correctIdx].setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
 
             Toast.makeText(this, "Chưa chính xác! Hãy ghi nhớ đáp án đúng nhé", Toast.LENGTH_SHORT).show()
 
-            // Next question after 1800ms
+            // Sang câu tiếp theo sau 1800ms
             handler.postDelayed({
                 currentIndex++
                 loadQuestion(currentIndex)
@@ -504,15 +487,10 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val total = questionList.size
         val percent = if (total > 0) (correctCount * 100) / total else 0
         tvFinalAccuracy.text = "$correctCount/$total ($percent%)"
-        tvHeaderSubtitle.text = "Đã hoàn thành toàn bộ 8 câu hỏi trắc nghiệm"
+        tvHeaderSubtitle.text = "Đã hoàn thành toàn bộ $total câu hỏi trắc nghiệm"
     }
 
     private fun restartQuiz() {
-        currentIndex = 0
-        scoreXP = 0
-        correctCount = 0
-        updateScoreDisplay(animated = false)
-
         cardCompletion.animate()
             .alpha(0f)
             .scaleX(0.9f)
@@ -522,7 +500,8 @@ class QuizActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 override fun onAnimationEnd(animation: Animator) {
                     cardCompletion.visibility = View.GONE
                     cardQuizContainer.visibility = View.VISIBLE
-                    loadQuestion(currentIndex)
+                    // [SỬA] Nạp lại bộ câu hỏi ngẫu nhiên mới khi restart
+                    loadQuizQuestions()
                 }
             })
             .start()

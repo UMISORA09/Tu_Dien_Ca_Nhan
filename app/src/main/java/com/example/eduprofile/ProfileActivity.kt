@@ -27,8 +27,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
+// [SỬA] ProfileActivity nạp thông tin user thật từ Firestore, bảo mật quyền mở Admin CMS
 class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     // Header
@@ -73,6 +75,10 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var isTtsReady = false
     private val handler = Handler(Looper.getMainLooper())
 
+    // [THÊM] Firebase Auth & Firestore
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -83,6 +89,7 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setupWindowInsets()
         initViews()
         setupListeners()
+        loadUserProfile()
 
         tts = TextToSpeech(this, this)
     }
@@ -91,6 +98,45 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onResume()
         // [THÊM]: Đảm bảo Status Bar luôn ẩn khi quay lại màn hình
         hideSystemStatusBar()
+        loadUserProfile()
+    }
+
+    // [THÊM] Nạp thông tin người dùng từ Firebase Auth và Firestore
+    private fun loadUserProfile() {
+        val user = auth.currentUser
+        if (user != null) {
+            tvUserEmail.text = user.email ?: "user@cassavas.edu.vn"
+            db.collection("users").document(user.uid).get()
+                .addOnSuccessListener { doc ->
+                    if (doc != null && doc.exists()) {
+                        val name = doc.getString("displayName") ?: user.displayName ?: "Văn Nguyễn Xuân Hòa"
+                        val role = doc.getString("role") ?: "USER"
+                        tvUserName.text = name
+
+                        if (role.equals("ADMIN", ignoreCase = true)) {
+                            tvUserRole.text = "Quản trị viên (ADMIN) • Chạm để mở CMS"
+                            tvUserRole.setOnClickListener {
+                                Toast.makeText(this, "Đang mở Bảng Quản trị Admin CMS...", Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this, AdminCmsActivity::class.java))
+                            }
+                        } else {
+                            tvUserRole.text = "Học viên (USER)"
+                            tvUserRole.setOnClickListener {
+                                Toast.makeText(this, "Tài khoản của bạn là Học viên (USER). Bảng CMS chỉ dành cho Admin.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else {
+                        tvUserName.text = user.displayName ?: "Học viên"
+                        tvUserRole.text = "Học viên (USER)"
+                        tvUserRole.setOnClickListener {
+                            Toast.makeText(this, "Tài khoản của bạn là Học viên (USER).", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    tvUserRole.text = "Học viên (USER)"
+                }
+        }
     }
 
     private fun setupWindowInsets() {
@@ -146,13 +192,9 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun setupListeners() {
         // Profile Avatar Tap
         ivAvatar.setOnClickListener {
-            Toast.makeText(this, "Hồ sơ: Văn Nguyễn Xuân Hòa (Học viên C1)", Toast.LENGTH_SHORT).show()
-        }
-
-        // Tap Role to open Admin CMS
-        tvUserRole.setOnClickListener {
-            Toast.makeText(this, "Đang mở Bảng Quản trị Admin CMS...", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, AdminCmsActivity::class.java))
+            val name = tvUserName.text.toString()
+            val role = tvUserRole.text.toString()
+            Toast.makeText(this, "Hồ sơ: $name ($role)", Toast.LENGTH_SHORT).show()
         }
 
         // [ĐÃ XÓA]: btnTopMenu.setOnClickListener và btnSyncNow.setOnClickListener
@@ -384,4 +426,3 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 }
-

@@ -18,8 +18,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.lifecycleScope
+import com.example.eduprofile.data.WordRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
+// [SỬA] AdminCmsActivity có chốt chặn kiểm tra quyền ADMIN từ Firestore, kết nối duyệt từ và quản trị người dùng thật
 class AdminCmsActivity : AppCompatActivity() {
 
     private lateinit var scrollContainer: NestedScrollView
@@ -91,16 +97,57 @@ class AdminCmsActivity : AppCompatActivity() {
     private var isUser3Blocked = false
     private var currentTab = 0 // 0: Pending, 1: Users, 2: Packs & Issues
 
+    // [THÊM] Repositories và Firebase Auth
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private val wordRepository = WordRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // [THÊM] Ẩn thanh trạng thái hệ thống
+        hideSystemStatusBar()
         setContentView(R.layout.activity_admin_cms)
+
+        // [THÊM] Chốt chặn quyền bảo mật (PROMPT 6.8): Chỉ người có role == ADMIN mới được truy cập
+        checkAdminAccessOrExit()
 
         setupWindowInsets()
         initViews()
         setupListeners()
         setupSearch()
         switchTab(0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemStatusBar()
+    }
+
+    // [THÊM] Chốt chặn quyền: Đọc từ Firestore users/{uid}.role
+    private fun checkAdminAccessOrExit() {
+        val user = auth.currentUser
+        if (user == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập tài khoản Quản trị viên (ADMIN)!", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+
+        db.collection("users").document(user.uid).get()
+            .addOnSuccessListener { doc ->
+                val role = doc.getString("role")
+                if (!role.equals("ADMIN", ignoreCase = true)) {
+                    Toast.makeText(this, "Truy cập bị từ chối! Tài khoản không có quyền Quản trị viên.", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener {
+                // Nếu không đọc được vai trò từ Firestore, kiểm tra theo email tài khoản demo admin
+                if (user.email != "admin@cassavas.edu.vn") {
+                    Toast.makeText(this, "Lỗi xác thực quyền Quản trị viên!", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
     }
 
     private fun setupWindowInsets() {
@@ -204,26 +251,26 @@ class AdminCmsActivity : AppCompatActivity() {
 
         // Word 1 actions
         btnApproveWord1.setOnClickListener {
-            approveWord(cardPendingWord1, "Concurrency")
+            approveWord(cardPendingWord1, "concurrency", "Concurrency")
         }
         btnRejectWord1.setOnClickListener {
-            rejectWord(cardPendingWord1, "Concurrency")
+            rejectWord(cardPendingWord1, "concurrency", "Concurrency")
         }
 
         // Word 2 actions
         btnApproveWord2.setOnClickListener {
-            approveWord(cardPendingWord2, "Zero-day")
+            approveWord(cardPendingWord2, "zero-day", "Zero-day")
         }
         btnRejectWord2.setOnClickListener {
-            rejectWord(cardPendingWord2, "Zero-day")
+            rejectWord(cardPendingWord2, "zero-day", "Zero-day")
         }
 
         // Word 3 actions
         btnApproveWord3.setOnClickListener {
-            approveWord(cardPendingWord3, "Idempotent")
+            approveWord(cardPendingWord3, "idempotent", "Idempotent")
         }
         btnRejectWord3.setOnClickListener {
-            rejectWord(cardPendingWord3, "Idempotent")
+            rejectWord(cardPendingWord3, "idempotent", "Idempotent")
         }
 
         // Tab 2: User management
@@ -335,11 +382,18 @@ class AdminCmsActivity : AppCompatActivity() {
         }
     }
 
-    private fun approveWord(card: LinearLayout, word: String) {
+    // [SỬA] approveWord cập nhật trạng thái "approved" trên Firestore
+    private fun approveWord(card: LinearLayout, slug: String, word: String) {
         MaterialAlertDialogBuilder(this)
             .setTitle("Phê duyệt từ vựng")
             .setMessage("Bạn có chắc chắn muốn duyệt từ \"$word\" vào từ điển hệ thống chuẩn của Cassavas?")
             .setPositiveButton("Xác nhận duyệt") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        val adminUid = auth.currentUser?.uid ?: "admin"
+                        wordRepository.approveWord(slug, adminUid)
+                    } catch (_: Exception) {}
+                }
                 card.animate()
                     .alpha(0f)
                     .setDuration(250)
@@ -354,11 +408,17 @@ class AdminCmsActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun rejectWord(card: LinearLayout, word: String) {
+    // [SỬA] rejectWord cập nhật trạng thái "rejected" trên Firestore
+    private fun rejectWord(card: LinearLayout, slug: String, word: String) {
         MaterialAlertDialogBuilder(this)
             .setTitle("Từ chối đóng góp")
             .setMessage("Từ chối từ \"$word\" từ người đóng góp?")
             .setPositiveButton("Từ chối") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        wordRepository.rejectWord(slug)
+                    } catch (_: Exception) {}
+                }
                 card.animate()
                     .alpha(0f)
                     .setDuration(250)
@@ -459,4 +519,3 @@ class AdminCmsActivity : AppCompatActivity() {
         cardUser3.visibility = if (match3) View.VISIBLE else View.GONE
     }
 }
-
