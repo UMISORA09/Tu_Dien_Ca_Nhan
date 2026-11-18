@@ -1,0 +1,284 @@
+[
+  {
+    "id": "serendipity",
+    "word": "Serendipity",
+    "ipa": "/ˌser.ənˈdɪp.ə.ti/",
+    "pos": "Danh từ",
+    "cefr": "C1",
+    "topic": "IELTS Academic",
+    "meaning": "Sự tình cờ may mắn; khả năng tình cờ phát hiện ra những điều thú vị, có giá trị ngoài mong đợi.",
+    "exampleEn": "Finding this charming coffee shop was pure serendipity on a rainy morning.",
+    "exampleVi": "Việc tìm thấy quán cà phê xinh đẹp này là một sự tình cờ may mắn thuần túy vào một buổi sáng mưa.",
+    "examples": [
+      {
+        "en": "Finding this cozy café was pure serendipity.",
+        "vi": "Tìm thấy quán cà phê ấm cúng này quả là một sự tình cờ may mắn."
+      },
+      {
+        "en": "Many scientific discoveries are the result of serendipity.",
+        "vi": "Nhiều khám phá khoa học là kết quả của sự tình cờ may mắn."
+      }
+    ],
+    "synonyms": ["Chance", "Fluke", "Happy accident", "Good luck"],
+    "antonyms": ["Misfortune", "Bad luck", "Plan"],
+    "collocations": ["Pure serendipity (Hoàn toàn tình cờ)", "A moment of serendipity (Khoảnh khắc kỳ diệu)"],
+    "mnemonic": "Mẹo nhớ: \"Se-ren-đi-pi-ty\" -> Đi dạo (đi) gặp chuyện vui vẻ, bất ngờ.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "ephemeral",
+    "word": "Ephemeral",
+    "ipa": "/ɪˈfem.ər.əl/",
+    "pos": "Tính từ",
+    "cefr": "C1",
+    "topic": "IELTS Academic",
+    "meaning": "Phù du, chóng tàn, chỉ tồn tại hoặc kéo dài trong một thời gian rất ngắn ngủi.",
+    "exampleEn": "The ephemeral beauty of cherry blossoms lasts for just a few days each spring.",
+    "exampleVi": "Vẻ đẹp phù du của hoa anh đào chỉ kéo dài vài ngày ngắn ngủi mỗi độ xuân về.",
+    "examples": [],
+    "synonyms": ["Transient", "Fleeting", "Short-lived", "Temporary"],
+    "antonyms": ["Permanent", "Eternal", "Enduring", "Everlasting"],
+    "collocations": ["Ephemeral beauty", "Ephemeral nature"],
+    "mnemonic": "Mẹo nhớ: \"E-phe-me-ral\" -> Phù du như một giấc mơ thoáng qua.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "idempotent",
+    "word": "Idempotent",
+    "ipa": "/ˌaɪ.dɛmˈpoʊ.tənt/",
+    "pos": "Tính từ",
+    "cefr": "C2",
+    "topic": "Chuyên ngành IT",
+    "meaning": "(Toán / IT) Lũy đẳng; đặc tính của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho kết quả giống hệt nhau.",
+    "exampleEn": "HTTP GET and PUT methods are designed to be idempotent in RESTful architecture.",
+    "exampleVi": "Các phương thức HTTP GET và PUT được thiết kế lũy đẳng trong kiến trúc RESTful.",
+    "examples": [
+      {
+        "en": "HTTP GET, PUT, and DELETE methods should be idempotent.",
+        "vi": "Các phương thức HTTP GET, PUT và DELETE nên có tính lũy đẳng."
+      },
+      {
+        "en": "An idempotent payment API prevents double charging.",
+        "vi": "Một API thanh toán lũy đẳng giúp ngăn chặn việc trừ tiền hai lần."
+      }
+    ],
+    "synonyms": ["Unchanging", "Consistent", "Repeatable"],
+    "antonyms": ["Non-idempotent", "Mutating"],
+    "collocations": ["Idempotent API", "Idempotent operation", "Idempotency key"],
+    "mnemonic": "Mẹo nhớ: \"Idem\" (giống nhau) + \"potent\" (năng lực) -> Bao lần làm cũng y nguyên.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "resilient",
+    "word": "Resilient",
+    "ipa": "/rɪˈzɪl.i.ənt/",
+    "pos": "Tính từ",
+    "cefr": "B2",
+    "topic": "Giao tiếp hàng ngày",
+    "meaning": "Kiên cường, mau hồi phục sau khó khăn, biến cố hoặc khả năng đàn hồi co giãn của vật chất.",
+    "exampleEn": "She showed a remarkably resilient attitude after facing the startup failure.",
+    "exampleVi": "Cô ấy thể hiện tinh thần kiên cường đáng kinh ngạc sau khi đối mặt thất bại khởi nghiệp.",
+    "examples": [
+      {
+        "en": "We need to build a resilient microservices architecture.",
+        "vi": "Chúng ta cần xây dựng một kiến trúc microservices có khả năng tự phục hồi."
+      },
+      {
+        "en": "Children are often much more resilient than adults think.",
+        "vi": "Trẻ em thường kiên cường hơn nhiều so với người lớn nghĩ."
+      }
+    ],
+    "synonyms": ["Tough", "Flexible", "Strong", "Adaptable"],
+    "antonyms": ["Fragile", "Vulnerable", "Weak"],
+    "collocations": ["Resilient system (Hệ thống chịu lỗi)", "Emotionally resilient (Tinh thần kiên cường)"],
+    "mnemonic": "Mẹo nhớ: \"Re\" (lại) + \"silient\" (bật dậy) -> Bị đẩy ngã vẫn bật dậy kiên cường.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "pragmatic",
+    "word": "Pragmatic",
+    "ipa": "/præɡˈmæt.ɪk/",
+    "pos": "Tính từ",
+    "cefr": "C1",
+    "topic": "Giao tiếp hàng ngày",
+    "meaning": "Thực tế, thực dụng; giải quyết vấn đề dựa trên hiệu quả thực tế thay vì lý thuyết suông.",
+    "exampleEn": "We need a pragmatic approach to complete the product launch on time.",
+    "exampleVi": "Chúng ta cần một cách tiếp cận thực tế để hoàn thành việc ra mắt sản phẩm đúng hạn.",
+    "examples": [],
+    "synonyms": ["Practical", "Realistic", "Sensible", "Down-to-earth"],
+    "antonyms": ["Idealistic", "Impractical", "Theoretical"],
+    "collocations": ["Pragmatic approach", "Pragmatic solution"],
+    "mnemonic": "Mẹo nhớ: \"Pragmatic\" -> Thực hành (practice) là trên hết, không lý thuyết suông.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "ubiquitous",
+    "word": "Ubiquitous",
+    "ipa": "/juːˈbɪk.wə.təs/",
+    "pos": "Tính từ",
+    "cefr": "C1",
+    "topic": "Chuyên ngành IT",
+    "meaning": "Có mặt ở khắp mọi nơi, phổ biến rộng rãi khắp chốn.",
+    "exampleEn": "Smartphones and high-speed mobile internet have become ubiquitous worldwide.",
+    "exampleVi": "Điện thoại thông minh và internet di động tốc độ cao đã trở nên phổ biến khắp mọi nơi.",
+    "examples": [
+      {
+        "en": "Smartphones have become ubiquitous in modern daily life.",
+        "vi": "Điện thoại thông minh đã trở nên phổ biến khắp nơi trong đời sống hiện đại."
+      }
+    ],
+    "synonyms": ["Omnipresent", "Everywhere", "Pervasive", "Universal"],
+    "antonyms": ["Rare", "Scarse", "Seldom"],
+    "collocations": ["Ubiquitous computing", "Ubiquitous presence"],
+    "mnemonic": "Mẹo nhớ: \"U-bi-qui-tous\" -> Đi đâu cũng gặp quầy tạp hóa quen thuộc.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "eloquent",
+    "word": "Eloquent",
+    "ipa": "/ˈel.ə.kwənt/",
+    "pos": "Tính từ",
+    "cefr": "B2",
+    "topic": "IELTS Academic",
+    "meaning": "Hùng biện, lưu loát; có tài diễn đạt ý nghĩ và cảm xúc một cách thuyết phục và truyền cảm.",
+    "exampleEn": "Her eloquent speech inspired thousands of young engineers in the conference.",
+    "exampleVi": "Bài phát biểu hùng biện của cô đã truyền cảm hứng cho hàng ngàn kỹ sư trẻ trong hội nghị.",
+    "examples": [],
+    "synonyms": ["Fluent", "Articulate", "Expressive", "Persuasive"],
+    "antonyms": ["Inarticulate", "Hesitant", "Tongue-tied"],
+    "collocations": ["Eloquent speech", "Eloquent speaker"],
+    "mnemonic": "Mẹo nhớ: \"E-loquent\" -> Lời nói lưu loát, thanh thoát, chạm đến trái tim người nghe.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "tenacious",
+    "word": "Tenacious",
+    "ipa": "/təˈneɪ.ʃəs/",
+    "pos": "Tính từ",
+    "cefr": "C1",
+    "topic": "IELTS Academic",
+    "meaning": "Bền bỉ, ngoan cường, kiên trì theo đuổi mục tiêu đến cùng mà không bao giờ bỏ cuộc.",
+    "exampleEn": "His tenacious investigation finally brought the truth to light after years.",
+    "exampleVi": "Cuộc điều tra kiên trì của anh cuối cùng đã đưa sự thật ra ánh sáng sau nhiều năm.",
+    "examples": [],
+    "synonyms": ["Persistent", "Determined", "Dogged", "Resolute"],
+    "antonyms": ["Weak", "Surrendering", "Yielding"],
+    "collocations": ["Tenacious effort", "Tenacious defender"],
+    "mnemonic": "Mẹo nhớ: \"Te-na-cious\" -> Bền bỉ như mầm cây bám chặt trên vách đá.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "synchronous",
+    "word": "Synchronous",
+    "ipa": "/ˈsɪŋ.krə.nəs/",
+    "pos": "Tính từ",
+    "cefr": "B2",
+    "topic": "Chuyên ngành IT",
+    "meaning": "(Công nghệ) Đồng bộ; các tiến trình xảy ra cùng một thời điểm hoặc tuần tự chờ kết quả của nhau.",
+    "exampleEn": "Synchronous network calls can block the main UI thread in Android applications.",
+    "exampleVi": "Các lệnh gọi mạng đồng bộ có thể làm nghẽn luồng giao diện chính trong ứng dụng Android.",
+    "examples": [],
+    "synonyms": ["Simultaneous", "Concurrent", "In sync"],
+    "antonyms": ["Asynchronous", "Non-concurrent"],
+    "collocations": ["Synchronous communication", "Synchronous operation"],
+    "mnemonic": "Mẹo nhớ: \"Syn\" (cùng) + \"chron\" (thời gian) -> Cùng nhịp thời gian đồng bộ.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "ambivalent",
+    "word": "Ambivalent",
+    "ipa": "/æmˈbɪv.ə.lənt/",
+    "pos": "Tính từ",
+    "cefr": "C1",
+    "topic": "Idioms & Phrasal",
+    "meaning": "Mâu thuẫn trong cảm xúc; vừa thích lại vừa không thích, lưỡng lự chưa dứt khoát.",
+    "exampleEn": "He felt ambivalent about taking the promotion because it required frequent travel.",
+    "exampleVi": "Anh cảm thấy vừa mừng vừa lo về việc thăng chức vì công việc yêu cầu công tác liên tục.",
+    "examples": [],
+    "synonyms": ["Equivocal", "Uncertain", "Undecided", "Mixed"],
+    "antonyms": ["Decisive", "Certain", "Unambiguous"],
+    "collocations": ["Feel ambivalent about", "Ambivalent attitude"],
+    "mnemonic": "Mẹo nhớ: \"Ambi\" (hai phía) + \"valent\" -> Tâm trí giằng xé giữa hai ngả đường.",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "bite-the-bullet",
+    "word": "Bite the bullet",
+    "ipa": "/baɪt ðə ˈbʊl.ɪt/",
+    "pos": "Idiom",
+    "cefr": "C1",
+    "topic": "Idioms & Phrasal Verbs",
+    "meaning": "Cắn răng chịu đựng; quyết tâm đối mặt với một tình huống khó khăn không thể tránh khỏi.",
+    "exampleEn": "I had to bite the bullet and refactor the entire legacy codebase.",
+    "exampleVi": "Tôi đành phải cắn răng quyết tâm viết lại toàn bộ đống code cũ kỹ đó.",
+    "examples": [
+      {
+        "en": "I had to bite the bullet and refactor the entire legacy codebase.",
+        "vi": "Tôi phải cắn răng chịu đựng và cấu trúc lại toàn bộ mã nguồn cũ."
+      }
+    ],
+    "synonyms": ["Face the music", "Grin and bear it"],
+    "antonyms": ["Avoid", "Chicken out"],
+    "collocations": ["Have to bite the bullet", "Decide to bite the bullet"],
+    "mnemonic": "",
+    "grammarNote": "",
+    "personalNote": "",
+    "status": "approved",
+    "createdBy": "seed"
+  },
+  {
+    "id": "articulate",
+    "word": "Articulate",
+    "ipa": "/ɑːˈtɪk.jə.lət/",
+    "pos": "Động từ",
+    "cefr": "C1",
+    "topic": "Giao tiếp hàng ngày",
+    "meaning": "Diễn đạt, bày tỏ ý tưởng hoặc cảm xúc một cách rõ ràng, mạch lạc, lưu loát.",
+    "exampleEn": "She struggled to articulate her thoughts during the interview.",
+    "exampleVi": "Cô ấy gặp khó khăn trong việc diễn đạt mạch lạc suy nghĩ của mình trong buổi phỏng vấn.",
+    "examples": [
+      {
+        "en": "She struggled to articulate her thoughts during the interview.",
+        "vi": "Cô ấy gặp khó khăn trong việc diễn đạt suy nghĩ của mình trong buổi phỏng vấn."
+      }
+    ],
+    "synonyms": ["Express clearly", "Vocalize", "Formulate"],
+    "antonyms": ["Mumble", "Inarticulate", "Hesitant"],
+    "collocations": ["Clearly articulate (Diễn đạt rõ ràng)", "Articulate a vision (Trình bày tầm nhìn)"],
+    "mnemonic": "",
+    "grammarNote": "Tính từ phát âm là /ɑːˈtɪk.jə.lət/, Động từ phát âm đuôi là /ɑːˈtɪk.jə.leɪt/.",
+    "personalNote": "Từ rất đắt giá để viết vào CV: \"Ability to articulate complex technical concepts\".",
+    "status": "approved",
+    "createdBy": "seed"
+  }
+]

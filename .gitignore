@@ -28,6 +28,10 @@ render.experimental.xml
 *.jks
 *.keystore
 
+# Firebase Admin Service Account Key (NEVER commit)
+*serviceAccount*.json
+serviceAccountKey.json
+
 
 # Android Profiling
 *.hprof

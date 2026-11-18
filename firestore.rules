@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Kho từ chung: ai cũng đọc từ đã duyệt; chỉ admin sửa/xóa/duyệt
+    match /words/{wordId} {
+      allow read: if resource.data.status == 'approved'
+        || (isSignedIn() && resource.data.createdBy == request.auth.uid)
+        || isAdmin();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    // Sổ tay cá nhân: chỉ chủ sở hữu
+    match /userWords/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Trạng thái ôn SM-2: chỉ chủ sở hữu
+    match /reviews/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Hồ sơ: chỉ chủ sở hữu đọc/sửa (không được tự đổi role), admin đọc/sửa hết
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.role == 'USER';
+      allow update: if isAdmin()
+        || (isOwner(userId)
+          && request.resource.data.role == resource.data.role);
+    }
+  }
+}
