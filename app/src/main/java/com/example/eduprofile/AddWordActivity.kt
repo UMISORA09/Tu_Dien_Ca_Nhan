@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -14,10 +13,20 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.eduprofile.data.Review
+import com.example.eduprofile.data.ReviewRepository
+import com.example.eduprofile.data.Word
+import com.example.eduprofile.data.WordRepository
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import java.util.Locale
 
+// [SỬA]: Refactor AddWordActivity theo PROMPT 6.3 - Lưu từ thật vào Firestore, khởi tạo hàng đợi SM-2 và gắn chốt bảo mật
 class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var btnBack: FrameLayout
@@ -62,15 +71,21 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var selectedTopic = "IELTS Academic"
 
     private var tts: TextToSpeech? = null
+    // [THÊM]: Kết nối Repository duy nhất theo PROMPT 5 và 6.3
+    private val wordRepository = WordRepository()
+    private val reviewRepository = ReviewRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // [THÊM]: Ẩn thanh trạng thái hệ thống theo yêu cầu "không hiện phần này"
+        hideSystemStatusBar()
         setContentView(R.layout.activity_add_word)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val padTop = (12 * resources.displayMetrics.density).toInt()
+            v.setPadding(systemBars.left, padTop, systemBars.right, systemBars.bottom)
             insets
         }
 
@@ -78,6 +93,12 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         initViews()
         setupListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // [THÊM]: Đảm bảo thanh trạng thái luôn ẩn
+        hideSystemStatusBar()
     }
 
     private fun initViews() {
@@ -115,20 +136,22 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun setupListeners() {
+        // [THÊM]: Xử lý nút quay lại
         btnBack.setOnClickListener {
             finish()
         }
 
+        // [THÊM]: Phát âm từ vựng qua TTS
         btnSpeakWord.setOnClickListener {
-            val text = etWord.text?.toString()?.trim()
-            if (!text.isNullOrEmpty()) {
-                tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "AddWordTTS")
+            val text = etWord.text?.toString()?.trim().orEmpty()
+            if (text.isNotEmpty()) {
+                tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
             } else {
-                Toast.makeText(this, "Nhập từ vựng tiếng Anh để nghe phát âm", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Vui lòng nhập từ vựng trước khi phát âm", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Part of speech
+        // POS Chips
         val posChips = listOf(chipPosNoun, chipPosVerb, chipPosAdj, chipPosAdv, chipPosIdiom)
         posChips.forEach { chip ->
             chip.setOnClickListener {
@@ -145,7 +168,7 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
 
-        // CEFR levels
+        // CEFR Chips
         val levelChips = listOf(chipLevelA, chipLevelB, chipLevelC)
         levelChips.forEach { chip ->
             chip.setOnClickListener {
@@ -196,6 +219,7 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    // [SỬA]: Ghi nhận dữ liệu thật vào Firestore và tạo bản ghi SM-2 theo PROMPT 6.3
     private fun validateAndSave() {
         val word = etWord.text?.toString()?.trim().orEmpty()
         val meaning = etMeaning.text?.toString()?.trim().orEmpty()
@@ -220,29 +244,78 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             return
         }
 
-        val isContributed = findViewById<com.google.android.material.checkbox.MaterialCheckBox>(R.id.cbContributeSystem)?.isChecked ?: true
+        val isContributed = findViewById<MaterialCheckBox>(R.id.cbContributeSystem)?.isChecked ?: true
 
-        val resultIntent = Intent().apply {
-            putExtra("WORD", word)
-            putExtra("MEANING", meaning)
-            putExtra("PHONETIC", phonetic)
-            putExtra("POS", selectedPos)
-            putExtra("LEVEL", selectedLevel)
-            putExtra("TOPIC", selectedTopic)
-            putExtra("EXAMPLE", example)
-            putExtra("MNEMONIC", mnemonic)
-            putExtra("CONTRIBUTED", isContributed)
+        // Khóa các nút để tránh click liên tiếp
+        btnSaveTop.isEnabled = false
+        btnSubmitWord.isEnabled = false
+
+        lifecycleScope.launch {
+            val user = FirebaseAuth.getInstance().currentUser
+            val uid = user?.uid ?: "guest_${System.currentTimeMillis()}"
+
+            // Tạo slug định danh cho từ vựng
+            val slug = word.lowercase().trim().replace(Regex("[^a-z0-9]"), "-").trim('-').ifEmpty {
+                "word-${System.currentTimeMillis()}"
+            }
+
+            val newWord = Word(
+                id = slug,
+                word = word,
+                ipa = phonetic,
+                pos = selectedPos,
+                cefr = selectedLevel,
+                topic = selectedTopic,
+                meaning = meaning,
+                exampleEn = example,
+                mnemonic = mnemonic,
+                status = if (isContributed) "pending" else "approved",
+                createdBy = uid
+            )
+
+            try {
+                // 1. Thêm từ vào Firestore words và userWords
+                wordRepository.addWord(newWord, uid)
+
+                // 2. Thêm vào hàng đợi ôn tập SM-2 để có thể học ngay
+                val review = Review(
+                    id = "${uid}_$slug",
+                    userId = uid,
+                    wordId = slug,
+                    ef = 2.5,
+                    interval = 1,
+                    repetitions = 0,
+                    nextReview = Timestamp.now()
+                )
+                reviewRepository.saveReview(review)
+
+                val resultIntent = Intent().apply {
+                    putExtra("WORD", word)
+                    putExtra("MEANING", meaning)
+                    putExtra("PHONETIC", phonetic)
+                    putExtra("POS", selectedPos)
+                    putExtra("LEVEL", selectedLevel)
+                    putExtra("TOPIC", selectedTopic)
+                    putExtra("EXAMPLE", example)
+                    putExtra("MNEMONIC", mnemonic)
+                    putExtra("CONTRIBUTED", isContributed)
+                }
+
+                setResult(RESULT_OK, resultIntent)
+                val successMsg = if (isContributed) {
+                    "Đã lưu \"$word\" vào Sổ tay và gửi đóng góp lên Admin CMS! 🚀"
+                } else {
+                    "Đã lưu từ \"$word\" ($selectedPos) vào Sổ tay \"$selectedTopic\"!"
+                }
+                Toast.makeText(this@AddWordActivity, successMsg, Toast.LENGTH_LONG).show()
+
+                finish()
+            } catch (e: Exception) {
+                btnSaveTop.isEnabled = true
+                btnSubmitWord.isEnabled = true
+                Toast.makeText(this@AddWordActivity, "Lỗi lưu từ vựng: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
-
-        setResult(RESULT_OK, resultIntent)
-        val successMsg = if (isContributed) {
-            "Đã thêm \"$word\" vào Sổ tay và gửi đóng góp lên Admin CMS! 🚀"
-        } else {
-            "Đã thêm từ \"$word\" ($selectedPos) vào Sổ tay \"$selectedTopic\"!"
-        }
-        Toast.makeText(this, successMsg, Toast.LENGTH_LONG).show()
-
-        finish()
     }
 
     override fun onInit(status: Int) {
@@ -257,4 +330,3 @@ class AddWordActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 }
-
