@@ -25,6 +25,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import java.util.Locale
 
 class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -282,6 +284,13 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun showChangePasswordDialog() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
+        if (user == null || email.isNullOrEmpty()) {
+            Toast.makeText(this, "Vui lòng đăng nhập tài khoản để đổi mật khẩu", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val builder = MaterialAlertDialogBuilder(this)
         builder.setTitle("Đổi mật khẩu tài khoản")
 
@@ -296,7 +305,7 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
         val etNewPass = EditText(this).apply {
-            hint = "Mật khẩu mới (tối thiểu 6 ký tự)"
+            hint = "Mật khẩu mới (tối thiểu 8 ký tự)"
             inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
         val etConfirmPass = EditText(this).apply {
@@ -310,15 +319,38 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         builder.setView(layout)
         builder.setPositiveButton("Cập nhật") { _, _ ->
+            val oldP = etOldPass.text.toString().trim()
             val newP = etNewPass.text.toString().trim()
             val confirmP = etConfirmPass.text.toString().trim()
-            if (newP.isEmpty() || confirmP.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập mật khẩu mới", Toast.LENGTH_SHORT).show()
-            } else if (newP != confirmP) {
-                Toast.makeText(this, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "🔒 Đã cập nhật mật khẩu thành công!", Toast.LENGTH_SHORT).show()
+
+            if (oldP.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập mật khẩu hiện tại", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
             }
+            if (newP.length < 8) {
+                Toast.makeText(this, "Mật khẩu mới phải có tối thiểu 8 ký tự", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+            if (newP != confirmP) {
+                Toast.makeText(this, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            // [THÊM]: Reauthenticate và cập nhật mật khẩu thật qua Firebase Auth theo PROMPT 2
+            val credential = EmailAuthProvider.getCredential(email, oldP)
+            user.reauthenticate(credential)
+                .addOnSuccessListener {
+                    user.updatePassword(newP)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "🔒 Đã cập nhật mật khẩu thành công!", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Lỗi cập nhật mật khẩu: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Mật khẩu hiện tại không chính xác", Toast.LENGTH_SHORT).show()
+                }
         }
         builder.setNegativeButton("Hủy", null)
         builder.show()
@@ -329,6 +361,11 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             .setTitle("Đăng xuất")
             .setMessage("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản trên thiết bị này?")
             .setPositiveButton("Đăng xuất") { _, _ ->
+                // [THÊM]: Đăng xuất Firebase Auth và xóa các session key cũ theo PROMPT 2
+                FirebaseAuth.getInstance().signOut()
+                val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                prefs.edit().remove("CURRENT_ROLE").remove("IS_LOGGED_IN").remove("LOGGED_IN_EMAIL").apply()
+
                 Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

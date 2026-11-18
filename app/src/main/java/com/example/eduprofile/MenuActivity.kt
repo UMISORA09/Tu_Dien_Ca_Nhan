@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.firebase.auth.FirebaseAuth
 
 class MenuActivity : AppCompatActivity() {
 
@@ -187,8 +188,12 @@ class MenuActivity : AppCompatActivity() {
             startActivity(Intent(this, AdminCmsActivity::class.java))
         }
 
-        // Đăng xuất
+        // [SỬA]: Đăng xuất thật bằng FirebaseAuth.signOut() và xóa key phiên cũ trong SharedPreferences theo PROMPT 2
         menuItemLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+            prefs.edit().remove("CURRENT_ROLE").remove("IS_LOGGED_IN").remove("LOGGED_IN_EMAIL").apply()
+
             Toast.makeText(this, "Đã đăng xuất khỏi tài khoản", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

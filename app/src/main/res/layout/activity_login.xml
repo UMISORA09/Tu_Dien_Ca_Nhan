@@ -65,123 +65,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAppTitle" />
 
-        <!-- Role Selection Container -->
-        <LinearLayout
-            android:id="@+id/layoutRoleSelect"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_btn_admin_import"
-            android:orientation="vertical"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAppSubtitle">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.04"
-                    android:text="CHỌN VAI TRÒ ĐĂNG NHẬP (ROLE-BASED AUTH)"
-                    android:textColor="@color/primary_purple"
-                    android:textSize="9.5sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tự điền tài khoản mẫu"
-                    android:textColor="#94A3B8"
-                    android:textSize="9.5sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/btnSelectRoleUser"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_tab_admin_active"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingVertical="9dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="👤"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvRoleUserText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="Học viên (User)"
-                        android:textColor="@color/white"
-                        android:textSize="11.5sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btnSelectRoleAdmin"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_btn_menu_white"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingVertical="9dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🛡️"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvRoleAdminText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="Quản trị (Admin)"
-                        android:textColor="#475569"
-                        android:textSize="11.5sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+        <!-- [ĐÃ XÓA]: layoutRoleSelect (Khối chọn vai trò) theo PROMPT 2. Role được phân quyền trực tiếp từ Firestore. -->
 
         <!-- Label: Email / Username -->
         <TextView
             android:id="@+id/tvEmailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:letterSpacing="0.04"
             android:text="@string/label_email"
             android:textColor="@color/text_label"
             android:textSize="11sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutRoleSelect" />
+            app:layout_constraintTop_toBottomOf="@id/tvAppSubtitle" />
 
         <!-- Input: Email -->
         <com.google.android.material.textfield.TextInputLayout
@@ -250,33 +148,21 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Options Row: Remember Me & Forgot Password -->
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbRememberMe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:checked="true"
-            android:text="@string/remember_login"
-            android:textColor="@color/text_primary"
-            android:textSize="13sp"
-            app:buttonTint="@color/primary_purple"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+        <!-- [ĐÃ XÓA]: cbRememberMe theo PROMPT 2 vì Firebase Auth tự duy trì phiên đăng nhập -->
 
         <TextView
             android:id="@+id/tvForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:padding="6dp"
             android:text="@string/forgot_password"
             android:textColor="@color/primary_purple"
             android:textSize="13sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/cbRememberMe"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/cbRememberMe" />
+            app:layout_constraintTop_toBottomOf="@id/tilPassword" />
 
         <!-- Main Button: Login -->
         <com.google.android.material.button.MaterialButton
@@ -299,7 +185,25 @@
             app:iconTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbRememberMe" />
+            app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
+
+        <!-- [THÊM]: Dòng thông tin tài khoản demo theo PROMPT 2 -->
+        <TextView
+            android:id="@+id/tvDemoAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Tài khoản demo: xuanhoa.dev@tdc.edu.vn / 12345678"
+            android:textColor="@color/primary_purple"
+            android:textSize="12.5sp"
+            android:textStyle="italic|bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
 
         <!-- Divider Row -->
         <View
@@ -317,7 +221,7 @@
             android:id="@+id/tvDividerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="22dp"
             android:letterSpacing="0.04"
             android:text="@string/or_continue_with"
             android:textColor="@color/text_label"
@@ -325,7 +229,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+            app:layout_constraintTop_toBottomOf="@id/tvDemoAccount" />
 
         <View
             android:id="@+id/dividerRight"

@@ -16,7 +16,7 @@
     <string name="or_continue_with">HOẶC TIẾP TỤC VỚI</string>
     <string name="social_google">Google</string>
     <string name="social_github">GitHub</string>
-    <string name="btn_guest_mode">Dùng thử Chế độ Khách (Offline SQLite)</string>
+    <string name="btn_guest_mode">Dùng thử Chế độ Khách</string>
 
     <string name="dont_have_account">Chưa có tài khoản cá nhân?</string>
     <string name="register_now">Đăng ký ngay</string>

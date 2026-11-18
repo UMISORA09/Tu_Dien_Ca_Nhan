@@ -2,43 +2,49 @@ package com.example.eduprofile
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var btnSelectRoleUser: LinearLayout
-    private lateinit var btnSelectRoleAdmin: LinearLayout
-    private lateinit var tvRoleUserText: TextView
-    private lateinit var tvRoleAdminText: TextView
+    // [ĐÃ XÓA]: btnSelectRoleUser, btnSelectRoleAdmin, tvRoleUserText, tvRoleAdminText, cbRememberMe, selectedRole theo PROMPT 2
 
     private lateinit var tilEmail: TextInputLayout
     private lateinit var etEmail: TextInputEditText
     private lateinit var tilPassword: TextInputLayout
     private lateinit var etPassword: TextInputEditText
-    private lateinit var cbRememberMe: MaterialCheckBox
     private lateinit var tvForgotPassword: TextView
     private lateinit var btnLogin: MaterialButton
+    private lateinit var tvDemoAccount: TextView
     private lateinit var btnGoogle: MaterialButton
     private lateinit var btnGithub: MaterialButton
     private lateinit var btnGuestMode: AppCompatButton
     private lateinit var tvRegister: TextView
 
-    private var selectedRole = "USER" // "USER" or "ADMIN"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // [THÊM]: Ghi nhớ đăng nhập bằng phiên Firebase Auth thật theo PROMPT 2
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            checkUserRoleAndNavigate(currentUser.uid)
+            return
+        }
+
+        setupLoginScreen()
+    }
+
+    private fun setupLoginScreen() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
@@ -50,22 +56,16 @@ class LoginActivity : AppCompatActivity() {
 
         initViews()
         setupListeners()
-        selectRole("USER")
     }
 
     private fun initViews() {
-        btnSelectRoleUser = findViewById(R.id.btnSelectRoleUser)
-        btnSelectRoleAdmin = findViewById(R.id.btnSelectRoleAdmin)
-        tvRoleUserText = findViewById(R.id.tvRoleUserText)
-        tvRoleAdminText = findViewById(R.id.tvRoleAdminText)
-
         tilEmail = findViewById(R.id.tilEmail)
         etEmail = findViewById(R.id.etEmail)
         tilPassword = findViewById(R.id.tilPassword)
         etPassword = findViewById(R.id.etPassword)
-        cbRememberMe = findViewById(R.id.cbRememberMe)
         tvForgotPassword = findViewById(R.id.tvForgotPassword)
         btnLogin = findViewById(R.id.btnLogin)
+        tvDemoAccount = findViewById(R.id.tvDemoAccount)
         btnGoogle = findViewById(R.id.btnGoogle)
         btnGithub = findViewById(R.id.btnGithub)
         btnGuestMode = findViewById(R.id.btnGuestMode)
@@ -73,12 +73,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        btnSelectRoleUser.setOnClickListener {
-            selectRole("USER")
+        // [THÊM]: Bấm dòng demo thì điền tài khoản User demo xuanhoa.dev@tdc.edu.vn / 12345678
+        tvDemoAccount.setOnClickListener {
+            etEmail.setText("xuanhoa.dev@tdc.edu.vn")
+            etPassword.setText("12345678")
+            tilEmail.error = null
+            tilPassword.error = null
+            Toast.makeText(this, "Đã điền tài khoản Học viên demo (User)", Toast.LENGTH_SHORT).show()
         }
 
-        btnSelectRoleAdmin.setOnClickListener {
-            selectRole("ADMIN")
+        // Nhấn giữ dòng demo để điền tài khoản Admin demo admin@cassavas.edu.vn / 12345678
+        tvDemoAccount.setOnLongClickListener {
+            etEmail.setText("admin@cassavas.edu.vn")
+            etPassword.setText("12345678")
+            tilEmail.error = null
+            tilPassword.error = null
+            Toast.makeText(this, "Đã điền tài khoản Quản trị demo (Admin)", Toast.LENGTH_SHORT).show()
+            true
         }
 
         btnLogin.setOnClickListener {
@@ -86,7 +97,18 @@ class LoginActivity : AppCompatActivity() {
         }
 
         tvForgotPassword.setOnClickListener {
-            Toast.makeText(this, "Chức năng quên mật khẩu sẽ gửi mã OTP về email", Toast.LENGTH_SHORT).show()
+            val email = etEmail.text?.toString()?.trim().orEmpty()
+            if (email.isNotEmpty()) {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Đã gửi email đặt lại mật khẩu đến $email", Toast.LENGTH_LONG).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Lỗi gửi email đặt lại mật khẩu: ${it.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Vui lòng nhập email để nhận liên kết đặt lại mật khẩu", Toast.LENGTH_SHORT).show()
+            }
         }
 
         btnGoogle.setOnClickListener {
@@ -97,9 +119,13 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Đang kết nối dịch vụ GitHub OAuth...", Toast.LENGTH_SHORT).show()
         }
 
+        // [SỬA]: Chế độ Khách theo PROMPT 2: vào HomeActivity với vai trò khách (không có tài khoản Auth)
         btnGuestMode.setOnClickListener {
-            Toast.makeText(this, "Đang vào ứng dụng với Chế độ Khách (Offline SQLite)...", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, HomeActivity::class.java))
+            Toast.makeText(this, "Đang vào ứng dụng với Chế độ Khách...", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("IS_GUEST", true)
+            startActivity(intent)
+            finish()
         }
 
         tvRegister.setOnClickListener {
@@ -108,36 +134,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectRole(role: String) {
-        selectedRole = role
-        val colorWhite = ContextCompat.getColor(this, R.color.white)
-        val colorDark = ContextCompat.getColor(this, R.color.admin_slate_dark)
+    // [ĐÃ XÓA]: selectRole() dòng 111-139 theo PROMPT 2 vì role chỉ đọc từ Firestore users/{uid}.role
 
-        if (role == "USER") {
-            btnSelectRoleUser.setBackgroundResource(R.drawable.bg_tab_admin_active)
-            tvRoleUserText.setTextColor(colorWhite)
-
-            btnSelectRoleAdmin.setBackgroundResource(R.drawable.bg_btn_menu_white)
-            tvRoleAdminText.setTextColor(colorDark)
-
-            etEmail.setText("xuanhoa.dev@tdc.edu.vn")
-            etPassword.setText("12345678")
-            btnLogin.text = "➔ Đăng nhập Sổ Tay Học Viên (User)"
-            btnLogin.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_purple))
-        } else {
-            btnSelectRoleAdmin.setBackgroundResource(R.drawable.bg_tab_admin_active)
-            tvRoleAdminText.setTextColor(colorWhite)
-
-            btnSelectRoleUser.setBackgroundResource(R.drawable.bg_btn_menu_white)
-            tvRoleUserText.setTextColor(colorDark)
-
-            etEmail.setText("admin@cassavas.edu.vn")
-            etPassword.setText("12345678")
-            btnLogin.text = "🛡️ Đăng nhập Quản Trị Hệ Thống (Admin)"
-            btnLogin.setBackgroundColor(ContextCompat.getColor(this, R.color.admin_orange))
-        }
-    }
-
+    // [SỬA]: Viết lại handleLogin() theo Firebase Auth thật và đọc role từ Firestore
     private fun handleLogin() {
         val email = etEmail.text?.toString()?.trim().orEmpty()
         val password = etPassword.text?.toString()?.trim().orEmpty()
@@ -158,23 +157,91 @@ class LoginActivity : AppCompatActivity() {
             tilPassword.error = null
         }
 
-        if (isValid) {
-            // Save role into SharedPreferences
-            val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-            prefs.edit().putString("CURRENT_ROLE", selectedRole).apply()
+        if (!isValid) return
 
-            if (selectedRole == "ADMIN") {
-                Toast.makeText(this, "Đăng nhập thành công với quyền Quản trị viên (Admin) 🛡️", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, AdminCmsActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                Toast.makeText(this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                finish()
+        btnLogin.isEnabled = false
+        btnLogin.text = "Đang đăng nhập..."
+
+        // [ĐÃ XÓA]: SharedPreferences putString("CURRENT_ROLE") cũ
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            .addOnSuccessListener { authResult ->
+                val user = authResult.user
+                if (user != null) {
+                    FirebaseFirestore.getInstance().collection("users").document(user.uid).get()
+                        .addOnSuccessListener { doc ->
+                            btnLogin.isEnabled = true
+                            btnLogin.text = getString(R.string.btn_login_notebook)
+
+                            if (doc != null && doc.exists()) {
+                                val isBlocked = doc.getBoolean("blocked") ?: false
+                                if (isBlocked) {
+                                    FirebaseAuth.getInstance().signOut()
+                                    Toast.makeText(this, "Tài khoản của bạn đã bị khóa bởi Quản trị viên", Toast.LENGTH_LONG).show()
+                                    return@addOnSuccessListener
+                                }
+
+                                val role = doc.getString("role") ?: "USER"
+                                if (role == "ADMIN") {
+                                    Toast.makeText(this, "Đăng nhập thành công với quyền Quản trị viên (Admin) 🛡️", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, AdminCmsActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                } else {
+                                    Toast.makeText(this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, HomeActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }
+                            } else {
+                                // Nếu document chưa có field role, mặc định là USER
+                                Toast.makeText(this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+                        .addOnFailureListener {
+                            btnLogin.isEnabled = true
+                            btnLogin.text = getString(R.string.btn_login_notebook)
+                            Toast.makeText(this, "Không tải được thông tin tài khoản, thử lại", Toast.LENGTH_SHORT).show()
+                        }
+                }
             }
-        }
+            .addOnFailureListener {
+                btnLogin.isEnabled = true
+                btnLogin.text = getString(R.string.btn_login_notebook)
+                tilPassword.error = "Email hoặc mật khẩu không đúng"
+            }
+    }
+
+    // [THÊM]: Hàm kiểm tra role và điều hướng tự động khi có phiên đăng nhập sẵn
+    private fun checkUserRoleAndNavigate(uid: String) {
+        FirebaseFirestore.getInstance().collection("users").document(uid).get()
+            .addOnSuccessListener { doc ->
+                if (doc != null && doc.exists()) {
+                    val isBlocked = doc.getBoolean("blocked") ?: false
+                    if (isBlocked) {
+                        FirebaseAuth.getInstance().signOut()
+                        Toast.makeText(this, "Tài khoản của bạn đã bị khóa", Toast.LENGTH_LONG).show()
+                        setupLoginScreen()
+                        return@addOnSuccessListener
+                    }
+
+                    val role = doc.getString("role") ?: "USER"
+                    if (role == "ADMIN") {
+                        startActivity(Intent(this, AdminCmsActivity::class.java))
+                    } else {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    }
+                    finish()
+                } else {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Không tải được thông tin tài khoản, thử lại", Toast.LENGTH_SHORT).show()
+                setupLoginScreen()
+            }
     }
 }
-

@@ -15,6 +15,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -130,23 +135,62 @@ class RegisterActivity : AppCompatActivity() {
             val selectedLevelId = cgLevel.checkedChipId
             val selectedLevel = if (selectedLevelId != View.NO_ID) {
                 findViewById<Chip>(selectedLevelId)?.text?.toString().orEmpty()
-            } else ""
+            } else "Trung cấp (B1 - B2)"
 
             val selectedGoalId = cgDailyGoal.checkedChipId
-            val selectedGoal = if (selectedGoalId != View.NO_ID) {
+            val selectedGoalText = if (selectedGoalId != View.NO_ID) {
                 findViewById<Chip>(selectedGoalId)?.text?.toString().orEmpty()
-            } else ""
+            } else "10 từ / ngày"
 
-            Toast.makeText(
-                this,
-                "${getString(R.string.msg_register_success)}\nTrình độ: $selectedLevel - Mục tiêu: $selectedGoal",
-                Toast.LENGTH_SHORT
-            ).show()
+            val dailyGoalNumber: Long = if (selectedGoalText.contains("20")) 20L else if (selectedGoalText.contains("30")) 30L else 10L
 
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+            btnRegister.isEnabled = false
+            btnRegister.text = "Đang tạo tài khoản..."
+
+            // [THÊM]: Đăng ký tài khoản thật với Firebase Auth và tạo document users/{uid} theo PROMPT 2
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener { authResult ->
+                    val uid = authResult.user?.uid
+                    if (uid != null) {
+                        val userMap = hashMapOf<String, Any>(
+                            "displayName" to fullname,
+                            "email" to email,
+                            "role" to "USER",
+                            "xp" to 0L,
+                            "streak" to 0L,
+                            "level" to selectedLevel,
+                            "dailyGoal" to dailyGoalNumber,
+                            "blocked" to false,
+                            "createdAt" to FieldValue.serverTimestamp()
+                        )
+                        FirebaseFirestore.getInstance().collection("users").document(uid).set(userMap)
+                            .addOnSuccessListener {
+                                btnRegister.isEnabled = true
+                                btnRegister.text = getString(R.string.btn_complete_register)
+                                Toast.makeText(this, getString(R.string.msg_register_success), Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, HomeActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                btnRegister.isEnabled = true
+                                btnRegister.text = getString(R.string.btn_complete_register)
+                                Toast.makeText(this, "Không thể lưu hồ sơ Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    btnRegister.isEnabled = true
+                    btnRegister.text = getString(R.string.btn_complete_register)
+                    if (e is FirebaseAuthUserCollisionException) {
+                        tilEmail.error = "Email này đã được đăng ký"
+                    } else if (e is FirebaseAuthWeakPasswordException) {
+                        tilPassword.error = "Mật khẩu phải có tối thiểu 6 ký tự"
+                    } else {
+                        Toast.makeText(this, "Đăng ký thất bại: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
     }
 }
