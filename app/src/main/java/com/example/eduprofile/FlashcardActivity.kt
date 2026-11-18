@@ -1,4 +1,4 @@
-package com.example.eduprofile
+﻿package com.example.eduprofile
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -28,12 +28,21 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.eduprofile.data.ReviewRepository
+import com.example.eduprofile.data.UserStatsRepository
+import com.example.eduprofile.data.WordRepository
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     data class FlashcardItem(
         val id: Int,
+        // [THÊM]: slug để ánh xạ chính xác với Firestore words và reviews theo PROMPT 6.4
+        val slug: String = "",
         val word: String,
         val phonetic: String,
         val pos: String,
@@ -127,11 +136,16 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var isTtsReady = false
 
     private lateinit var prefs: SharedPreferences
+    // [THÊM]: Repository duy nhất quản lý SM-2, từ vựng và XP theo PROMPT 5 và PROMPT 6.4
+    private val wordRepository = WordRepository()
+    private val reviewRepository = ReviewRepository()
+    private val userStatsRepository = UserStatsRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        hideStatusBar()
+        // [THÊM]: Ẩn thanh trạng thái hệ thống theo yêu cầu "không hiện phần này"
+        hideSystemStatusBar()
         setContentView(R.layout.activity_flashcard)
 
         setupWindowInsets()
@@ -140,29 +154,16 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         initViews()
         initMasterDeck()
 
-        if (savedInstanceState != null) {
-            restoreInstanceState(savedInstanceState)
-        } else {
-            buildSessionQueue()
-        }
-
         setupListeners()
         setupCameraDistance()
 
         tts = TextToSpeech(this, this)
-
-        showCard(currentIndex)
     }
 
     override fun onResume() {
         super.onResume()
-        hideStatusBar()
-    }
-
-    private fun hideStatusBar() {
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+        // [THÊM]: Đảm bảo thanh trạng thái luôn ẩn
+        hideSystemStatusBar()
     }
 
     private fun setupWindowInsets() {
@@ -178,184 +179,98 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    // [SỬA]: Xóa bỏ 10 từ hard-code cũ, nạp dữ liệu động từ Firestore theo PROMPT 6.4
     private fun initMasterDeck() {
-        masterDeck.clear()
-        masterDeck.add(
-            FlashcardItem(
-                id = 1,
-                word = "Serendipity",
-                phonetic = "/ˌser.ənˈdɪp.ə.ti/",
-                pos = "Danh từ",
-                cefr = "C1",
-                topic = "IELTS Academic",
-                meaning = "Sự tình cờ may mắn; khả năng tình cờ phát hiện ra những điều thú vị, có giá trị ngoài mong đợi.",
-                exampleEn = "\"Finding this charming coffee shop was pure serendipity on a rainy morning.\"",
-                exampleVi = "→ Việc tìm thấy quán cà phê xinh đẹp này là một sự tình cờ may mắn thuần túy vào một buổi sáng mưa.",
-                mnemonic = "Mẹo nhớ: \"Se-ren-đi-pi-ty\" -> Đi dạo (đi) gặp chuyện vui vẻ, bất ngờ.",
-                easeFactor = 2.5f,
-                intervalDays = 4,
-                repetitions = 2,
-                isBookmarked = true
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 2,
-                word = "Ephemeral",
-                phonetic = "/ɪˈfem.ər.əl/",
-                pos = "Tính từ",
-                cefr = "C1",
-                topic = "IELTS Academic",
-                meaning = "Phù du, chóng tàn, chỉ tồn tại hoặc kéo dài trong một thời gian rất ngắn ngủi.",
-                exampleEn = "\"The ephemeral beauty of cherry blossoms lasts for just a few days each spring.\"",
-                exampleVi = "→ Vẻ đẹp phù du của hoa anh đào chỉ kéo dài vài ngày ngắn ngủi mỗi độ xuân về.",
-                mnemonic = "Mẹo nhớ: \"E-phe-me-ral\" -> Phù du như một giấc mơ thoáng qua.",
-                easeFactor = 2.4f,
-                intervalDays = 1,
-                repetitions = 1
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 3,
-                word = "Idempotent",
-                phonetic = "/ˌaɪ.dɛmˈpoʊ.tənt/",
-                pos = "Tính từ",
-                cefr = "C2",
-                topic = "Chuyên ngành IT",
-                meaning = "(Toán / IT) Lũy đẳng; đặc tính của một thao tác mà dù thực hiện 1 lần hay nhiều lần đều cho kết quả giống hệt nhau.",
-                exampleEn = "\"HTTP GET and PUT methods are designed to be idempotent in RESTful architecture.\"",
-                exampleVi = "→ Các phương thức HTTP GET và PUT được thiết kế lũy đẳng trong kiến trúc RESTful.",
-                mnemonic = "Mẹo nhớ: \"Idem\" (giống nhau) + \"potent\" (năng lực) -> Bao lần làm cũng y nguyên.",
-                easeFactor = 2.6f,
-                intervalDays = 6,
-                repetitions = 3
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 4,
-                word = "Resilient",
-                phonetic = "/rɪˈzɪl.i.ənt/",
-                pos = "Tính từ",
-                cefr = "B2",
-                topic = "Giao tiếp hàng ngày",
-                meaning = "Kiên cường, mau hồi phục sau khó khăn, biến cố hoặc khả năng đàn hồi co giãn của vật chất.",
-                exampleEn = "\"She showed a remarkably resilient attitude after facing the startup failure.\"",
-                exampleVi = "→ Cô ấy thể hiện tinh thần kiên cường đáng kinh ngạc sau khi đối mặt thất bại khởi nghiệp.",
-                mnemonic = "Mẹo nhớ: \"Re\" (lại) + \"silient\" (bật dậy) -> Bị đẩy ngã vẫn bật dậy kiên cường.",
-                easeFactor = 2.5f,
-                intervalDays = 3,
-                repetitions = 2,
-                isBookmarked = true
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 5,
-                word = "Pragmatic",
-                phonetic = "/præɡˈmæt.ɪk/",
-                pos = "Tính từ",
-                cefr = "C1",
-                topic = "Giao tiếp hàng ngày",
-                meaning = "Thực tế, thực dụng; giải quyết vấn đề dựa trên hiệu quả thực tế thay vì lý thuyết suông.",
-                exampleEn = "\"We need a pragmatic approach to complete the product launch on time.\"",
-                exampleVi = "→ Chúng ta cần một cách tiếp cận thực tế để hoàn thành việc ra mắt sản phẩm đúng hạn.",
-                mnemonic = "Mẹo nhớ: \"Pragmatic\" -> Thực hành (practice) là trên hết, không lý thuyết suông.",
-                easeFactor = 2.5f,
-                intervalDays = 2,
-                repetitions = 1
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 6,
-                word = "Ubiquitous",
-                phonetic = "/juːˈbɪk.wə.təs/",
-                pos = "Tính từ",
-                cefr = "C1",
-                topic = "Chuyên ngành IT",
-                meaning = "Có mặt ở khắp mọi nơi, phổ biến rộng rãi khắp chốn.",
-                exampleEn = "\"Smartphones and high-speed mobile internet have become ubiquitous worldwide.\"",
-                exampleVi = "→ Điện thoại thông minh và internet di động tốc độ cao đã trở nên phổ biến khắp mọi nơi.",
-                mnemonic = "Mẹo nhớ: \"U-bi-qui-tous\" -> Đi đâu cũng gặp quầy tạp hóa quen thuộc.",
-                easeFactor = 2.7f,
-                intervalDays = 7,
-                repetitions = 3
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 7,
-                word = "Eloquent",
-                phonetic = "/ˈel.ə.kwənt/",
-                pos = "Tính từ",
-                cefr = "B2",
-                topic = "IELTS Academic",
-                meaning = "Hùng biện, lưu loát; có tài diễn đạt ý nghĩ và cảm xúc một cách thuyết phục và truyền cảm.",
-                exampleEn = "\"Her eloquent speech inspired thousands of young engineers in the conference.\"",
-                exampleVi = "→ Bài phát biểu hùng biện của cô đã truyền cảm hứng cho hàng ngàn kỹ sư trẻ trong hội nghị.",
-                mnemonic = "Mẹo nhớ: \"E-loquent\" -> Lời nói lưu loát, thanh thoát, chạm đến trái tim người nghe.",
-                easeFactor = 2.5f,
-                intervalDays = 4,
-                repetitions = 2
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 8,
-                word = "Tenacious",
-                phonetic = "/təˈneɪ.ʃəs/",
-                pos = "Tính từ",
-                cefr = "C1",
-                topic = "IELTS Academic",
-                meaning = "Bền bỉ, ngoan cường, kiên trì theo đuổi mục tiêu đến cùng mà không bao giờ bỏ cuộc.",
-                exampleEn = "\"His tenacious investigation finally brought the truth to light after years.\"",
-                exampleVi = "→ Cuộc điều tra kiên trì của anh cuối cùng đã đưa sự thật ra ánh sáng sau nhiều năm.",
-                mnemonic = "Mẹo nhớ: \"Te-na-cious\" -> Bền bỉ như mầm cây bám chặt trên vách đá.",
-                easeFactor = 2.4f,
-                intervalDays = 2,
-                repetitions = 1
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 9,
-                word = "Synchronous",
-                phonetic = "/ˈsɪŋ.krə.nəs/",
-                pos = "Tính từ",
-                cefr = "B2",
-                topic = "Chuyên ngành IT",
-                meaning = "(Công nghệ) Đồng bộ; các tiến trình xảy ra cùng một thời điểm hoặc tuần tự chờ kết quả của nhau.",
-                exampleEn = "\"Synchronous network calls can block the main UI thread in Android applications.\"",
-                exampleVi = "→ Các lệnh gọi mạng đồng bộ có thể làm nghẽn luồng giao diện chính trong ứng dụng Android.",
-                mnemonic = "Mẹo nhớ: \"Syn\" (cùng) + \"chron\" (thời gian) -> Cùng nhịp thời gian đồng bộ.",
-                easeFactor = 2.5f,
-                intervalDays = 3,
-                repetitions = 2
-            )
-        )
-        masterDeck.add(
-            FlashcardItem(
-                id = 10,
-                word = "Ambivalent",
-                phonetic = "/æmˈbɪv.ə.lənt/",
-                pos = "Tính từ",
-                cefr = "C1",
-                topic = "Idioms & Phrasal",
-                meaning = "Mâu thuẫn trong cảm xúc; vừa thích lại vừa không thích, lưỡng lự chưa dứt khoát.",
-                exampleEn = "\"He felt ambivalent about taking the promotion because it required frequent travel.\"",
-                exampleVi = "→ Anh cảm thấy vừa mừng vừa lo về việc thăng chức vì công việc yêu cầu công tác liên tục.",
-                mnemonic = "Mẹo nhớ: \"Ambi\" (hai phía) + \"valent\" -> Tâm trí giằng xé giữa hai ngả đường.",
-                easeFactor = 2.5f,
-                intervalDays = 1,
-                repetitions = 1
-            )
-        )
+        lifecycleScope.launch {
+            val user = FirebaseAuth.getInstance().currentUser
+            val uid = user?.uid ?: "guest"
 
-        // Tải trạng thái SM-2 đã lưu từ SharedPreferences cho từng từ
-        for (item in masterDeck) {
-            loadItemState(item)
+            // 1. Chạy migrate SharedPreferences sang Firestore nếu có dữ liệu cũ
+            try {
+                reviewRepository.migrateFromPrefsIfFound(uid, prefs)
+            } catch (e: Exception) {
+                // Ignore
+            }
+
+            // 2. Lấy kho từ đã duyệt hoặc danh sách chuẩn
+            val approvedWords = try {
+                wordRepository.getApprovedWords().firstOrNull() ?: WordRepository.getSeedWordsList()
+            } catch (e: Exception) {
+                WordRepository.getSeedWordsList()
+            }
+            val words = approvedWords.ifEmpty { WordRepository.getSeedWordsList() }
+            val wordMap = words.associateBy { it.id }
+
+            // 3. Lấy reviews đến hạn của user
+            val reviews = try {
+                if (uid != "guest") {
+                    reviewRepository.getDueReviews(uid).firstOrNull() ?: emptyList()
+                } else {
+                    emptyList()
+                }
+            } catch (e: Exception) {
+                emptyList()
+            }
+
+            masterDeck.clear()
+            if (reviews.isNotEmpty()) {
+                reviews.forEachIndexed { idx, rev ->
+                    val w = wordMap[rev.wordId]
+                    if (w != null) {
+                        masterDeck.add(
+                            FlashcardItem(
+                                id = idx + 1,
+                                slug = w.id,
+                                word = w.word,
+                                phonetic = w.ipa,
+                                pos = w.pos,
+                                cefr = w.cefr,
+                                topic = w.topic,
+                                meaning = w.meaning,
+                                exampleEn = if (w.exampleEn.isNotEmpty()) "\"\"" else "",
+                                exampleVi = if (w.exampleVi.isNotEmpty()) "→ " else "",
+                                mnemonic = w.mnemonic,
+                                easeFactor = rev.ef.toFloat(),
+                                intervalDays = rev.interval.toInt(),
+                                repetitions = rev.repetitions.toInt(),
+                                nextReviewMillis = rev.nextReview?.toDate()?.time ?: 0L,
+                                isBookmarked = rev.isBookmarked
+                            )
+                        )
+                    }
+                }
+            }
+
+            // Nếu hàng đợi rỗng, khởi tạo từ kho từ thật để luôn có bài học
+            if (masterDeck.isEmpty()) {
+                words.forEachIndexed { idx, w ->
+                    masterDeck.add(
+                        FlashcardItem(
+                            id = idx + 1,
+                            slug = w.id,
+                            word = w.word,
+                            phonetic = w.ipa,
+                            pos = w.pos,
+                            cefr = w.cefr,
+                            topic = w.topic,
+                            meaning = w.meaning,
+                            exampleEn = if (w.exampleEn.isNotEmpty()) "\"\"" else "",
+                            exampleVi = if (w.exampleVi.isNotEmpty()) "→ " else "",
+                            mnemonic = w.mnemonic,
+                            easeFactor = 2.5f,
+                            intervalDays = 1,
+                            repetitions = 0,
+                            nextReviewMillis = System.currentTimeMillis(),
+                            isBookmarked = false
+                        )
+                    )
+                }
+            }
+
+            buildSessionQueue()
+            if (flashcardList.isNotEmpty()) {
+                showCard(currentIndex)
+            }
         }
     }
 
@@ -572,6 +487,18 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             item.isBookmarked = !item.isBookmarked
             updateBookmarkIcon(item.isBookmarked)
             saveItemState(item)
+
+            // [THÊM]: Đồng bộ trạng thái bookmark lên Firestore theo PROMPT 6.4
+            val user = FirebaseAuth.getInstance().currentUser
+            val uid = user?.uid ?: "guest"
+            lifecycleScope.launch {
+                try {
+                    reviewRepository.toggleBookmark(uid, item.slug, item.isBookmarked)
+                } catch (e: Exception) {
+                    // Ignore
+                }
+            }
+
             val msg = if (item.isBookmarked) "Đã lưu vào danh sách yêu thích" else "Đã bỏ đánh dấu"
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         }
@@ -832,6 +759,19 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         saveItemState(currentItem)
         reviewedCount++
 
+        // [THÊM]: Lưu vào Firestore và cộng XP thật theo PROMPT 6.4
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user?.uid ?: "guest"
+        lifecycleScope.launch {
+            try {
+                reviewRepository.applyRating(uid, currentItem.slug, q)
+                userStatsRepository.addXp(uid, 5) // +5 XP cho mỗi thẻ Flashcard hoàn thành
+                userStatsRepository.recordStudyDay(uid)
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+
         val activeCard = if (isFlipped) cardBack else cardFront
 
         // Hiệu ứng trượt thẻ ra ngoài (Slide Out) sang trái
@@ -885,10 +825,18 @@ class FlashcardActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val earnedXp = maxOf(5, reviewedCount * 5)
         tvCompletionXp.text = "+$earnedXp XP tích lũy"
 
-        // Đọc streak từ SharedPreferences hoặc hiển thị 18 ngày khớp với Dashboard
-        val savedStreak = prefs.getInt("user_learning_streak", 18)
-        tvCompletionStreak.text = "$savedStreak ngày streak"
-
+        // [THÊM]: Đọc streak và stats thực tế từ UserStatsRepository theo PROMPT 6.4
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user?.uid ?: "guest"
+        lifecycleScope.launch {
+            val stats = try {
+                userStatsRepository.getUserStats(uid).firstOrNull()
+            } catch (e: Exception) {
+                null
+            }
+            val savedStreak = stats?.streak ?: prefs.getInt("user_learning_streak", 18)
+            tvCompletionStreak.text = "$savedStreak ngày streak"
+        }
         Toast.makeText(this, "Chúc mừng! Bạn đã hoàn thành phiên ôn tập Flashcard 3D! 🎉", Toast.LENGTH_LONG).show()
     }
 
