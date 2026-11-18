@@ -7,7 +7,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -15,11 +14,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.eduprofile.data.ReviewRepository
+import com.example.eduprofile.data.Word
+import com.example.eduprofile.data.WordAdapter
+import com.example.eduprofile.data.WordRepository
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
-    // [ĐÃ XÓA]: btnBack (nút quay lại góc trái) đã được gỡ bỏ khỏi giao diện
     private lateinit var etSearchBox: EditText
     private lateinit var btnVoiceSearch: FrameLayout
     private lateinit var btnCameraSearch: FrameLayout
@@ -45,14 +54,11 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var chipRecent5: TextView
     private lateinit var chipRecent6: TextView
 
-    // Actions & Cards
+    // Inventory Header & RecyclerView
+    private lateinit var tvInventoryCount: TextView
     private lateinit var btnAddNewWord: TextView
-    private lateinit var btnAudioWord1: FrameLayout
-    private lateinit var btnAudioWord2: FrameLayout
-    private lateinit var btnAudioWord3: FrameLayout
-    private lateinit var btnBookmarkWord1: ImageView
-    private lateinit var btnBookmarkWord2: ImageView
-    private lateinit var btnBookmarkWord3: ImageView
+    private lateinit var rvWords: RecyclerView
+    private lateinit var tvEmptyState: TextView
 
     // Bottom Navigation
     private lateinit var navHome: LinearLayout
@@ -63,29 +69,46 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var navAccount: LinearLayout
 
     private var tts: TextToSpeech? = null
-    private var isWord1Bookmarked = true
-    private var isWord2Bookmarked = true
-    private var isWord3Bookmarked = true
+    private val wordRepository = WordRepository()
+    private val reviewRepository = ReviewRepository()
+
+    private var allWords: List<Word> = emptyList()
+    private var currentFilteredWords: List<Word> = emptyList()
+    private var selectedPosFilter: String = "ALL"
+    private var bookmarkedIds: MutableSet<String> = mutableSetOf()
+    private lateinit var wordAdapter: WordAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // [THÊM]: Ẩn thanh trạng thái hệ thống Status Bar theo yêu cầu "không hiện phần này"
+        hideSystemStatusBar()
         setContentView(R.layout.activity_lookup)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            // [SỬA]: padTop = 12dp để không bị cấn khi ẩn Status Bar
+            val padTop = (12 * resources.displayMetrics.density).toInt()
+            v.setPadding(systemBars.left, padTop, systemBars.right, 0)
             val bottomNav = findViewById<LinearLayout>(R.id.bottomNavContainer)
-            val padTop = (8 * resources.displayMetrics.density).toInt()
+            val navPadTop = (8 * resources.displayMetrics.density).toInt()
             val padHoriz = (4 * resources.displayMetrics.density).toInt()
-            bottomNav.setPadding(padHoriz, padTop, padHoriz, systemBars.bottom + padTop)
+            bottomNav.setPadding(padHoriz, navPadTop, padHoriz, systemBars.bottom + navPadTop)
             insets
         }
 
         tts = TextToSpeech(this, this)
 
         initViews()
+        setupRecyclerView()
         setupListeners()
+        loadDataFromRepository()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // [THÊM]: Đảm bảo Status Bar luôn được ẩn khi quay lại màn hình
+        hideSystemStatusBar()
     }
 
     private fun initViews() {
@@ -111,13 +134,10 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         chipRecent5 = findViewById(R.id.chipRecent5)
         chipRecent6 = findViewById(R.id.chipRecent6)
 
+        tvInventoryCount = findViewById(R.id.tvInventoryCount)
         btnAddNewWord = findViewById(R.id.btnAddNewWord)
-        btnAudioWord1 = findViewById(R.id.btnAudioWord1)
-        btnAudioWord2 = findViewById(R.id.btnAudioWord2)
-        btnAudioWord3 = findViewById(R.id.btnAudioWord3)
-        btnBookmarkWord1 = findViewById(R.id.btnBookmarkWord1)
-        btnBookmarkWord2 = findViewById(R.id.btnBookmarkWord2)
-        btnBookmarkWord3 = findViewById(R.id.btnBookmarkWord3)
+        rvWords = findViewById(R.id.rvWords)
+        tvEmptyState = findViewById(R.id.tvEmptyState)
 
         navHome = findViewById(R.id.navHome)
         navLookup = findViewById(R.id.navLookup)
@@ -127,8 +147,34 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         navAccount = findViewById(R.id.navAccount)
     }
 
+    private fun setupRecyclerView() {
+        wordAdapter = WordAdapter(
+            words = emptyList(),
+            bookmarkedWordIds = bookmarkedIds,
+            onWordClick = { word ->
+                // [SỬA]: Mở WordDetailActivity với EXTRA_WORD là slug (ví dụ: serendipity) theo PROMPT 6.1
+                val intent = Intent(this, WordDetailActivity::class.java).apply {
+                    putExtra("EXTRA_WORD", word.id)
+                }
+                startActivity(intent)
+            },
+            onAudioClick = { word ->
+                speakWord(word.word)
+            },
+            onBookmarkClick = { word ->
+                handleToggleBookmark(word)
+            }
+        )
+        rvWords.layoutManager = LinearLayoutManager(this)
+        rvWords.adapter = wordAdapter
+    }
+
     private fun setupListeners() {
-        // [ĐÃ XÓA]: Listener btnBack.setOnClickListener { finish() } đã gỡ bỏ cùng nút quay lại
+        // Tìm kiếm tức thì khi gõ
+        etSearchBox.doAfterTextChanged { text ->
+            performSearch(text?.toString().orEmpty())
+        }
+
         etSearchBox.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 performSearch(etSearchBox.text.toString())
@@ -144,7 +190,14 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             Toast.makeText(this, "Quét văn bản OCR qua Camera", Toast.LENGTH_SHORT).show()
         }
 
-        // Recent search chips click
+        // Chip lọc loại từ
+        chipFilterAll.setOnClickListener { applyPosFilter("ALL") }
+        chipFilterNoun.setOnClickListener { applyPosFilter("Danh từ") }
+        chipFilterVerb.setOnClickListener { applyPosFilter("Động từ") }
+        chipFilterAdj.setOnClickListener { applyPosFilter("Tính từ") }
+        chipFilterIdiom.setOnClickListener { applyPosFilter("Idiom") }
+
+        // Chip tìm kiếm gần đây
         chipRecent1.setOnClickListener { setSearchQuery("Serendipity") }
         chipRecent2.setOnClickListener { setSearchQuery("Idempotent") }
         chipRecent3.setOnClickListener { setSearchQuery("Ephemeral") }
@@ -157,53 +210,13 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         btnAddNewWord.setOnClickListener {
-            startActivity(Intent(this, AddWordActivity::class.java))
-        }
-
-        // Open Word Details
-        findViewById<View>(R.id.cardWord1)?.setOnClickListener {
-            val intent = Intent(this, WordDetailActivity::class.java).apply {
-                putExtra("EXTRA_WORD", "Serendipity")
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user == null) {
+                Toast.makeText(this, "Đăng nhập để thêm từ vựng mới", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginActivity::class.java))
+            } else {
+                startActivity(Intent(this, AddWordActivity::class.java))
             }
-            startActivity(intent)
-        }
-
-        findViewById<View>(R.id.cardWord2)?.setOnClickListener {
-            val intent = Intent(this, WordDetailActivity::class.java).apply {
-                putExtra("EXTRA_WORD", "Resilient")
-            }
-            startActivity(intent)
-        }
-
-        findViewById<View>(R.id.cardWord3)?.setOnClickListener {
-            val intent = Intent(this, WordDetailActivity::class.java).apply {
-                putExtra("EXTRA_WORD", "Idempotent")
-            }
-            startActivity(intent)
-        }
-
-        // Audio pronunciation
-        btnAudioWord1.setOnClickListener { speakWord("Serendipity") }
-        btnAudioWord2.setOnClickListener { speakWord("Resilient") }
-        btnAudioWord3.setOnClickListener { speakWord("Idempotent") }
-
-        // Bookmark buttons
-        btnBookmarkWord1.setOnClickListener {
-            isWord1Bookmarked = !isWord1Bookmarked
-            btnBookmarkWord1.setImageResource(if (isWord1Bookmarked) R.drawable.ic_bookmark_gold else R.drawable.ic_bookmark)
-            Toast.makeText(this, if (isWord1Bookmarked) "Đã lưu 'Serendipity'" else "Đã bỏ lưu 'Serendipity'", Toast.LENGTH_SHORT).show()
-        }
-
-        btnBookmarkWord2.setOnClickListener {
-            isWord2Bookmarked = !isWord2Bookmarked
-            btnBookmarkWord2.setImageResource(if (isWord2Bookmarked) R.drawable.ic_bookmark_gold else R.drawable.ic_bookmark)
-            Toast.makeText(this, if (isWord2Bookmarked) "Đã lưu 'Resilient'" else "Đã bỏ lưu 'Resilient'", Toast.LENGTH_SHORT).show()
-        }
-
-        btnBookmarkWord3.setOnClickListener {
-            isWord3Bookmarked = !isWord3Bookmarked
-            btnBookmarkWord3.setImageResource(if (isWord3Bookmarked) R.drawable.ic_bookmark_gold else R.drawable.ic_bookmark)
-            Toast.makeText(this, if (isWord3Bookmarked) "Đã lưu 'Idempotent'" else "Đã bỏ lưu 'Idempotent'", Toast.LENGTH_SHORT).show()
         }
 
         // Bottom Navigation
@@ -225,14 +238,42 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         navSRS.setOnClickListener {
             startActivity(Intent(this, FlashcardActivity::class.java))
+            finish()
         }
 
         navStats.setOnClickListener {
             startActivity(Intent(this, StatsActivity::class.java))
+            finish()
         }
 
         navAccount.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
+            finish()
+        }
+    }
+
+    // [THÊM]: Đọc danh sách từ vựng approved thật từ Firestore theo PROMPT 6.1
+    private fun loadDataFromRepository() {
+        lifecycleScope.launch {
+            // Tự động seed nếu kho Firestore còn trống
+            try {
+                wordRepository.seedInitialWordsIfEmpty()
+            } catch (_: Exception) {}
+
+            val currentUid = FirebaseAuth.getInstance().currentUser?.uid
+            if (currentUid != null) {
+                lifecycleScope.launch {
+                    reviewRepository.getAllUserReviews(currentUid).collectLatest { reviews ->
+                        bookmarkedIds = reviews.filter { it.isBookmarked }.map { it.wordId }.toMutableSet()
+                        wordAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
+            wordRepository.getApprovedWords().collectLatest { words ->
+                allWords = words
+                applyFilters()
+            }
         }
     }
 
@@ -243,9 +284,62 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun performSearch(query: String) {
-        val q = query.trim()
-        if (q.isNotEmpty()) {
-            Toast.makeText(this, "Đang tra cứu từ vựng: $q", Toast.LENGTH_SHORT).show()
+        applyFilters()
+    }
+
+    private fun applyPosFilter(pos: String) {
+        selectedPosFilter = pos
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        val query = etSearchBox.text?.toString()?.trim()?.lowercase().orEmpty()
+        var filtered = allWords
+
+        if (selectedPosFilter != "ALL") {
+            filtered = filtered.filter { it.pos.equals(selectedPosFilter, ignoreCase = true) }
+        }
+
+        if (query.isNotEmpty()) {
+            filtered = filtered.filter {
+                it.word.lowercase().contains(query) || it.meaning.lowercase().contains(query)
+            }
+        }
+
+        currentFilteredWords = filtered
+        wordAdapter.updateData(filtered)
+
+        tvInventoryCount.text = "Tất cả từ vựng trong kho (${filtered.size})"
+
+        if (filtered.isEmpty()) {
+            tvEmptyState.visibility = View.VISIBLE
+            rvWords.visibility = View.GONE
+        } else {
+            tvEmptyState.visibility = View.GONE
+            rvWords.visibility = View.VISIBLE
+        }
+    }
+
+    private fun handleToggleBookmark(word: Word) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid == null) {
+            Toast.makeText(this, "Đăng nhập để lưu từ vào Sổ tay", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val isCurrentlyBookmarked = bookmarkedIds.contains(word.id)
+        val newBookmark = !isCurrentlyBookmarked
+        if (newBookmark) {
+            bookmarkedIds.add(word.id)
+            Toast.makeText(this, "Đã lưu '${word.word}' vào Sổ tay", Toast.LENGTH_SHORT).show()
+        } else {
+            bookmarkedIds.remove(word.id)
+            Toast.makeText(this, "Đã bỏ lưu '${word.word}'", Toast.LENGTH_SHORT).show()
+        }
+        wordAdapter.notifyDataSetChanged()
+
+        lifecycleScope.launch {
+            reviewRepository.toggleBookmark(uid, word.id, newBookmark)
         }
     }
 
@@ -271,4 +365,3 @@ class LookupActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 }
-

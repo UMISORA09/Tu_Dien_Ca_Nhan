@@ -76,7 +76,8 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        hideStatusBar()
+        // [THÊM]: Ẩn thanh trạng thái hệ thống Status Bar theo yêu cầu "không hiện phần này"
+        hideSystemStatusBar()
         setContentView(R.layout.activity_profile)
 
         setupWindowInsets()
@@ -88,14 +89,8 @@ class ProfileActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     override fun onResume() {
         super.onResume()
-        hideStatusBar()
-    }
-
-    // [THÊM]: Ẩn thanh trạng thái hệ thống Status Bar toàn màn hình theo yêu cầu giao diện
-    private fun hideStatusBar() {
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+        // [THÊM]: Đảm bảo Status Bar luôn ẩn khi quay lại màn hình
+        hideSystemStatusBar()
     }
 
     private fun setupWindowInsets() {

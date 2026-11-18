@@ -35,3 +35,5 @@ serviceAccountKey.json
 
 # Android Profiling
 *.hprof
+
+.vscode/

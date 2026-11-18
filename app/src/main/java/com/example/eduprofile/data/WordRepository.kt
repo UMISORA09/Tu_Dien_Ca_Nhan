@@ -18,20 +18,26 @@ class WordRepository(
 
     /**
      * Lấy danh sách từ vựng đã duyệt (status == "approved") theo thời gian thực (Flow).
-     * Firestore Android tự bật offline cache, xem được ngay cả khi mất mạng.
+     * Firestore Android tự bật offline cache. Nếu Firestore chưa có bản ghi hoặc chưa tạo DB,
+     * tự động fallback về 12 từ vựng chuẩn để đảm bảo app luôn hiển thị đầy đủ dữ liệu.
      */
     fun getApprovedWords(): Flow<List<Word>> = callbackFlow {
         val listener = wordsCollection
             .whereEqualTo("status", "approved")
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error)
+                    trySend(getSeedWordsList())
                     return@addSnapshotListener
                 }
                 val words = snapshot?.documents?.mapNotNull { doc ->
                     doc.toObject(Word::class.java)
                 }?.sortedBy { it.word } ?: emptyList()
-                trySend(words)
+
+                if (words.isEmpty()) {
+                    trySend(getSeedWordsList())
+                } else {
+                    trySend(words)
+                }
             }
         awaitClose { listener.remove() }
     }
@@ -61,11 +67,17 @@ class WordRepository(
         val listener = wordsCollection.document(wordId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error)
+                    val fallback = getSeedWordsList().find { it.id == wordId }
+                    trySend(fallback)
                     return@addSnapshotListener
                 }
                 val word = snapshot?.toObject(Word::class.java)
-                trySend(word)
+                if (word != null) {
+                    trySend(word)
+                } else {
+                    val fallback = getSeedWordsList().find { it.id == wordId }
+                    trySend(fallback)
+                }
             }
         awaitClose { listener.remove() }
     }
